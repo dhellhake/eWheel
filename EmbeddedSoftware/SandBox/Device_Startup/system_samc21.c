@@ -1,40 +1,5 @@
-/**
- * \file
- *
- * \brief Low-level initialization functions called upon chip startup.
- *
- * Copyright (c) 2017 Atmel Corporation,
- *                    a wholly owned subsidiary of Microchip Technology Inc.
- *
- * \asf_license_start
- *
- * \page License
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the Licence at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * \asf_license_stop
- *
- */
-
 #include "samc21.h"
 
-/**
- * Initial system clock frequency. The System RC Oscillator (RCSYS) provides
- *  the source for the main clock at chip startup.
- */
-#define __SYSTEM_CLOCK    (4000000)
-
-uint32_t SystemCoreClock = __SYSTEM_CLOCK;/*!< System Clock Frequency (Core Clock)*/
 
 /**
  * Initialize the system
@@ -43,21 +8,42 @@ uint32_t SystemCoreClock = __SYSTEM_CLOCK;/*!< System Clock Frequency (Core Cloc
  *         Initialize the System and update the SystemCoreClock variable.
  */
 void SystemInit(void)
-{
-	// Keep the default device state after reset
-	SystemCoreClock = __SYSTEM_CLOCK;
-	return;
-}
+{	
+	//Set INTFLAG to be cleared	
+	SUPC->INTFLAG.reg = SUPC_INTFLAG_BODVDDRDY | SUPC_INTFLAG_BODVDDDET;
+	
+	//Set flash controller wait states.
+	NVMCTRL->CTRLB.bit.RWS = 0;
+	
+	/* OSC48M */
+	OSCCTRL->OSC48MCTRL.reg |= (1 << OSCCTRL_OSC48MCTRL_ONDEMAND_Pos)
+								| (0 << OSCCTRL_OSC48MCTRL_RUNSTDBY_Pos);
 
-/**
- * Update SystemCoreClock variable
- *
- * @brief  Updates the SystemCoreClock with current core Clock
- *         retrieved from cpu registers.
- */
-void SystemCoreClockUpdate(void)
-{
-	// Not implemented
-	SystemCoreClock = __SYSTEM_CLOCK;
+	OSCCTRL->OSC48MDIV.reg = OSCCTRL_OSC48MDIV_DIV(1);
+	while(OSCCTRL->OSC48MSYNCBUSY.reg);
+		
+		
+	
+	//Set bits in the clock mask for an APBx bus.
+	MCLK->APBAMASK.reg |= (1 << MCLK_APBAMASK_GCLK_Pos);	
+	
+	/* Software reset the module to ensure it is re-initialized correctly */
+	GCLK->CTRLA.reg = GCLK_CTRLA_SWRST;
+	while (GCLK->CTRLA.reg & GCLK_CTRLA_SWRST);
+	
+	
+	//Set main CPU clock divider.
+	MCLK->CPUDIV.reg = MCLK_CPUDIV_CPUDIV(0);
+	
+	
+	//Initializes a Generic Clock Generator 0 to defaults.
+	while (GCLK->SYNCBUSY.reg & GCLK_SYNCBUSY_GENCTRL(1 << 0));
+	
+	GCLK->GENCTRL[0].reg = 
+					6 << GCLK_GENCTRL_SRC_Pos |						//source_clock = GCLK_SOURCE_OSC48M;
+					(GCLK->GENCTRL[0].reg & GCLK_GENCTRL_GENEN);
+		
+	while (GCLK->SYNCBUSY.reg & GCLK_SYNCBUSY_GENCTRL(1 << 0));
+	
 	return;
 }
