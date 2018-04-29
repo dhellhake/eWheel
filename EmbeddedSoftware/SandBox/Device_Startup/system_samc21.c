@@ -1,49 +1,62 @@
 #include "samc21.h"
 
 
+
 /**
  * Initialize the system
  *
  * @brief  Setup the microcontroller system.
  *         Initialize the System and update the SystemCoreClock variable.
  */
-void SystemInit(void)
-{	
-	//Set INTFLAG to be cleared	
-	SUPC->INTFLAG.reg = SUPC_INTFLAG_BODVDDRDY | SUPC_INTFLAG_BODVDDDET;
-	
-	//Set flash controller wait states.
-	NVMCTRL->CTRLB.bit.RWS = 0;
-	
-	/* OSC48M */
-	OSCCTRL->OSC48MCTRL.reg |= (1 << OSCCTRL_OSC48MCTRL_ONDEMAND_Pos)
-								| (0 << OSCCTRL_OSC48MCTRL_RUNSTDBY_Pos);
+void SystemInit()
+ {
+	 // Set flash wait states for operation at 48 MHz @ 5V
+	 NVMCTRL->CTRLB.reg = NVMCTRL_CTRLB_RWS(1) | NVMCTRL_CTRLB_MANW;        //
+	 while ((OSCCTRL->STATUS.reg & OSCCTRL_STATUS_OSC48MRDY) == 0 );       // Wait until ready
+ 
+	 // Default setting for OSC48M
+	 OSCCTRL->OSC48MCTRL.reg = OSCCTRL_OSC48MCTRL_ONDEMAND | OSCCTRL_OSC48MCTRL_ENABLE;
+	 OSCCTRL->OSC48MDIV.reg = OSCCTRL_OSC48MDIV_DIV(1 - 1) | OSCCTRL_OSC48MCTRL_RUNSTDBY;   // 48MHz
 
-	OSCCTRL->OSC48MDIV.reg = OSCCTRL_OSC48MDIV_DIV(1);
-	while(OSCCTRL->OSC48MSYNCBUSY.reg);
-		
-		
+	 REG_OSCCTRL_OSC48MSTUP = 0x07;              // ~21uS startup
+	 while (OSCCTRL->OSC48MSYNCBUSY.reg);        // Wait until synced
+	 while ((OSCCTRL->STATUS.reg & OSCCTRL_STATUS_OSC48MRDY) == 0 );        // Wait until ready
+
+	 // Default setting for GEN0 (DIV => 0 & 1 are both 1)
+	 GCLK->GENCTRL[0].reg = GCLK_GENCTRL_SRC_OSC48M | GCLK_GENCTRL_GENEN | GCLK_GENCTRL_DIV(1);    // 48MHz
+	 GCLK->GENCTRL[2].reg = GCLK_GENCTRL_SRC_OSC48M | GCLK_GENCTRL_GENEN | GCLK_GENCTRL_DIV(6);    // 8MHz
+ }
+
+
+uint32_t get_gclk_hz(uint32_t gclk_id)
+{
 	
-	//Set bits in the clock mask for an APBx bus.
-	MCLK->APBAMASK.reg |= (1 << MCLK_APBAMASK_GCLK_Pos);	
+	//GCLK Frequency
+	uint8_t gen_id = GCLK->PCHCTRL[gclk_id].bit.GEN;
 	
-	/* Software reset the module to ensure it is re-initialized correctly */
-	GCLK->CTRLA.reg = GCLK_CTRLA_SWRST;
-	while (GCLK->CTRLA.reg & GCLK_CTRLA_SWRST);
+	//Step 1:
+	/* Get the frequency of the source connected to the GCLK generator */
+	uint32_t gen_input_hz;
 	
+	switch (GCLK->GENCTRL[gen_id].bit.SRC)
+	{
+		case 6: //(GCLK_SOURCE_OSC48M)
+			gen_input_hz = 48000000UL / (OSCCTRL->OSC48MDIV.bit.DIV + 1);
+		break;
+		default:
+			gen_input_hz = 0;
+	}
 	
-	//Set main CPU clock divider.
-	MCLK->CPUDIV.reg = MCLK_CPUDIV_CPUDIV(0);
+	uint8_t divsel = GCLK->GENCTRL[gen_id].bit.DIVSEL;
+	uint32_t divider = GCLK->GENCTRL[gen_id].bit.DIV;
 	
+	if (!divsel && divider > 1) {
+		gen_input_hz /= divider;
+		} else if (divsel) {
+		gen_input_hz >>= (divider+1);
+	}
 	
-	//Initializes a Generic Clock Generator 0 to defaults.
-	while (GCLK->SYNCBUSY.reg & GCLK_SYNCBUSY_GENCTRL(1 << 0));
-	
-	GCLK->GENCTRL[0].reg = 
-					6 << GCLK_GENCTRL_SRC_Pos |						//source_clock = GCLK_SOURCE_OSC48M;
-					(GCLK->GENCTRL[0].reg & GCLK_GENCTRL_GENEN);
-		
-	while (GCLK->SYNCBUSY.reg & GCLK_SYNCBUSY_GENCTRL(1 << 0));
-	
-	return;
+	return gen_input_hz;	
 }
+
+
