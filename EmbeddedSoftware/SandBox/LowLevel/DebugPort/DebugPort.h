@@ -23,6 +23,9 @@ private:
 //functions
 public:
 	DebugPort();
+	
+	void Init();
+		
 	~DebugPort();
 protected:
 private:

@@ -14,6 +14,12 @@ DebugPort::DebugPort()
 {
 } //DebugPort
 
+void DebugPort::Init()
+{
+	USART::InitSERCOM();
+	
+}
+
 // default destructor
 DebugPort::~DebugPort()
 {
