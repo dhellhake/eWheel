@@ -8,9 +8,20 @@
 
 #include "USART.h"
 
+// static class member
+bool USART::isInitialized = false;
+
 // default constructor
 USART::USART()
 {
+} //USART
+
+// default constructor
+void USART::InitSERCOM()
+{
+	if (USART::isInitialized)
+		return;
+	
 	//USART:
 	//CP2102.RX => PB02 / SERCOM5.PAD0 (MUX_D)
 	//CP2102.TX => PB03 / SERCOM5.PAD1 (MUX_D)
@@ -73,6 +84,8 @@ USART::USART()
 	SERCOM5->USART.CTRLA.reg |= SERCOM_USART_CTRLA_ENABLE;
 	/* synchronization busy */
 	while(SERCOM5->USART.SYNCBUSY.reg & SERCOM_USART_SYNCBUSY_ENABLE);
+	
+	USART::isInitialized = true;
 } //USART
 
 
