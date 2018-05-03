@@ -1,3 +1,5 @@
 /EmbeddedSoftware/SandBox/Debug/*
 EmbeddedSoftware/SandBox/.vs/*
 *.atsln
+
+*.atsuo
