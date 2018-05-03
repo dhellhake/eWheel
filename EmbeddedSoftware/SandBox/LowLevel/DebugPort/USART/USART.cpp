@@ -43,32 +43,12 @@ void USART::InitSERCOM()
 	GCLK->PCHCTRL[SERCOM5_GCLK_ID_CORE].reg |= GCLK_PCHCTRL_CHEN;
 
 	//Configure SERCOM5 for USART
-	SERCOM_USART_CTRLA_Type ctrla;
-	ctrla.bit.DORD = 1;			//LSB first
-	ctrla.bit.CPOL = 0;			//Rising XCK edge
-	ctrla.bit.CMODE = 0;			//Async communication
-	ctrla.bit.FORM = 0x0;		//USAT frame with parity
-	ctrla.bit.SAMPA = 0x0;		//7-8-9 / 3-4-5
-	ctrla.bit.RXPO = 0x1;		//Receive on PAD1 (PB03)
-	ctrla.bit.TXPO = 0x0;		//Transmit on PAD0 (PB02)
-	ctrla.bit.SAMPR = 0x0;		//16x over-sampling on arithmetic baud
-	ctrla.bit.IBON = 0; 		//Interupt on data-stream
-	ctrla.bit.RUNSTDBY = 0;		//Generic Clock disable on finish
-	ctrla.bit.MODE = 0x1;			//Use Internal Clock
-	SERCOM5->USART.CTRLA.reg = ctrla.reg;
+	SERCOM5->USART.CTRLA.reg =  (1 << SERCOM_USART_CTRLA_DORD_Pos) |	// LSB first
+								(1 << SERCOM_USART_CTRLA_RXPO_Pos) |	// Receive on PAD1 (PB03)
+								(1 << SERCOM_USART_CTRLA_MODE_Pos);		// Use Internal Clock
 	
-	
-	SERCOM_USART_CTRLB_Type ctrlb;
-	ctrlb.bit.LINCMD = 0x0;		//0x0 = Normal USART
-	ctrlb.bit.RXEN = 1;			//1 = Receiver enabled
-	ctrlb.bit.TXEN = 1;			//1 = Transmit enable
-	ctrlb.bit.PMODE = 0;			//0 = Even parity
-	ctrlb.bit.ENC = 0;			//0 = no encoding
-	ctrlb.bit.SFDE = 0;			//0 = Start-of-frame detection disabled
-	ctrlb.bit.COLDEN = 0;		//0 = collision detect disabled
-	ctrlb.bit.SBMODE = 0;		//0 = one stop bit
-	ctrlb.bit.CHSIZE = 0x0;		//0x0 = 8 bits
-	SERCOM5->USART.CTRLB.reg = ctrlb.reg;
+	SERCOM5->USART.CTRLB.reg =  (1 << SERCOM_USART_CTRLB_RXEN_Pos) |	//1 = Receiver enabled
+								(1 << SERCOM_USART_CTRLB_TXEN_Pos);		//1 = Transmit enable
 	
 	while(SERCOM3->USART.SYNCBUSY.bit.CTRLB);
 	
