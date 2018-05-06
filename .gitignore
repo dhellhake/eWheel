@@ -1,5 +1,14 @@
 /EmbeddedSoftware/SandBox/Debug/*
-EmbeddedSoftware/SandBox/.vs/*
+/EmbeddedSoftware/SandBox/.vs/*
+/DiagMonitor/.vs/*
+/DiagMonitor/obj/Debug/*
+/DiagMonitor/bin/Debug/*
 *.atsln
 
 *.atsuo
+
+*.sln
+
+*.suo
+
+*.cache
