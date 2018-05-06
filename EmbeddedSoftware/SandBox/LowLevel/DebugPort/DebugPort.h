@@ -21,14 +21,12 @@ protected:
 private:
 
 //functions
-public:
-	DebugPort();
-	
-	void Init();
-		
-	~DebugPort();
+public:	
+	static void Init();
 protected:
 private:
+	DebugPort();
+	~DebugPort();
 	DebugPort( const DebugPort &c );
 	DebugPort& operator=( const DebugPort &c );
 

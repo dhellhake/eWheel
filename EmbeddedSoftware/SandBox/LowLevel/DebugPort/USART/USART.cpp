@@ -26,7 +26,7 @@ void USART::InitSERCOM()
 	//CP2102.RX => PB02 / SERCOM5.PAD0 (MUX_D)
 	//CP2102.TX => PB03 / SERCOM5.PAD1 (MUX_D)
 	
-	uint32_t baud_val = calculate_baud_value(115200, get_gclk_hz(SERCOM5_GCLK_ID_CORE), 16);
+	uint32_t baud_val = calculate_baud_value(921600, get_gclk_hz(SERCOM5_GCLK_ID_CORE), 16);
 	//Enable Clock for SERCOM5
 	//Set bits in the clock mask for an APBx bus.
 	MCLK->APBCMASK.bit.SERCOM5_ = 1;

@@ -7,6 +7,9 @@
 
 #include "SPI.h"
 
+// static class member
+bool SPIPort::isInitialized = false;
+
 // default constructor
 SPIPort::SPIPort()
 {
@@ -17,8 +20,11 @@ SPIPort::~SPIPort()
 {
 } //~USART
 
-void SPIPort::SPIInit()
+void SPIPort::InitSERCOM()
 {
+	if (SPIPort::isInitialized)
+		return;
+	
 	// max 10Mhz
 	// MSB first
 	// CPOL=0 (~SERCOM_SPI_CTRLA_CPOL)
@@ -59,15 +65,9 @@ void SPIPort::SPIInit()
 	NVIC->ISER[0] = (uint32_t)(1 << ((uint32_t)SERCOM0_IRQn & 0x0000001f));
 	
 	SERCOM0->SPI.CTRLA.bit.ENABLE = 1;
-	while(SERCOM0->SPI.SYNCBUSY.bit.ENABLE);	
-}
-
-uint8_t SPIPort::SendByte(uint8_t byte)
-{
-	while(SERCOM0->SPI.INTFLAG.bit.DRE == 0);
-	SERCOM0->SPI.DATA.reg = byte;
-	while(SERCOM0->SPI.INTFLAG.bit.RXC == 0);
-	return SERCOM0->SPI.DATA.reg;
+	while(SERCOM0->SPI.SYNCBUSY.bit.ENABLE);
+	
+	SPIPort::isInitialized = true;	
 }
 
 void SERCOM0_Handler()

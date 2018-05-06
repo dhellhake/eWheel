@@ -207,10 +207,16 @@
     <Compile Include="LowLevel\Device_Startup\system_samc21.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LowLevel\SPI\SPI.cpp">
+    <Compile Include="LowLevel\LSM6D\LSM6D.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LowLevel\SPI\SPI.h">
+    <Compile Include="LowLevel\LSM6D\LSM6D.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\LSM6D\SPI\SPI.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\LSM6D\SPI\SPI.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="LowLevel\system.h">
@@ -225,7 +231,8 @@
     <Folder Include="LowLevel\DebugPort\USART" />
     <Folder Include="LowLevel\Device_Startup\" />
     <Folder Include="LowLevel\DebugPort" />
-    <Folder Include="LowLevel\SPI" />
+    <Folder Include="LowLevel\LSM6D" />
+    <Folder Include="LowLevel\LSM6D\SPI\" />
     <Folder Include="Horizon" />
   </ItemGroup>
   <ItemGroup>

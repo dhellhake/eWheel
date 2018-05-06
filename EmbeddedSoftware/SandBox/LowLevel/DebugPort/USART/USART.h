@@ -22,10 +22,12 @@ class USART
 
 	//functions
 	public:
-		void InitSERCOM();
-		void SendByte(uint8_t byte);
+		static void SendByte(uint8_t byte);
 	protected:
 		USART();
+		
+		static void InitSERCOM();
+		
 		~USART();
 	private:
 		USART( const USART &c );
@@ -58,7 +60,7 @@ class USART
 			return q;
 		}
 
-		uint16_t inline calculate_baud_value(const uint32_t baudrate, const uint32_t peripheral_clock, uint8_t sample_num)
+		static inline uint16_t calculate_baud_value(const uint32_t baudrate, const uint32_t peripheral_clock, uint8_t sample_num)
 		{
 			/* Temporary variables */
 			uint64_t ratio = 0;
