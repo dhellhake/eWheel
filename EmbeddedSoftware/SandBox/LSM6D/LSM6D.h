@@ -9,9 +9,7 @@
 #ifndef __LSM6D_H__
 #define __LSM6D_H__
 
-#include "SPI/SPI.h"
-
-
+#include "..\LowLevel\SPI\SPI.h"
 
 class LSM6D : public SPIPort
 {

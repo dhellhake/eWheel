@@ -10,7 +10,7 @@
 #define __USART_H__
 
 #include "sam.h"
-#include "..\..\system.h"
+#include "..\System\System.h"
 
 class USART
 {

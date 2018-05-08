@@ -189,16 +189,10 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="LowLevel\DebugPort\DebugPort.cpp">
+    <Compile Include="DebugPort\DebugPort.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LowLevel\DebugPort\DebugPort.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="LowLevel\DebugPort\USART\USART.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="LowLevel\DebugPort\USART\USART.h">
+    <Compile Include="DebugPort\DebugPort.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="LowLevel\Device_Startup\startup_samc21.c">
@@ -207,19 +201,28 @@
     <Compile Include="LowLevel\Device_Startup\system_samc21.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LowLevel\LSM6D\LSM6D.cpp">
+    <Compile Include="LowLevel\SPI\SPI.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LowLevel\LSM6D\LSM6D.h">
+    <Compile Include="LowLevel\SPI\SPI.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LowLevel\LSM6D\SPI\SPI.cpp">
+    <Compile Include="LowLevel\System\System.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LowLevel\LSM6D\SPI\SPI.h">
+    <Compile Include="LowLevel\System\System.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LowLevel\system.h">
+    <Compile Include="LowLevel\USART\USART.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\USART\USART.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LSM6D\LSM6D.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LSM6D\LSM6D.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.cpp">
@@ -227,13 +230,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="DebugPort\" />
     <Folder Include="LowLevel" />
-    <Folder Include="LowLevel\DebugPort\USART" />
     <Folder Include="LowLevel\Device_Startup\" />
-    <Folder Include="LowLevel\DebugPort" />
-    <Folder Include="LowLevel\LSM6D" />
-    <Folder Include="LowLevel\LSM6D\SPI\" />
-    <Folder Include="Horizon" />
+    <Folder Include="LowLevel\SPI\" />
+    <Folder Include="LowLevel\System" />
+    <Folder Include="LowLevel\USART\" />
+    <Folder Include="LSM6D\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LowLevel\Device_Startup\samc21g18a_flash.ld">

@@ -25,8 +25,8 @@ void USART::InitSERCOM()
 	//USART:
 	//CP2102.RX => PB02 / SERCOM5.PAD0 (MUX_D)
 	//CP2102.TX => PB03 / SERCOM5.PAD1 (MUX_D)
-	
-	uint32_t baud_val = calculate_baud_value(921600, get_gclk_hz(SERCOM5_GCLK_ID_CORE), 16);
+	//921600 / 115200
+	uint32_t baud_val = calculate_baud_value(115200, System::GetGCLK_Hz(SERCOM5_GCLK_ID_CORE), 16);
 	//Enable Clock for SERCOM5
 	//Set bits in the clock mask for an APBx bus.
 	MCLK->APBCMASK.bit.SERCOM5_ = 1;
@@ -54,8 +54,8 @@ void USART::InitSERCOM()
 	
 	SERCOM5->USART.BAUD.reg = baud_val;
 	
-	pin_set_peripheral_function(PINMUX_PB02D_SERCOM5_PAD0);
-	pin_set_peripheral_function(PINMUX_PB03D_SERCOM5_PAD1);
+	System::SetPinPeripheralFunction(PINMUX_PB02D_SERCOM5_PAD0);
+	System::SetPinPeripheralFunction(PINMUX_PB03D_SERCOM5_PAD1);
 
 
 	NVIC->ISER[0] = (uint32_t)(1 << ((uint32_t)SERCOM5_IRQn & 0x0000001f));

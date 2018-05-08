@@ -10,7 +10,7 @@
 #define SPI_H_
 
 #include "sam.h"
-#include "..\..\system.h"
+#include "..\System\System.h"
 
 class SPIPort
 {

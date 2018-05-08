@@ -49,9 +49,9 @@ void SPIPort::InitSERCOM()
 	// Enable GCLK for peripheral
 	GCLK->PCHCTRL[SERCOM0_GCLK_ID_CORE].reg |= GCLK_PCHCTRL_CHEN;
 	
-	pin_set_peripheral_function(PINMUX_PA08C_SERCOM0_PAD0);
-	pin_set_peripheral_function(PINMUX_PA10C_SERCOM0_PAD2);
-	pin_set_peripheral_function(PINMUX_PA11C_SERCOM0_PAD3);
+	System::SetPinPeripheralFunction(PINMUX_PA08C_SERCOM0_PAD0);
+	System::SetPinPeripheralFunction(PINMUX_PA10C_SERCOM0_PAD2);
+	System::SetPinPeripheralFunction(PINMUX_PA11C_SERCOM0_PAD3);
 	
 	//Configure SERCOM0	
 	SERCOM0->SPI.CTRLA.reg =	(0x3 << SERCOM_SPI_CTRLA_MODE_Pos) |
@@ -60,7 +60,7 @@ void SPIPort::InitSERCOM()
 	SERCOM0->SPI.CTRLB.reg =	(1 << SERCOM_SPI_CTRLB_RXEN_Pos);
 	
 	
-	SERCOM0->SPI.BAUD.reg = (get_gclk_hz(SERCOM0_GCLK_ID_CORE) / (2 * 10000000)) - 1;
+	SERCOM0->SPI.BAUD.reg = (System::GetGCLK_Hz(SERCOM0_GCLK_ID_CORE) / (2 * 10000000)) - 1;
 	
 	NVIC->ISER[0] = (uint32_t)(1 << ((uint32_t)SERCOM0_IRQn & 0x0000001f));
 	

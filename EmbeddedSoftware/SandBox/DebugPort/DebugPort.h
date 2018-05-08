@@ -10,8 +10,7 @@
 #define __DEBUGPORT_H__
 
 #include "sam.h"
-#include "..\system.h"
-#include "USART/USART.h"
+#include "..\LowLevel\USART\USART.h"
 
 class DebugPort : public USART
 {
