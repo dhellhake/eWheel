@@ -2,25 +2,31 @@
 * LSM6D.h
 *
 * Created: 06.05.2018 15:52:49
-* Author: domin
+* Author: dominik hellhake
 */
 
 
 #ifndef __LSM6D_H__
 #define __LSM6D_H__
 
+#include <math.h>
 #include "..\LowLevel\SPI\SPI.h"
+
 
 class LSM6D : public SPIPort
 {
 //variables
 public:
+	static float Yaw;
+	static float Pitch;
+	static float Roll;
 protected:
 private:
 
 //functions
 public:	
 	static void Init();
+	static void Update();
 	static uint8_t ReadRegister(uint8_t address);
 	static int16_t ReadRegisterWord(uint8_t address);
 	static uint8_t WriteRegister(uint8_t address, uint8_t data);
