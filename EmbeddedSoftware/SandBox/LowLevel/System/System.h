@@ -15,7 +15,7 @@ class System
 {
 //variables
 public:
-	static uint32_t SysTick_Overflow;
+	volatile static uint32_t SysTick_Overflow;
 protected:
 private:
 

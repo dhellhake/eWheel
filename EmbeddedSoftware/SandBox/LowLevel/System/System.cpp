@@ -9,7 +9,7 @@
 #include "System.h"
 
 // static class member
-uint32_t System::SysTick_Overflow = 0;
+volatile uint32_t System::SysTick_Overflow = 0;
 
 // default constructor
 System::System()
@@ -91,8 +91,8 @@ uint32_t System::GetGCLK_Hz(uint32_t gclk_id)
 
 uint32_t System::GetElapsedMilis()
 {
-	uint32_t result = (System::SysTick_Overflow * 0xFFFFFF) + SysTick->VAL;
-	return (result / 48000);
+	uint64_t result = (System::SysTick_Overflow * 0xFFFFFF) + (0xFFFFFF - SysTick->VAL);
+	return (uint32_t)(result / 48000);
 }
 
 void SysTick_Handler(void)
