@@ -38,7 +38,7 @@ void System::Init()
 
 	// Default setting for GEN0 (DIV => 0 & 1 are both 1)
 	GCLK->GENCTRL[0].reg = GCLK_GENCTRL_SRC_OSC48M | GCLK_GENCTRL_GENEN | GCLK_GENCTRL_DIV(1);    // 48MHz
-	GCLK->GENCTRL[2].reg = GCLK_GENCTRL_SRC_OSC48M | GCLK_GENCTRL_GENEN | GCLK_GENCTRL_DIV(6);    // 8MHz
+	GCLK->GENCTRL[1].reg = GCLK_GENCTRL_SRC_OSC48M | GCLK_GENCTRL_GENEN | GCLK_GENCTRL_DIV(6);    // 8MHz
 	
 	/* Configure SysTick-Counter */
 	SysTick->CTRL = 0;					// Disable SysTick
