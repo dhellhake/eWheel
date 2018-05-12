@@ -7,24 +7,18 @@
 
 #include "SPI.h"
 
-// static class member
-bool SPIPort::isInitialized = false;
-
 // default constructor
 SPIPort::SPIPort()
 {
-} //USART
+} //SPIPort
 
 // default destructor
 SPIPort::~SPIPort()
 {
-} //~USART
+} //~SPIPort
 
 void SPIPort::InitSERCOM()
 {
-	if (SPIPort::isInitialized)
-		return;
-	
 	// max 10Mhz
 	// MSB first
 	// CPOL=0 (~SERCOM_SPI_CTRLA_CPOL)
@@ -67,8 +61,6 @@ void SPIPort::InitSERCOM()
 	
 	SERCOM0->SPI.CTRLA.bit.ENABLE = 1;
 	while(SERCOM0->SPI.SYNCBUSY.bit.ENABLE);
-	
-	SPIPort::isInitialized = true;	
 }
 
 void SERCOM0_Handler()

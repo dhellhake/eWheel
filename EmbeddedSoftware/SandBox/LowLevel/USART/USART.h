@@ -18,7 +18,6 @@ class USART
 	public:
 	protected:
 	private:
-		static bool isInitialized;
 
 	//functions
 	public:

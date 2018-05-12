@@ -17,8 +17,7 @@ class SPIPort
 	//variables
 	public:
 	protected:
-	private:	
-		static bool isInitialized;
+	private:
 
 	//functions
 	public:
