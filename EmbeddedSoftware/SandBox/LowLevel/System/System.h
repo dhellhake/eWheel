@@ -23,6 +23,8 @@ private:
 public:
 	static void Init();
 	
+	static void InitEIC();
+	
 	static void SetPinPeripheralFunction(uint32_t pinmux);
 	
 	static uint32_t GetGCLK_Hz(uint32_t gclk_id);

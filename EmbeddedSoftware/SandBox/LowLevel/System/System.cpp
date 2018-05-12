@@ -51,6 +51,37 @@ void System::Init()
 	/* Configure Board-LED */
 	PORT->Group[0].DIRSET.reg = PORT_PA28;
 	PORT->Group[0].OUTCLR.reg = PORT_PA28;
+	
+	/* Configure External Interrupt */
+	System::InitEIC();
+}
+
+void System::InitEIC()
+{
+	/* Disable the peripheral channel */
+	GCLK->PCHCTRL[EIC_GCLK_ID].reg &= ~GCLK_PCHCTRL_CHEN;
+	while (GCLK->PCHCTRL[EIC_GCLK_ID].reg & GCLK_PCHCTRL_CHEN);
+
+	/* Configure the peripheral channel */
+	GCLK->PCHCTRL[EIC_GCLK_ID].reg = GCLK_PCHCTRL_GEN(0);
+
+	// Enable GCLK for peripheral
+	GCLK->PCHCTRL[EIC_GCLK_ID].reg |= GCLK_PCHCTRL_CHEN;
+	
+	// Reset EIC
+	EIC->CTRLA.reg = EIC_CTRLA_SWRST;
+	while (EIC->CTRLA.reg & EIC_CTRLA_SWRST);
+	
+											
+	NVIC->ISER[0] = (uint32_t)(1 << ((uint32_t)EIC_IRQn & 0x0000001f));
+	
+	EIC->CONFIG[0].reg =	EIC_CONFIG_SENSE1_BOTH |						//Interrupt on Rise and Fall edge for Hall-sensor
+							EIC_CONFIG_SENSE2_BOTH |
+							EIC_CONFIG_SENSE3_BOTH;
+	
+	EIC->CONFIG[1].reg =	EIC_CONFIG_SENSE5_RISE;							//Interrupt on rise for LSM6D-INT1
+	
+	EIC->CTRLA.reg = EIC_CTRLA_ENABLE;
 }
  
 void System::SetPinPeripheralFunction(uint32_t pinmux)

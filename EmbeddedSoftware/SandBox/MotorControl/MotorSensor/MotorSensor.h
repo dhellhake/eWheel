@@ -36,6 +36,8 @@ class MotorSensor
 	public:
 		static void InitEIC();	//ToBeProtected
 		
+		static void Update();
+		
 		static inline HALL_STATE MASKToState(uint8_t mask)
 		{
 			switch (mask)

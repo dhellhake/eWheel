@@ -21,7 +21,9 @@ private:
 
 //functions
 public:
-	static void InitTC();	//ToBeProtected
+	static void InitTC1();	//ToBeProtected
+	static void SetSlowDrive();
+	static void SetDrive();
 protected:
 	MotorDriver();
 	~MotorDriver();
