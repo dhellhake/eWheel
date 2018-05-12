@@ -49,13 +49,14 @@ void SPIPort::InitSERCOM()
 	// Enable GCLK for peripheral
 	GCLK->PCHCTRL[SERCOM0_GCLK_ID_CORE].reg |= GCLK_PCHCTRL_CHEN;
 	
-	System::SetPinPeripheralFunction(PINMUX_PA08C_SERCOM0_PAD0);
+	System::SetPinPeripheralFunction(PINMUX_PA09C_SERCOM0_PAD1);
 	System::SetPinPeripheralFunction(PINMUX_PA10C_SERCOM0_PAD2);
 	System::SetPinPeripheralFunction(PINMUX_PA11C_SERCOM0_PAD3);
 	
 	//Configure SERCOM0	
 	SERCOM0->SPI.CTRLA.reg =	(0x3 << SERCOM_SPI_CTRLA_MODE_Pos) |
-								(1 << SERCOM_SPI_CTRLA_DOPO_Pos);
+								(0x1 << SERCOM_SPI_CTRLA_DOPO_Pos) |				//MOSI on PAD2 (PA10); SCLK on PAD3 (PA11)
+								(0x1 << SERCOM_SPI_CTRLA_DIPO_Pos);					//MISO on PAD 1 (PA09)
 								
 	SERCOM0->SPI.CTRLB.reg =	(1 << SERCOM_SPI_CTRLB_RXEN_Pos);
 	

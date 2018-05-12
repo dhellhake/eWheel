@@ -25,8 +25,8 @@ void LSM6D::Init()
 	SPIPort::InitSERCOM();
 		
 	//Configure CS-Pin as Output
-	PORT->Group[0].DIRSET.reg = PORT_PA09;
-	PORT->Group[0].OUTSET.reg = PORT_PA09;
+	PORT->Group[0].DIRSET.reg = PORT_PA12;
+	PORT->Group[0].OUTSET.reg = PORT_PA12;
 		
 	uint8_t status;
 	
@@ -55,13 +55,21 @@ void LSM6D::Update()
 	//Check if acceleration data is available
 	if ((status & 0b1) != 0x0)
 	{
+		uint32_t start = SysTick->VAL;
+		
 		int16_t accX = LSM6D::ReadRegisterWord(LSM6DS3_OUTX_L_XL);
 		int16_t accY = LSM6D::ReadRegisterWord(LSM6DS3_OUTY_L_XL);
 		int16_t accZ = LSM6D::ReadRegisterWord(LSM6DS3_OUTZ_L_XL);
 				
+		uint32_t t1 = start - SysTick->VAL;		
+				
 		LSM6D::Pitch = (atan2(accX, sqrt(accY * accY + accZ * accZ)) * 180.0) / M_PI;
 		LSM6D::Roll = (atan2(-accY, accZ) * 180.0) / M_PI;
-		LSM6D::Yaw = 180 * atan(accZ / sqrt(accX * accX + accZ * accZ)) / M_PI;
+		//LSM6D::Yaw = 180 * atan(accZ / sqrt(accX * accX + accZ * accZ)) / M_PI;
+		
+		
+		uint32_t t2 = start - SysTick->VAL;
+		t2++;
 	}	
 }
 
@@ -70,13 +78,13 @@ uint8_t LSM6D::ReadRegister(uint8_t address)
 {
 	uint8_t result = 0x00;
 	//CS Low
-	PORT->Group[0].OUTCLR.reg = PORT_PA09;
+	PORT->Group[0].OUTCLR.reg = PORT_PA12;
 	
 	SPIPort::TransmitByte(address | 0x80);
 	result = SPIPort::TransmitByte(0x00);
 	
 	//CS High
-	PORT->Group[0].OUTSET.reg = PORT_PA09;
+	PORT->Group[0].OUTSET.reg = PORT_PA12;
 	
 	return result;
 }
@@ -85,14 +93,14 @@ int16_t LSM6D::ReadRegisterWord(uint8_t address)
 {
 	uint8_t result[2];
 	//CS Low
-	PORT->Group[0].OUTCLR.reg = PORT_PA09;
+	PORT->Group[0].OUTCLR.reg = PORT_PA12;
 	
 	SPIPort::TransmitByte(address | 0x80);
 	result[0] = SPIPort::TransmitByte(0x00);
 	result[1] = SPIPort::TransmitByte(0x00);
 	
 	//CS High
-	PORT->Group[0].OUTSET.reg = PORT_PA09;
+	PORT->Group[0].OUTSET.reg = PORT_PA12;
 	
 	return (int16_t)result[0] | int16_t(result[1] << 8);
 }
@@ -101,13 +109,13 @@ uint8_t LSM6D::WriteRegister(uint8_t address, uint8_t data)
 {
 	uint8_t result = 0x00;
 	//CS Low
-	PORT->Group[0].OUTCLR.reg = PORT_PA09;
+	PORT->Group[0].OUTCLR.reg = PORT_PA12;
 	
 	SPIPort::TransmitByte(address & 0x7F);
 	result = SPIPort::TransmitByte(data);
 	
 	//CS High
-	PORT->Group[0].OUTSET.reg = PORT_PA09;
+	PORT->Group[0].OUTSET.reg = PORT_PA12;
 	
 	return result;
 }
