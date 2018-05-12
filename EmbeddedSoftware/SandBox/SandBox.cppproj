@@ -224,6 +224,12 @@
     <Compile Include="main.cpp">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="MotorControl\MotorDriver\MotorDriver.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MotorControl\MotorDriver\MotorDriver.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="MotorControl\MotorSensor\MotorSensor.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -241,6 +247,7 @@
     <Folder Include="LSM6D\" />
     <Folder Include="MotorControl" />
     <Folder Include="MotorControl\MotorSensor" />
+    <Folder Include="MotorControl\MotorDriver" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LowLevel\System\Device_Startup\samc21g18a_flash.ld">
