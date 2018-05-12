@@ -27,24 +27,22 @@ void LSM6D::Init()
 	//Configure CS-Pin as Output
 	PORT->Group[0].DIRSET.reg = PORT_PA12;
 	PORT->Group[0].OUTSET.reg = PORT_PA12;
-		
-	uint8_t status;
-	
+			
 	//Trigger SW-Reset
-	status = LSM6D::WriteRegister(LSM6DS3_CTRL3_C, 0x1);
+	LSM6D::WriteRegister(LSM6DS3_CTRL3_C, 0x1);
 	
 	//Configure Accelerometer
-	status = LSM6D::WriteRegister(LSM6DS3_CTRL6_C, 0x0);						//CTRL6_C->XL_HM_MODE = 0		Enable High-Performance Mode for Accel
-	status = LSM6D::WriteRegister(LSM6DS3_CTRL1_XL, (0b0100 << 4) |				//CTRL1_XL->ODR_XL = 100		104Hz data rate for Accel
-													(0b1 << 0));				//CTRL1_XL->BW_XL = 10			analog filter cutoff frequence = 100hz (00=400;01=200;10=100;11=50)
-	status = LSM6D::WriteRegister(LSM6DS3_CTRL4_C,	(0b1 << 7));				//CTRL4_C->XL_BW_SCAL_ODR = 1   Select CTRL1_XL->BW_XL as source for analog filter bandwith
-	status = LSM6D::WriteRegister(LSM6DS3_TAP_CFG,	(0b1 << 4));				//TAP_CFG->SLOPE_FDS = 1		enable HP and LPF2 for Accel
+	LSM6D::WriteRegister(LSM6DS3_CTRL6_C, 0x0);						//CTRL6_C->XL_HM_MODE = 0		Enable High-Performance Mode for Accel
+	LSM6D::WriteRegister(LSM6DS3_CTRL1_XL,  (0b0100 << 4) |				//CTRL1_XL->ODR_XL = 100		104Hz data rate for Accel
+											(0b1 << 0));				//CTRL1_XL->BW_XL = 10			analog filter cutoff frequence = 100hz (00=400;01=200;10=100;11=50)
+	LSM6D::WriteRegister(LSM6DS3_CTRL4_C,	(0b1 << 7));				//CTRL4_C->XL_BW_SCAL_ODR = 1   Select CTRL1_XL->BW_XL as source for analog filter bandwith
+	LSM6D::WriteRegister(LSM6DS3_TAP_CFG,	(0b1 << 4));				//TAP_CFG->SLOPE_FDS = 1		enable HP and LPF2 for Accel
 	
 	//Configure Gyro
-	status = LSM6D::WriteRegister(LSM6DS3_CTRL2_G,	(0b0100 << 4));				//CTRL2_G->ODR_G = 100			104Hz data rate for Gyro
-	status = LSM6D::WriteRegister(LSM6DS3_CTRL7_G,	(0b1 << 6) |				//CTRL7_G->HP_G_EN = 1			enable high pass filter
-													(0b10 << 4) |				//CTRL7_G->HPCF_G = 10			high pass filter cutoff = 2.07Hz (00=0,0081;01=0,0324;10=2,07;11=16,32)
-													(0b1 << 3));				//CTRL7_G->HP_G_RST = 1			reset dc offset of Gyro
+	LSM6D::WriteRegister(LSM6DS3_CTRL2_G,	(0b0100 << 4));				//CTRL2_G->ODR_G = 100			104Hz data rate for Gyro
+	LSM6D::WriteRegister(LSM6DS3_CTRL7_G,	(0b1 << 6) |				//CTRL7_G->HP_G_EN = 1			enable high pass filter
+											(0b10 << 4) |				//CTRL7_G->HPCF_G = 10			high pass filter cutoff = 2.07Hz (00=0,0081;01=0,0324;10=2,07;11=16,32)
+											(0b1 << 3));				//CTRL7_G->HP_G_RST = 1			reset dc offset of Gyro
 }
 
 
@@ -54,22 +52,14 @@ void LSM6D::Update()
 	
 	//Check if acceleration data is available
 	if ((status & 0b1) != 0x0)
-	{
-		uint32_t start = SysTick->VAL;
-		
+	{		
 		int16_t accX = LSM6D::ReadRegisterWord(LSM6DS3_OUTX_L_XL);
 		int16_t accY = LSM6D::ReadRegisterWord(LSM6DS3_OUTY_L_XL);
 		int16_t accZ = LSM6D::ReadRegisterWord(LSM6DS3_OUTZ_L_XL);
-				
-		uint32_t t1 = start - SysTick->VAL;		
-				
+						
 		LSM6D::Pitch = (atan2(accX, sqrt(accY * accY + accZ * accZ)) * 180.0) / M_PI;
 		LSM6D::Roll = (atan2(-accY, accZ) * 180.0) / M_PI;
 		//LSM6D::Yaw = 180 * atan(accZ / sqrt(accX * accX + accZ * accZ)) / M_PI;
-		
-		
-		uint32_t t2 = start - SysTick->VAL;
-		t2++;
 	}	
 }
 
