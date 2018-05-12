@@ -6,7 +6,7 @@
 */
 #include "MotorSensor.h"
 
-HALL_STATE MotorSensor::HallState = HALL_STATE::UNDEFINED_1;
+volatile HALL_STATE MotorSensor::HallState = HALL_STATE::UNDEFINED_1;
 
 // default constructor
 MotorSensor::MotorSensor()

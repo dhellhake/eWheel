@@ -28,13 +28,44 @@ class MotorSensor
 {
 	//variables
 	public:
+		volatile static HALL_STATE HallState;
 	protected:
-		static HALL_STATE HallState;
 	private:
 	
 	//functions
 	public:
 		static void InitEIC();	//ToBeProtected
+		
+		static inline HALL_STATE MASKToState(uint8_t mask)
+		{
+			switch (mask)
+			{
+				case (uint8_t)HALL_STATE::HALL_STATE_1:
+				return HALL_STATE::HALL_STATE_1;
+				break;
+				case (uint8_t)HALL_STATE::HALL_STATE_2:
+				return HALL_STATE::HALL_STATE_2;
+				break;
+				case (uint8_t)HALL_STATE::HALL_STATE_3:
+				return HALL_STATE::HALL_STATE_3;
+				break;
+				case (uint8_t)HALL_STATE::HALL_STATE_4:
+				return HALL_STATE::HALL_STATE_4;
+				break;
+				case (uint8_t)HALL_STATE::HALL_STATE_5:
+				return HALL_STATE::HALL_STATE_5;
+				break;
+				case (uint8_t)HALL_STATE::HALL_STATE_6:
+				return HALL_STATE::HALL_STATE_6;
+				break;
+				case (uint8_t)HALL_STATE::UNDEFINED_1:
+				return HALL_STATE::UNDEFINED_1;
+				break;
+				case (uint8_t)HALL_STATE::UNDEFINED_2:
+				return HALL_STATE::UNDEFINED_2;
+				break;
+			}
+		}
 	protected:
 		MotorSensor();
 		
@@ -42,39 +73,7 @@ class MotorSensor
 		~MotorSensor();
 	private:
 		MotorSensor( const MotorSensor &c );
-		MotorSensor& operator=( const MotorSensor &c );
-		
-		static inline HALL_STATE MASKToState(uint8_t mask)
-		{
-			switch (mask)
-			{
-				case (uint8_t)HALL_STATE::HALL_STATE_1:
-					return HALL_STATE::HALL_STATE_1;
-					break;
-				case (uint8_t)HALL_STATE::HALL_STATE_2:
-					return HALL_STATE::HALL_STATE_2;
-					break;
-				case (uint8_t)HALL_STATE::HALL_STATE_3:
-					return HALL_STATE::HALL_STATE_3;
-					break;
-				case (uint8_t)HALL_STATE::HALL_STATE_4:
-					return HALL_STATE::HALL_STATE_4;
-					break;
-				case (uint8_t)HALL_STATE::HALL_STATE_5:
-					return HALL_STATE::HALL_STATE_5;
-					break;
-				case (uint8_t)HALL_STATE::HALL_STATE_6:
-					return HALL_STATE::HALL_STATE_6;
-					break;
-				case (uint8_t)HALL_STATE::UNDEFINED_1:
-					return HALL_STATE::UNDEFINED_1;
-					break;
-				case (uint8_t)HALL_STATE::UNDEFINED_2:
-					return HALL_STATE::UNDEFINED_2;
-					break;	
-			}			
-		}
-
+		MotorSensor& operator=( const MotorSensor &c );		
 }; //MotorSensor
 
 #endif //__MOTORSENSOR_H__
