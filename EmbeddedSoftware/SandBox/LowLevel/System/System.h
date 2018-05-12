@@ -28,6 +28,14 @@ public:
 	static uint32_t GetGCLK_Hz(uint32_t gclk_id);
 	
 	static uint32_t GetElapsedMilis();
+	
+	static inline void SetLED(bool state)
+	{
+		if (state)
+			PORT->Group[0].OUTSET.reg = PORT_PA28;
+		else
+			PORT->Group[0].OUTSET.reg = PORT_PA28;
+	}
 		
 protected:
 private:

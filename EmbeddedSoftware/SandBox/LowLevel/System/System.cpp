@@ -47,6 +47,10 @@ void System::Init()
 	SysTick->VAL = 0;					// Reset the SysTick counter value
 	SysTick->CTRL = 0x00000007;			// Enable SysTick, Enable SysTick Exceptions, Use CPU Clock
 	NVIC_EnableIRQ(SysTick_IRQn);		// Enable SysTick Interrupt
+	
+	/* Configure Board-LED */
+	PORT->Group[0].DIRSET.reg = PORT_PA28;
+	PORT->Group[0].OUTCLR.reg = PORT_PA28;
 }
  
 void System::SetPinPeripheralFunction(uint32_t pinmux)
