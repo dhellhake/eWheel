@@ -224,6 +224,12 @@
     <Compile Include="main.cpp">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="MotorControl\MotorControl.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MotorControl\MotorControl.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="MotorControl\MotorDriver\MotorDriver.cpp">
       <SubType>compile</SubType>
     </Compile>

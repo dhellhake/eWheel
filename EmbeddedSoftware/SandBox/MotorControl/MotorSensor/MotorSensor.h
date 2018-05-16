@@ -14,12 +14,12 @@
 
 enum class HALL_STATE 
 {	//State decoding: 0vUVW
-	HALL_STATE_1 = 0b100,
-	HALL_STATE_2 = 0b110,
-	HALL_STATE_3 = 0b010,
-	HALL_STATE_4 = 0b011,
-	HALL_STATE_5 = 0b001,
-	HALL_STATE_6 = 0b101,
+	HALL_STATE_1 = 0b101,
+	HALL_STATE_2 = 0b100,
+	HALL_STATE_3 = 0b110,
+	HALL_STATE_4 = 0b010,
+	HALL_STATE_5 = 0b011,
+	HALL_STATE_6 = 0b001,
 	UNDEFINED_1  = 0b000,
 	UNDEFINED_2  = 0b111
 };
@@ -36,7 +36,7 @@ class MotorSensor
 	public:
 		static void InitEIC();	//ToBeProtected
 		
-		static void Update();
+		static void HallState_Update();
 		
 		static inline HALL_STATE MASKToState(uint8_t mask)
 		{
@@ -67,6 +67,7 @@ class MotorSensor
 				return HALL_STATE::UNDEFINED_2;
 				break;
 			}
+			return HALL_STATE::UNDEFINED_1;
 		}
 	protected:
 		MotorSensor();

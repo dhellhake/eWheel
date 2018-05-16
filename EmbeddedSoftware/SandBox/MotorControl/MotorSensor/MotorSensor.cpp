@@ -32,12 +32,9 @@ void MotorSensor::InitEIC()
 		
 	//Enable Interrupt on ECTINT1-3
 	EIC->INTENSET.reg |= (1 << 1) | (1 << 2) | (1 << 3);
-	
-	/* Init Hall-State */
-	MotorSensor::HallState = MotorSensor::MASKToState(PORT->Group[0].IN.reg >> 17);
 }
 
-void MotorSensor::Update()
+void MotorSensor::HallState_Update()
 {	
 	MotorSensor::HallState = MotorSensor::MASKToState(PORT->Group[0].IN.reg >> 17);
 }
