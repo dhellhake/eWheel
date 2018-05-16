@@ -72,8 +72,9 @@ void System::InitEIC()
 	EIC->CTRLA.reg = EIC_CTRLA_SWRST;
 	while (EIC->CTRLA.reg & EIC_CTRLA_SWRST);
 	
-											
-	NVIC->ISER[0] = (uint32_t)(1 << ((uint32_t)EIC_IRQn & 0x0000001f));
+	
+	NVIC_SetPriority(EIC_IRQn, 0);;										
+	NVIC->ISER[0] = (uint32_t)(1 << ((uint32_t)EIC_IRQn & 0x0000001f));	
 	
 	EIC->CONFIG[0].reg =	EIC_CONFIG_SENSE1_BOTH |						//Interrupt on Rise and Fall edge for Hall-sensor
 							EIC_CONFIG_SENSE2_BOTH |

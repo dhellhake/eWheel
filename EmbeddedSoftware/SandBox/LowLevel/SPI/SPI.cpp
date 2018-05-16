@@ -53,17 +53,9 @@ void SPIPort::InitSERCOM()
 								(0x1 << SERCOM_SPI_CTRLA_DIPO_Pos);					//MISO on PAD 1 (PA09)
 								
 	SERCOM0->SPI.CTRLB.reg =	(1 << SERCOM_SPI_CTRLB_RXEN_Pos);
-	
-	
+		
 	SERCOM0->SPI.BAUD.reg = (System::GetGCLK_Hz(SERCOM0_GCLK_ID_CORE) / (2 * 10000000)) - 1;
-	
-	NVIC->ISER[0] = (uint32_t)(1 << ((uint32_t)SERCOM0_IRQn & 0x0000001f));
 	
 	SERCOM0->SPI.CTRLA.bit.ENABLE = 1;
 	while(SERCOM0->SPI.SYNCBUSY.bit.ENABLE);
-}
-
-void SERCOM0_Handler()
-{
-	
 }

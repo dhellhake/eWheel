@@ -51,9 +51,6 @@ void USART::InitSERCOM()
 	System::SetPinPeripheralFunction(PINMUX_PB02D_SERCOM5_PAD0);
 	System::SetPinPeripheralFunction(PINMUX_PB03D_SERCOM5_PAD1);
 
-
-	NVIC->ISER[0] = (uint32_t)(1 << ((uint32_t)SERCOM5_IRQn & 0x0000001f));
-
 	SERCOM5->USART.INTENSET.reg = SERCOM_USART_INTFLAG_RXC;
 	SERCOM5->USART.CTRLA.reg |= SERCOM_USART_CTRLA_ENABLE;
 	/* synchronization busy */
@@ -65,12 +62,6 @@ void USART::SendByte(uint8_t byte)
 {
 	while(!SERCOM5->USART.INTFLAG.bit.DRE);
 	SERCOM5->USART.DATA.reg = byte;
-}
-
-void SERCOM5_Handler()
-{
-	
-	
 }
 
 // default destructor
