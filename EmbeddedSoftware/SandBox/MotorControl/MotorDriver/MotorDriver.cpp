@@ -8,134 +8,79 @@
 
 #include "MotorDriver.h"
 
-volatile uint8_t MotorDriver::PhaseDuty = 0x00;
+volatile uint32_t MotorDriver::PhaseDuty = 0x00;
 
 // default constructor
 MotorDriver::MotorDriver()
 {
 } //MotorDriver
 
-void MotorDriver::InitTC0()
+void MotorDriver::InitTCC()
 {
 	//Enable Clock for TC0
 	//Set bits in the clock mask for an APBx bus.
-	MCLK->APBCMASK.bit.TC0_ = 1;
+	MCLK->APBCMASK.bit.TCC0_ = 1;
 	
 	/* Disable the peripheral channel */
-	GCLK->PCHCTRL[TC0_GCLK_ID].reg &= ~GCLK_PCHCTRL_CHEN;
-	while (GCLK->PCHCTRL[TC0_GCLK_ID].reg & GCLK_PCHCTRL_CHEN);
+	GCLK->PCHCTRL[TCC0_GCLK_ID].reg &= ~GCLK_PCHCTRL_CHEN;
+	while (GCLK->PCHCTRL[TCC0_GCLK_ID].reg & GCLK_PCHCTRL_CHEN);
 
 	/* Configure the peripheral channel */
-	GCLK->PCHCTRL[TC0_GCLK_ID].reg = GCLK_PCHCTRL_GEN(0);
+	GCLK->PCHCTRL[TCC0_GCLK_ID].reg = GCLK_PCHCTRL_GEN(0);
 
 	// Enable GCLK for peripheral
-	GCLK->PCHCTRL[TC0_GCLK_ID].reg |= GCLK_PCHCTRL_CHEN;
+	GCLK->PCHCTRL[TCC0_GCLK_ID].reg |= GCLK_PCHCTRL_CHEN;
 	
-	// Reset TC0
-	TC0->COUNT16.CTRLA.reg = TC_CTRLA_SWRST;
-	while (TC0->COUNT16.CTRLA.reg & TC_CTRLA_SWRST);
 	
-	TC0->COUNT8.CTRLA.reg = TC_CTRLA_MODE_COUNT8 | TC_CTRLA_PRESCALER_DIV8 | TC_CTRLA_PRESCSYNC_PRESC;		//8bit count mode; 48Mhz / Div8 = 6Mhz => ~23,5kHz
-	TC0->COUNT8.WAVE.reg = TC_WAVE_WAVEGEN_NPWM;
-
-	TC0->COUNT8.COUNT.reg = 0;
-	TC0->COUNT8.CC[0].reg = 0;
-	TC0->COUNT8.CC[1].reg = 0;
+	TCC0->CTRLA.reg = TCC_CTRLA_PRESCALER_DIV1 |			//No division of 48Mhz GCLK
+	TCC_CTRLA_PRESCSYNC_GCLK;				//Count sync on GCLK
 	
-	TC0->COUNT8.CTRLA.reg |= TC_CTRLA_ENABLE;
-	TC0->COUNT8.DBGCTRL.reg = TC_DBGCTRL_DBGRUN;
+	TCC0->DBGCTRL.bit.DBGRUN = 1;							//Run on CPU-Halt during debug-session
 	
-	//Configure PWM Output to V_High
-	PORT->Group[0].DIRSET.reg = PORT_PA23;
-	PORT->Group[0].OUTSET.reg = PORT_PA23;
-	System::SetPinPeripheralFunction(PINMUX_PA23E_TC0_WO1);
+	TCC0->WAVE.reg = TCC_WAVE_WAVEGEN_NPWM;
 	
-	//Configure PWM Output to V_Low
-	PORT->Group[0].DIRSET.reg = PORT_PA22;
-	PORT->Group[0].OUTSET.reg = PORT_PA22;
-	System::SetPinPeripheralFunction(PINMUX_PA22E_TC0_WO0);
-}
-
-void MotorDriver::InitTC1()
-{
-	//Enable Clock for TC1
-	//Set bits in the clock mask for an APBx bus.
-	MCLK->APBCMASK.bit.TC1_ = 1;
+	TCC0->COUNT.reg	= 0x00;
+	TCC0->PER.reg	= 2399;									//f_PWM = 48Mhz / 1 (2399 + 1)  => 20Khz
 	
-	/* Disable the peripheral channel */
-	GCLK->PCHCTRL[TC1_GCLK_ID].reg &= ~GCLK_PCHCTRL_CHEN;
-	while (GCLK->PCHCTRL[TC1_GCLK_ID].reg & GCLK_PCHCTRL_CHEN);
-
-	/* Configure the peripheral channel */
-	GCLK->PCHCTRL[TC1_GCLK_ID].reg = GCLK_PCHCTRL_GEN(0);
-
-	// Enable GCLK for peripheral
-	GCLK->PCHCTRL[TC1_GCLK_ID].reg |= GCLK_PCHCTRL_CHEN;
+	TCC0->CC[0].reg	= MotorDriver::PhaseDuty;				//50% duty
 	
-	// Reset TC1
-	TC1->COUNT16.CTRLA.reg = TC_CTRLA_SWRST;
-	while (TC1->COUNT16.CTRLA.reg & TC_CTRLA_SWRST);
+	TCC0->WEXCTRL.reg = TCC_WEXCTRL_OTMX(0x2) |
+	TCC_WEXCTRL_DTIEN0 |				//Enable Dead-Time-Insertion on WO0 (WO0 = High-Side; WO4 = Low-Side)
+	TCC_WEXCTRL_DTIEN2 |				//Enable Dead-Time-Insertion on WO2 (WO2 = High-Side; WO6 = Low-Side)
+	TCC_WEXCTRL_DTIEN3 |				//Enable Dead-Time-Insertion on WO3 (WO3 = High-Side; WO7 = Low-Side)
+	TCC_WEXCTRL_DTLS(10) |				//Set Dead-Time-Insertion of 10x20,8ns (208ns) (min: 133ns)
+	TCC_WEXCTRL_DTHS(10);				//Set Dead-Time-Insertion of 10x20,8ns (208ns) (min: 133ns)
 		
-	TC1->COUNT8.CTRLA.reg = TC_CTRLA_MODE_COUNT8 | TC_CTRLA_PRESCALER_DIV8 | TC_CTRLA_PRESCSYNC_PRESC;		//8bit count mode; 48Mhz / Div8 = 6Mhz => ~23,5kHz
-	TC1->COUNT8.WAVE.reg = TC_WAVE_WAVEGEN_NPWM;
-
-	TC1->COUNT8.COUNT.reg = 0;
-	TC1->COUNT8.CC[0].reg = 0;
-	TC1->COUNT8.CC[1].reg = 0;
-		
-	TC1->COUNT8.CTRLA.reg |= TC_CTRLA_ENABLE;
-	TC1->COUNT8.DBGCTRL.reg = TC_DBGCTRL_DBGRUN;
+	TCC0->CTRLA.bit.ENABLE = 1;
 	
-	//Configure PWM Output to W_High
-	PORT->Group[0].DIRSET.reg = PORT_PA25;
-	PORT->Group[0].OUTSET.reg = PORT_PA25;
-	System::SetPinPeripheralFunction(PINMUX_PA25E_TC1_WO1);
+	//Configure PWM Output for U
+	PORT->Group[0].DIRSET.reg = PORT_PA19;
+	PORT->Group[0].OUTSET.reg = PORT_PA19;
+	System::SetPinPeripheralFunction(PINMUX_PA19F_TCC0_WO3);	// High
 	
-	//Configure PWM Output to W_Low
-	PORT->Group[0].DIRSET.reg = PORT_PA24;
-	PORT->Group[0].OUTSET.reg = PORT_PA24;
-	System::SetPinPeripheralFunction(PINMUX_PA24E_TC1_WO0);
-}
-
-void MotorDriver::InitTC3()
-{
-	//Enable Clock for TC3
-	//Set bits in the clock mask for an APBx bus.
-	MCLK->APBCMASK.bit.TC3_ = 1;
-	
-	/* Disable the peripheral channel */
-	GCLK->PCHCTRL[TC3_GCLK_ID].reg &= ~GCLK_PCHCTRL_CHEN;
-	while (GCLK->PCHCTRL[TC3_GCLK_ID].reg & GCLK_PCHCTRL_CHEN);
-
-	/* Configure the peripheral channel */
-	GCLK->PCHCTRL[TC3_GCLK_ID].reg = GCLK_PCHCTRL_GEN(0);
-
-	// Enable GCLK for peripheral
-	GCLK->PCHCTRL[TC3_GCLK_ID].reg |= GCLK_PCHCTRL_CHEN;
-	
-	// Reset TC1
-	TC3->COUNT16.CTRLA.reg = TC_CTRLA_SWRST;
-	while (TC3->COUNT16.CTRLA.reg & TC_CTRLA_SWRST);
-	
-	TC3->COUNT8.CTRLA.reg = TC_CTRLA_MODE_COUNT8 | TC_CTRLA_PRESCALER_DIV8 | TC_CTRLA_PRESCSYNC_PRESC;		//8bit count mode; 48Mhz / Div8 = 6Mhz => ~23,5kHz
-	TC3->COUNT8.WAVE.reg = TC_WAVE_WAVEGEN_NPWM;
-
-	TC3->COUNT8.COUNT.reg = 0;
-	TC3->COUNT8.CC[0].reg = 0;
-	TC3->COUNT8.CC[1].reg = 0;
-	
-	TC3->COUNT8.CTRLA.reg |= TC_CTRLA_ENABLE;
-	TC3->COUNT8.DBGCTRL.reg = TC_DBGCTRL_DBGRUN;
-	
-	//Configure PWM Output to W_High
 	PORT->Group[0].DIRSET.reg = PORT_PA21;
 	PORT->Group[0].OUTSET.reg = PORT_PA21;
-	System::SetPinPeripheralFunction(PINMUX_PA21E_TC3_WO1);
+	System::SetPinPeripheralFunction(PINMUX_PA21F_TCC0_WO7);	// Low
 	
-	//Configure PWM Output to W_Low
+	
+	//Configure PWM Output for V
+	PORT->Group[0].DIRSET.reg = PORT_PA18;
+	PORT->Group[0].OUTSET.reg = PORT_PA18;
+	System::SetPinPeripheralFunction(PINMUX_PA18F_TCC0_WO2);	// High
+	
 	PORT->Group[0].DIRSET.reg = PORT_PA20;
 	PORT->Group[0].OUTSET.reg = PORT_PA20;
-	System::SetPinPeripheralFunction(PINMUX_PA20E_TC3_WO0);
+	System::SetPinPeripheralFunction(PINMUX_PA20F_TCC0_WO6);	// Low
+	
+	
+	//Configure PWM Output for W
+	PORT->Group[0].DIRSET.reg = PORT_PA04;
+	PORT->Group[0].OUTSET.reg = PORT_PA04;
+	System::SetPinPeripheralFunction(PINMUX_PA04E_TCC0_WO0);	// High
+	
+	PORT->Group[0].DIRSET.reg = PORT_PA22;
+	PORT->Group[0].OUTSET.reg = PORT_PA22;
+	System::SetPinPeripheralFunction(PINMUX_PA22F_TCC0_WO4);	// Low
 }
 
 // default destructor

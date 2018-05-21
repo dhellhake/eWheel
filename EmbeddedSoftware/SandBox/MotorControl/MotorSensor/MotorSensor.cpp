@@ -15,29 +15,30 @@ MotorSensor::MotorSensor()
 
 void MotorSensor::InitEIC()
 {		
-	/* Pin-Config: U-Hall on EXTINT3 */
-	PORT->Group[0].DIRCLR.reg = PORT_PA19;
-	PORT->Group[0].PINCFG[PIN_PA19].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
-	System::SetPinPeripheralFunction(PINMUX_PA19A_EIC_EXTINT3);
+	/* Pin-Config: U-Hall on EXTINT13 */
+	PORT->Group[0].DIRCLR.reg = PORT_PA25;
+	PORT->Group[0].PINCFG[PIN_PA25].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+	System::SetPinPeripheralFunction(PINMUX_PA25A_EIC_EXTINT13);
 	
-	/* Pin-Config: V-Hall on EXTINT2 */
-	PORT->Group[0].DIRCLR.reg = PORT_PA18;
-	PORT->Group[0].PINCFG[PIN_PA18].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
-	System::SetPinPeripheralFunction(PINMUX_PA18A_EIC_EXTINT2);
+	/* Pin-Config: V-Hall on EXTINT12 */
+	PORT->Group[0].DIRCLR.reg = PORT_PA24;
+	PORT->Group[0].PINCFG[PIN_PA24].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+	System::SetPinPeripheralFunction(PINMUX_PA24A_EIC_EXTINT12);
 	
-	/* Pin-Config: W-Hall on EXTINT1 */
-	PORT->Group[0].DIRCLR.reg = PORT_PA17;
-	PORT->Group[0].PINCFG[PIN_PA17].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;	
-	System::SetPinPeripheralFunction(PINMUX_PA17A_EIC_EXTINT1);
+	/* Pin-Config: W-Hall on EXTINT7 */
+	PORT->Group[0].DIRCLR.reg = PORT_PA23;
+	PORT->Group[0].PINCFG[PIN_PA23].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;	
+	System::SetPinPeripheralFunction(PINMUX_PA23A_EIC_EXTINT7);
 		
-	//Enable Interrupt on ECTINT1-3
-	EIC->INTENSET.reg |= (1 << 1) | (1 << 2) | (1 << 3);
+	//Enable Interrupt on ECTINT 7, 12, 13
+	EIC->INTENSET.reg |= (1 << 7) | (1 << 12) | (1 << 13);
 }
 
 void MotorSensor::HallState_Update()
-{	
-	MotorSensor::HallState = MotorSensor::MASKToState(PORT->Group[0].IN.reg >> 17);
+{
+	MotorSensor::HallState = MotorSensor::MASKToState((PORT->Group[0].IN.reg >> 23) & 0b111);
 }
+
 
 // default destructor
 MotorSensor::~MotorSensor()

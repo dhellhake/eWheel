@@ -29,9 +29,9 @@ void LSM6D::Init()
 	PORT->Group[0].OUTSET.reg = PORT_PA12;
 	
 	//Configure INT1-Pin as Interrupt-Trigger Input
-	PORT->Group[0].DIRCLR.reg = PORT_PA13;
-	PORT->Group[0].PINCFG[PIN_PA13].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
-	System::SetPinPeripheralFunction(PINMUX_PA13A_EIC_EXTINT13);
+	PORT->Group[0].DIRCLR.reg = PORT_PA02;
+	PORT->Group[0].PINCFG[PIN_PA02].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+	System::SetPinPeripheralFunction(PINMUX_PA02A_EIC_EXTINT2);
 			
 	//Trigger SW-Reset
 	LSM6D::WriteRegister(LSM6DS3_CTRL3_C, 0x1);
@@ -44,21 +44,9 @@ void LSM6D::Init()
 											(0b1 << 0));				//CTRL1_XL->BW_XL = 10			analog filter cutoff frequence = 100hz (00=400;01=200;10=100;11=50)
 	LSM6D::WriteRegister(LSM6DS3_CTRL4_C,	(0b1 << 7));				//CTRL4_C->XL_BW_SCAL_ODR = 1   Select CTRL1_XL->BW_XL as source for analog filter bandwith
 	LSM6D::WriteRegister(LSM6DS3_TAP_CFG,	(0b1 << 4));				//TAP_CFG->SLOPE_FDS = 1		enable HP and LPF2 for Accel
-	
-	/* //Configure Gyro
-	LSM6D::WriteRegister(LSM6DS3_CTRL2_G,	(0b0100 << 4));				//CTRL2_G->ODR_G = 100			104Hz data rate for Gyro
-	LSM6D::WriteRegister(LSM6DS3_CTRL7_G,	(0b1 << 6) |				//CTRL7_G->HP_G_EN = 1			enable high pass filter
-											(0b10 << 4) |				//CTRL7_G->HPCF_G = 10			high pass filter cutoff = 2.07Hz (00=0,0081;01=0,0324;10=2,07;11=16,32)
-											(0b1 << 3));				//CTRL7_G->HP_G_RST = 1			reset dc offset of Gyro
-	*/
-		
-	/* Pin-Config: INT1 on EXTINT13 */
-	PORT->Group[0].DIRCLR.reg = PORT_PA13;
-	PORT->Group[0].PINCFG[PIN_PA13].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
-	System::SetPinPeripheralFunction(PINMUX_PA13A_EIC_EXTINT13);
-		
+			
 	//Enable Interrupt for PIN
-	EIC->INTENSET.reg |= (1 << 13);											//Enable Interrupt on EXTINT13  for LSM6D-INT1
+	EIC->INTENSET.reg |= (1 << 2);											//Enable Interrupt on EXTINT2  for LSM6D-INT1
 }
 
 

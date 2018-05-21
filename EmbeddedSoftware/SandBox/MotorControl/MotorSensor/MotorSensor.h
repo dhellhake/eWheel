@@ -14,12 +14,12 @@
 
 enum class HALL_STATE 
 {	//State decoding: 0vUVW
-	HALL_STATE_1 = 0b101,
-	HALL_STATE_2 = 0b100,
-	HALL_STATE_3 = 0b110,
-	HALL_STATE_4 = 0b010,
-	HALL_STATE_5 = 0b011,
-	HALL_STATE_6 = 0b001,
+	HALL_STATE_1 = 0b010,
+	HALL_STATE_2 = 0b110,
+	HALL_STATE_3 = 0b100,
+	HALL_STATE_4 = 0b101,
+	HALL_STATE_5 = 0b001,
+	HALL_STATE_6 = 0b011,
 	UNDEFINED_1  = 0b000,
 	UNDEFINED_2  = 0b111
 };
@@ -40,34 +40,7 @@ class MotorSensor
 		
 		static inline HALL_STATE MASKToState(uint8_t mask)
 		{
-			switch (mask)
-			{
-				case (uint8_t)HALL_STATE::HALL_STATE_1:
-				return HALL_STATE::HALL_STATE_1;
-				break;
-				case (uint8_t)HALL_STATE::HALL_STATE_2:
-				return HALL_STATE::HALL_STATE_2;
-				break;
-				case (uint8_t)HALL_STATE::HALL_STATE_3:
-				return HALL_STATE::HALL_STATE_3;
-				break;
-				case (uint8_t)HALL_STATE::HALL_STATE_4:
-				return HALL_STATE::HALL_STATE_4;
-				break;
-				case (uint8_t)HALL_STATE::HALL_STATE_5:
-				return HALL_STATE::HALL_STATE_5;
-				break;
-				case (uint8_t)HALL_STATE::HALL_STATE_6:
-				return HALL_STATE::HALL_STATE_6;
-				break;
-				case (uint8_t)HALL_STATE::UNDEFINED_1:
-				return HALL_STATE::UNDEFINED_1;
-				break;
-				case (uint8_t)HALL_STATE::UNDEFINED_2:
-				return HALL_STATE::UNDEFINED_2;
-				break;
-			}
-			return HALL_STATE::UNDEFINED_1;
+			return (HALL_STATE)mask;
 		}
 	protected:
 		MotorSensor();

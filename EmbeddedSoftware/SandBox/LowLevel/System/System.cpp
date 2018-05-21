@@ -76,11 +76,10 @@ void System::InitEIC()
 	NVIC_SetPriority(EIC_IRQn, 0);;										
 	NVIC->ISER[0] = (uint32_t)(1 << ((uint32_t)EIC_IRQn & 0x0000001f));	
 	
-	EIC->CONFIG[0].reg =	EIC_CONFIG_SENSE1_BOTH |						//Interrupt on Rise and Fall edge for Hall-sensor
-							EIC_CONFIG_SENSE2_BOTH |
-							EIC_CONFIG_SENSE3_BOTH;
-	
-	EIC->CONFIG[1].reg =	EIC_CONFIG_SENSE5_RISE;							//Interrupt on rise for LSM6D-INT1
+	EIC->CONFIG[0].reg =	EIC_CONFIG_SENSE2_RISE |						//LSM6D-INT1
+							EIC_CONFIG_SENSE7_BOTH;							//Hall Sensor
+	EIC->CONFIG[1].reg =	EIC_CONFIG_SENSE4_BOTH	|
+							EIC_CONFIG_SENSE5_BOTH;
 	
 	EIC->CTRLA.reg = EIC_CTRLA_ENABLE;
 }

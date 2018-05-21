@@ -17,21 +17,20 @@
 void EIC_Handler()
 {
 	
-	if ((EIC->INTFLAG.reg & 0b1110) != 0x00)
+	if ((EIC->INTFLAG.reg & ((1 << 7) | (1 << 12) | (1 << 13))) != 0x00)
 	{
 		/* Hall Sensor caused interrupt */
 		MotorControl::ElectronicPhase_Changed();
-		
-		EIC->INTFLAG.reg = (1 << 1) | (1 << 2) | (1 << 3);
-	} else if ((EIC->INTFLAG.reg & (1 << 13)) != 0x00)
+				
+		EIC->INTFLAG.reg = (1 << 7) | (1 << 12) | (1 << 13);
+	} else if ((EIC->INTFLAG.reg & (1 << 2)) != 0x00)
 	{
 		/* LSM6D->INT1 caused interrupt */
 		LSM6D::Update();
 		
-		EIC->INTFLAG.reg = (1 << 13);
+		EIC->INTFLAG.reg = (1 << 2);
 	}
 }
-
 
 int main(void)
 {
@@ -42,8 +41,14 @@ int main(void)
 	/* Initialize the lsm6d sensor */
 	LSM6D::Init();
 	/* Initialize BLDC Motor Control */
-	MotorDriver::PhaseDuty = 0x0F;
+	MotorDriver::PhaseDuty = 1200;
 	MotorControl::Init();
+	
+	
+	uint8_t result = LSM6D::ReadRegister(LSM6DS3_WHO_AM_I_REG);
+	
+	result *=2;
+	
 	while (1)
 	{
 	}
