@@ -19,7 +19,7 @@ public:
 protected:
 private:
 	static uint8_t *buffer_ref;
-	static uint8_t tx_index;
+	static uint16_t tx_index;
 	static uint16_t tx_count;
 
 	static volatile bool tx_complete;

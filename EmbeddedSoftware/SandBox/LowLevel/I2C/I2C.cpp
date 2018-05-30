@@ -8,9 +8,9 @@
 
 #include "I2C.h"
 
-uint8_t I2C::tx_index = 0;
+uint16_t I2C::tx_index = 0;
 uint16_t I2C::tx_count = 0;
-uint8_t *I2C::buffer_ref = &I2C::tx_index;
+uint8_t *I2C::buffer_ref = 0x00;
 	
 volatile bool I2C::tx_complete = true;
 
