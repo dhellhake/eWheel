@@ -248,6 +248,12 @@
     <Compile Include="MotorControl\MotorSensor\MotorSensor.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="SystemMonitor\SSD1306\SSD1306.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="SystemMonitor\SSD1306\SSD1306.h">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DebugPort\" />
@@ -261,6 +267,8 @@
     <Folder Include="MotorControl" />
     <Folder Include="MotorControl\MotorSensor" />
     <Folder Include="MotorControl\MotorDriver" />
+    <Folder Include="SystemMonitor" />
+    <Folder Include="SystemMonitor\SSD1306" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LowLevel\System\Device_Startup\samc21g18a_flash.ld">
