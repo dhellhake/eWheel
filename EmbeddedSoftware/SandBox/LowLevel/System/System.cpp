@@ -73,7 +73,7 @@ void System::InitEIC()
 	while (EIC->CTRLA.reg & EIC_CTRLA_SWRST);
 	
 	
-	NVIC_SetPriority(EIC_IRQn, 0);;										
+	NVIC_SetPriority(EIC_IRQn, 0);										
 	NVIC->ISER[0] = (uint32_t)(1 << ((uint32_t)EIC_IRQn & 0x0000001f));	
 	
 	EIC->CONFIG[0].reg =	EIC_CONFIG_SENSE2_RISE |						//LSM6D-INT1
