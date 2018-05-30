@@ -194,6 +194,12 @@
     <Compile Include="DebugPort\DebugPort.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="LowLevel\I2C\I2C.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\I2C\I2C.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="LowLevel\SPI\SPI.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -246,6 +252,7 @@
   <ItemGroup>
     <Folder Include="DebugPort\" />
     <Folder Include="LowLevel" />
+    <Folder Include="LowLevel\I2C" />
     <Folder Include="LowLevel\SPI\" />
     <Folder Include="LowLevel\System" />
     <Folder Include="LowLevel\System\Device_Startup\" />
