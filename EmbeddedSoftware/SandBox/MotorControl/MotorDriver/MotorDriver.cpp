@@ -8,7 +8,7 @@
 
 #include "MotorDriver.h"
 
-volatile uint32_t MotorDriver::PhaseDuty = 0x00;
+volatile uint32_t MotorDriver::PhaseDuty = 150;
 
 // default constructor
 MotorDriver::MotorDriver()
@@ -48,8 +48,8 @@ void MotorDriver::InitTCC()
 	TCC_WEXCTRL_DTIEN0 |				//Enable Dead-Time-Insertion on WO0 (WO0 = High-Side; WO4 = Low-Side)
 	TCC_WEXCTRL_DTIEN2 |				//Enable Dead-Time-Insertion on WO2 (WO2 = High-Side; WO6 = Low-Side)
 	TCC_WEXCTRL_DTIEN3 |				//Enable Dead-Time-Insertion on WO3 (WO3 = High-Side; WO7 = Low-Side)
-	TCC_WEXCTRL_DTLS(10) |				//Set Dead-Time-Insertion of 10x20,8ns (208ns) (min: 133ns)
-	TCC_WEXCTRL_DTHS(10);				//Set Dead-Time-Insertion of 10x20,8ns (208ns) (min: 133ns)
+	TCC_WEXCTRL_DTLS(50) |				//Set Dead-Time-Insertion of 10x20,8ns (208ns) (min: 133ns)
+	TCC_WEXCTRL_DTHS(255);				//Set Dead-Time-Insertion of 10x20,8ns (208ns) (min: 133ns)
 		
 	TCC0->CTRLA.bit.ENABLE = 1;
 	
