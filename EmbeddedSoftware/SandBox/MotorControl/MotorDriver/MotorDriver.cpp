@@ -8,7 +8,7 @@
 
 #include "MotorDriver.h"
 
-volatile uint32_t MotorDriver::PhaseDuty = 150;
+volatile uint32_t MotorDriver::PhaseDuty = 500;
 
 // default constructor
 MotorDriver::MotorDriver()
@@ -40,7 +40,7 @@ void MotorDriver::InitTCC()
 	TCC0->WAVE.reg = TCC_WAVE_WAVEGEN_NPWM;
 	
 	TCC0->COUNT.reg	= 0x00;
-	TCC0->PER.reg	= 2399;									//f_PWM = 48Mhz / 1 (2399 + 1)  => 20Khz
+	TCC0->PER.reg	= 2000;									//f_PWM = 48Mhz / 1 (2399 + 1)  => 20Khz
 	
 	TCC0->CC[0].reg	= MotorDriver::PhaseDuty;				//50% duty
 	
@@ -48,8 +48,8 @@ void MotorDriver::InitTCC()
 	TCC_WEXCTRL_DTIEN0 |				//Enable Dead-Time-Insertion on WO0 (WO0 = High-Side; WO4 = Low-Side)
 	TCC_WEXCTRL_DTIEN2 |				//Enable Dead-Time-Insertion on WO2 (WO2 = High-Side; WO6 = Low-Side)
 	TCC_WEXCTRL_DTIEN3 |				//Enable Dead-Time-Insertion on WO3 (WO3 = High-Side; WO7 = Low-Side)
-	TCC_WEXCTRL_DTLS(50) |				//Set Dead-Time-Insertion of 10x20,8ns (208ns) (min: 133ns)
-	TCC_WEXCTRL_DTHS(255);				//Set Dead-Time-Insertion of 10x20,8ns (208ns) (min: 133ns)
+	TCC_WEXCTRL_DTLS(100) |				//Set Dead-Time-Insertion of 10x20,8ns (208ns) (min: 133ns)
+	TCC_WEXCTRL_DTHS(150);				//Set Dead-Time-Insertion of 10x20,8ns (208ns) (min: 133ns)
 		
 	TCC0->CTRLA.bit.ENABLE = 1;
 	
