@@ -22,37 +22,18 @@ private:
 	static uint16_t tx_index;
 	static uint16_t tx_count;
 
-	static volatile bool tx_complete;
 
 //functions
 public:
 	static void InitSERCOM();
 	
-	static void StartTransmitt(uint8_t slave_addr, uint8_t *bufferRef, uint16_t count);
+	static void InitDMAC();
 	
-	static inline void Handler()
-	{
-		/* Master on bus interrupt checking */
-		if (SERCOM4->I2CM.INTFLAG.bit.MB)
-		{
-			if (I2C::tx_index == I2C::tx_count)
-			{ /* After transferring the last byte stop condition will be sent */
-				SERCOM4->I2CM.CTRLB.bit.CMD = 0x3;
-				while(SERCOM4->I2CM.SYNCBUSY.bit.SYSOP);
-				I2C::tx_complete = true;
-				I2C::tx_index = 0;
-			}
-			else
-			{ /* placing the data from transmitting buffer to DATA register*/
-				SERCOM4->I2CM.DATA.reg = I2C::buffer_ref[I2C::tx_index++];
-				while(SERCOM4->I2CM.SYNCBUSY.bit.SYSOP);
-			}
-		}
-	}
-	
+	static void StartDMACTransfer(DmacDescriptor *descriptor);
+		
 	static inline void Wait()
 	{
-		while(!I2C::tx_complete);
+		while(!System::DMAC_TX_Complete[0]);
 	}
 protected:
 	I2C();

@@ -2,7 +2,7 @@
 * I2C.cpp
 *
 * Created: 30.05.2018 18:19:17
-* Author: domin
+* Author: dominik hellhake
 */
 
 
@@ -11,8 +11,6 @@
 uint16_t I2C::tx_index = 0;
 uint16_t I2C::tx_count = 0;
 uint8_t *I2C::buffer_ref = 0x00;
-	
-volatile bool I2C::tx_complete = true;
 
 // default constructor
 I2C::I2C()
@@ -52,7 +50,7 @@ void I2C::InitSERCOM()
 	/* synchronization busy */
 	while(SERCOM4->I2CM.SYNCBUSY.bit.SYSOP);
 	/* BAUD = 120 for 400kHz-SCL @ 48Mhz GCLK */
-	SERCOM4->I2CM.BAUD.reg = SERCOM_I2CM_BAUD_BAUD(120);
+	SERCOM4->I2CM.BAUD.reg = SERCOM_I2CM_BAUD_BAUD(40);
 	/* synchronization busy */
 	while(SERCOM4->I2CM.SYNCBUSY.bit.SYSOP);
 	/* SERCOM4 peripheral enabled by setting the ENABLE bit as 1*/
@@ -63,31 +61,32 @@ void I2C::InitSERCOM()
 	SERCOM4->I2CM.STATUS.bit.BUSSTATE = 0x1;
 	/* synchronization busy */
 	while(SERCOM4->I2CM.SYNCBUSY.bit.SYSOP);
-	/* Both master on bus and slave on bus interrupt is enabled */
-	SERCOM4->I2CM.INTENSET.reg = SERCOM_I2CM_INTENSET_MB | SERCOM_I2CM_INTENSET_SB;
-	/* SERCOM4 handler enabled */
-	NVIC->ISER[0] = (uint32_t)(1 << ((uint32_t)SERCOM4_IRQn & 0x0000001f));	
-}
-
-void I2C::StartTransmitt(uint8_t slave_addr, uint8_t *bufferRef, uint16_t count)
-{	
-	I2C::tx_count = count;
-	I2C::buffer_ref = bufferRef;
-	I2C::tx_index = 0;
 	
-	I2C::tx_complete = false;
-		
-	/* Acknowledge section is set as ACK signal by
-		writing 0 in ACKACT bit */
-	SERCOM4->I2CM.CTRLB.reg &= ~SERCOM_I2CM_CTRLB_ACKACT;
-	while(SERCOM4->I2CM.SYNCBUSY.bit.SYSOP);
-	/* slave address with Write(0) */
-	SERCOM4->I2CM.ADDR.reg = (slave_addr << 1) | 0;
+	/* Init I2C-DMAC channel */
+	I2C::InitDMAC();
 }
 
-void SERCOM4_Handler(void)
+void I2C::InitDMAC()
+{	
+	DMAC->CHID.reg = DMAC_CHID_ID(0);
+	DMAC->CHCTRLA.reg &= ~DMAC_CHCTRLA_ENABLE;
+	DMAC->CHCTRLA.reg = DMAC_CHCTRLA_SWRST;
+	DMAC->CHCTRLA.reg |= DMAC_CHCTRLA_RUNSTDBY;
+	
+	DMAC->SWTRIGCTRL.reg &= (uint32_t)(~(1 << 0));
+	
+	DMAC->CHCTRLB.reg =	DMAC_CHCTRLB_LVL(0) | \
+						DMAC_CHCTRLB_TRIGSRC(SERCOM4_DMAC_ID_TX) | \
+						DMAC_CHCTRLB_TRIGACT(DMAC_CHCTRLB_TRIGACT_BEAT_Val);	
+	
+	/* Enable DMAC interrupt */
+	NVIC->ISER[0] = (uint32_t)(1 << ((uint32_t)DMAC_IRQn & 0x0000001f));
+	DMAC->CHINTENSET.reg = DMAC_CHINTENSET_TERR | DMAC_CHINTENSET_TCMPL | DMAC_CHINTENSET_SUSP;
+}
+
+void I2C::StartDMACTransfer(DmacDescriptor *descriptor)
 {
-	I2C::Handler();
+	System::StartDMATransfer(descriptor, 0);
 }
 
 // default destructor
