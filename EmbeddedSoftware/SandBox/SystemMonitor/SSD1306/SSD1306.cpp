@@ -8,6 +8,29 @@
 
 #include "SSD1306.h"
 
+DmacDescriptor SSD1306::DMAC_Descriptors[9];
+
+uint8_t SSD1306::Blank[32] = {
+	0, 0,
+	0, 0,
+	0, 0,
+	0, 0,
+	0, 0,
+	0, 0,
+	0, 0,
+	0, 0,
+	0, 0,
+	0, 0,
+	0, 0,
+	0, 0,
+	0, 0,
+	0, 0,
+	0, 0,
+	0, 0
+};
+
+uint8_t SSD1306::CMDBuffer[27] = {};
+
 uint8_t SSD1306::ASCII[320] = {
 	0, 0,
 	7, 192,
@@ -180,242 +203,191 @@ uint8_t SSD1306::ASCII[320] = {
 	14, 0
 };
 
-
-uint8_t SSD1306::FrameBuffer[513] = {
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-};
-
-// default constructor
-SSD1306::SSD1306()
+void SSD1306::InitDMADescriptors()
 {
-} //SSD1306
+	for (uint8_t x = 0; x < 9; x++)
+	{
+		/* Set block transfer control to base descriptor */
+		SSD1306::DMAC_Descriptors[x].BTCTRL.bit.VALID = true;
+		SSD1306::DMAC_Descriptors[x].BTCTRL.bit.EVOSEL = 0;
+		SSD1306::DMAC_Descriptors[x].BTCTRL.bit.BLOCKACT = 0;
+		SSD1306::DMAC_Descriptors[x].BTCTRL.bit.BEATSIZE = 0;
+		SSD1306::DMAC_Descriptors[x].BTCTRL.bit.SRCINC = true;
+		SSD1306::DMAC_Descriptors[x].BTCTRL.bit.DSTINC = false;
+		SSD1306::DMAC_Descriptors[x].BTCTRL.bit.STEPSEL = 0;
+		SSD1306::DMAC_Descriptors[x].BTCTRL.bit.STEPSIZE = 0;
+		SSD1306::DMAC_Descriptors[x].BTCNT.reg = 32;
+		
+		SSD1306::DMAC_Descriptors[x].DSTADDR.reg = (uint32_t)(&SERCOM4->I2CM.DATA.reg);
+		
+		/* Set next transfer descriptor address */
+		if (x > 0 && x < 8)
+			SSD1306::DMAC_Descriptors[x].DESCADDR.reg = (uint32_t)&(SSD1306::DMAC_Descriptors[x + 1]);
+		else
+		{
+			SSD1306::DMAC_Descriptors[x].BTCNT.reg = 30;
+			SSD1306::DMAC_Descriptors[x].DESCADDR.reg = 0;
+		}
+	}
+}
 
 void SSD1306::Init()
 {
-	uint8_t cmd_buff[2] = {0x00, 0x00};
+	// ERRATA: Swap ASCII Bit-Pattern for each character.
+	uint8_t tmp;
+	for (uint16_t x = 0; x < 320; x += 2)
+	{
+		tmp = SSD1306::ASCII[x+1];
+		SSD1306::ASCII[x+1] = SSD1306::ASCII[x];
+		SSD1306::ASCII[x] = tmp;
+	}
 	
 	/* Init I2C peripheral */
 	I2C::InitSERCOM();
 	
-	/* DISPLAYOFF */
-	cmd_buff[1] = 0xAE;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
+	SSD1306::InitDMADescriptors();
 	
-	/* SETDISPLAYCLOCKDIV */
-	cmd_buff[1] = 0xD5;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-	cmd_buff[1] = 0x80;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
+	uint8_t dataLength = 27;
+	SSD1306::CMDBuffer[0] = 0x00;
+	SSD1306::CMDBuffer[1] = 0xAE;			// DISPLAYOFF
+	SSD1306::CMDBuffer[2] = 0xD5;			// SETDISPLAYCLOCKDIV
+	SSD1306::CMDBuffer[3] = 0x80;
+	SSD1306::CMDBuffer[4] = 0xA8;			// SETMULTIPLEX
+	SSD1306::CMDBuffer[5] = 32 - 1;
+	SSD1306::CMDBuffer[6] = 0xD3;			// SETDISPLAYOFFSET
+	SSD1306::CMDBuffer[7] = 0x00;
+	SSD1306::CMDBuffer[8] = 0x40 | 0x0;		// SETSTARTLINE
+	SSD1306::CMDBuffer[9] = 0x8D;			// CHARGEPUMP
+	SSD1306::CMDBuffer[10] = 0x14;
+	SSD1306::CMDBuffer[11] = 0x20;			// MEMORYMODE
+	SSD1306::CMDBuffer[12] = 0x01;
+	SSD1306::CMDBuffer[13] = 0xA0 | 0x1;	// SEGREMAP
+	SSD1306::CMDBuffer[14] = 0xC8;			// COMSCANDEC
+	SSD1306::CMDBuffer[15] = 0xDA;			// SETCOMPINS
+	SSD1306::CMDBuffer[16] = 0x02;
+	SSD1306::CMDBuffer[17] = 0x81;			// SETCONTRAST
+	SSD1306::CMDBuffer[18] = 0x8F;
+	SSD1306::CMDBuffer[19] = 0xD9;			// SETPRECHARGE
+	SSD1306::CMDBuffer[20] = 0xF1;
+	SSD1306::CMDBuffer[21] = 0xDB;			// SETVCOMDETECT
+	SSD1306::CMDBuffer[22] = 0x40;
+	SSD1306::CMDBuffer[23] = 0xA4;			// DISPLAYALLON_RESUME
+	SSD1306::CMDBuffer[24] = 0xA6;			// NORMALDISPLAY
+	SSD1306::CMDBuffer[25] = 0x2E;			// DEACTIVATE_SCROLL
+	SSD1306::CMDBuffer[26] = 0xAF;			// DISPLAYON
 	
-	/* SETMULTIPLEX */
-	cmd_buff[1] = 0xA8;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-	cmd_buff[1] = 32 - 1;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-
-	/* SETDISPLAYOFFSET */
-	cmd_buff[1] = 0xD3;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-	cmd_buff[1] = 0x00;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
 	
-	/* SETSTARTLINE */
-	cmd_buff[1] = 0x40 | 0x0;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
+	/* Set transfer size, source address and destination address */
+	SSD1306::DMAC_Descriptors[0].BTCNT.reg = dataLength;
+	SSD1306::DMAC_Descriptors[0].SRCADDR.reg = (uint32_t)(SSD1306::CMDBuffer + dataLength);
+		
+	/* Set channel x descriptor 0 to the descriptor base address */
+	System::StartDMATransfer(SSD1306::DMAC_Descriptors, 0);
 	
-	/* CHARGEPUMP */
-	cmd_buff[1] = 0x8D;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-	cmd_buff[1] = 0x14;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-	
-	/* MEMORYMODE */
-	cmd_buff[1] = 0x20;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-	cmd_buff[1] = 0x00;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-	
-	/* SEGREMAP */
-	cmd_buff[1] = 0xA0 | 0x1;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-	
-	/* COMSCANDEC */
-	cmd_buff[1] = 0xC8;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-
-	/* SETCOMPINS */
-	cmd_buff[1] = 0xDA;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-	cmd_buff[1] = 0x02;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-	
-	/* SETCONTRAST */
-	cmd_buff[1] = 0x81;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-	cmd_buff[1] = 0x8F;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-	
-	/* SETPRECHARGE */
-	cmd_buff[1] = 0xD9;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-	cmd_buff[1] = 0xF1;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-	
-	/* SETVCOMDETECT */
-	cmd_buff[1] = 0xDB;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-	cmd_buff[1] = 0x40;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-	
-	/* DISPLAYALLON_RESUME */
-	cmd_buff[1] = 0xA4;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-	
-	/* NORMALDISPLAY */
-	cmd_buff[1] = 0xA6;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-
-	/* DEACTIVATE_SCROLL */
-	cmd_buff[1] = 0x2E;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-	
-	/* DISPLAYON */
-	cmd_buff[1] = 0xAF;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
+	SERCOM4->I2CM.ADDR.reg =	SERCOM_I2CM_ADDR_ADDR(SLAVE_ADDR<<1) |
+								SERCOM_I2CM_ADDR_LENEN |
+								SERCOM_I2CM_ADDR_LEN(dataLength) |
+								0;
 }
 
-void SSD1306::Update()
-{
-	uint8_t cmd_buff[2] = {0x00, 0x00};
+void SSD1306::SetAddress(uint8_t row)
+{	
+	SSD1306::CMDBuffer[0] = 0x00;
+	SSD1306::CMDBuffer[1] = 0x21;
+	SSD1306::CMDBuffer[2] = 0x00;
+	SSD1306::CMDBuffer[3] = 127;
+	SSD1306::CMDBuffer[4] = 0x22;
+	SSD1306::CMDBuffer[5] = (uint8_t)(row*2);
+	SSD1306::CMDBuffer[6] = (uint8_t)((row*2) + 1);
 		
-	/* COLUMNADDR */
-	cmd_buff[1] = 0x21;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-	cmd_buff[1] = 0x00;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-	cmd_buff[1] = 128-1;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-
-	/* PAGEADDR */
-	cmd_buff[1] = 0x22;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-	cmd_buff[1] = 0x00;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-	cmd_buff[1] = 0x03;
-	I2C::StartTransmitt(SLAVE_ADDR, cmd_buff, 2);
-	I2C::Wait();
-		
-	SSD1306::FrameBuffer[0] = 0x40;
-		
-	I2C::StartTransmitt(SLAVE_ADDR, SSD1306::FrameBuffer, 513);
-	I2C::Wait();
+	SSD1306::DMAC_Descriptors[0].BTCNT.reg = 7;								//Data-length = amount of bytes to send
+	SSD1306::DMAC_Descriptors[0].SRCADDR.reg = (uint32_t)(SSD1306::CMDBuffer + 7);
+	SSD1306::DMAC_Descriptors[0].DESCADDR.reg = 0;
+	
+	/* Set channel x descriptor 0 to the descriptor base address */
+	System::StartDMATransfer(SSD1306::DMAC_Descriptors, 0);
+	
+	SERCOM4->I2CM.ADDR.reg =	SERCOM_I2CM_ADDR_ADDR(SLAVE_ADDR<<1) |
+								SERCOM_I2CM_ADDR_LENEN |
+								SERCOM_I2CM_ADDR_LEN(7) |
+								0;
 }
 
-void SSD1306::WriteInt(uint16_t number, uint8_t row)
-{
-	SSD1306::ClearPage((row * 2) + 0);
-	SSD1306::ClearPage((row * 2) + 1);
+void SSD1306::WriteInt(uint32_t number, uint8_t row)
+{	
+	SSD1306::SetAddress(row);
 	
-	uint16_t index = row * 256;
-	do
-	{
-		uint8_t digit = number % 10;
+	
+	/* Wait for pending i2c-transfer */
+	I2C::Wait();
 		
-		SSD1306::WriteChar(SSD1306::ASCII + (32 * digit), index);
-		index += 16;
+	/* Prepare CMD-PMAC-Descriptor */
+	SSD1306::CMDBuffer[0] = 0x40;
+	
+	SSD1306::DMAC_Descriptors[0].BTCNT.reg = 1;
+	SSD1306::DMAC_Descriptors[0].SRCADDR.reg = (uint32_t)(SSD1306::CMDBuffer + 1);
+	SSD1306::DMAC_Descriptors[0].DESCADDR.reg = (uint32_t)&(SSD1306::DMAC_Descriptors[1]);
+	
+	uint8_t curDigit = 0;
+	for (uint8_t x = 1; x < 9; x++)
+	{		
+		if (number > 0)
+		{
+			curDigit = number % 10;
+			
+			SSD1306::DMAC_Descriptors[x].SRCADDR.reg = (uint32_t)((((uint8_t*)SSD1306::ASCII + (32 * curDigit))) + 32);
+			
+			number = (number - curDigit) / 10;
+		} else {
+			SSD1306::DMAC_Descriptors[x].SRCADDR.reg = (uint32_t)(((uint8_t*)SSD1306::Blank) + 32);
+		}
+	}	
+	
+	/* Set channel x descriptor 0 to the descriptor base address */
+	System::StartDMATransfer(SSD1306::DMAC_Descriptors, 0);
+	
+	SERCOM4->I2CM.ADDR.reg =	SERCOM_I2CM_ADDR_ADDR(SLAVE_ADDR<<1) |
+								SERCOM_I2CM_ADDR_LENEN |
+								SERCOM_I2CM_ADDR_LEN(255) |
+								0;														
+}
+
+
+void SSD1306::Clear()
+{
+	for (uint8_t row = 0; row < 2; row++)
+	{		
+		/* Wait for pending i2c-transfer */
+		I2C::Wait();	
 		
-		number = (number - digit) / 10;
-	} while (number > 0);
+		SSD1306::SetAddress(row);
+		
+		/* Wait for pending i2c-transfer */
+		I2C::Wait();
+		
+		/* Start I2C-Idle delay */
+		uint32_t t1 = SysTick->VAL;
+				
+		/* Prepare CMD-PMAC-Descriptor */
+		SSD1306::CMDBuffer[0] = 0x40;
+		
+		SSD1306::DMAC_Descriptors[0].BTCNT.reg = 1;
+		SSD1306::DMAC_Descriptors[0].SRCADDR.reg = (uint32_t)(SSD1306::CMDBuffer + 1);
+		SSD1306::DMAC_Descriptors[0].DESCADDR.reg = (uint32_t)&(SSD1306::DMAC_Descriptors[1]);
+		
+		for (uint8_t x = 1; x < 9; x++)
+			SSD1306::DMAC_Descriptors[x].SRCADDR.reg = (uint32_t)(((uint8_t*)SSD1306::Blank) + 32);
+		
+		/* Wait for rest of I2C-Idle delay */
+		while ((t1 - 1900) < SysTick->VAL){}
+		
+		/* Set channel x descriptor 0 to the descriptor base address */
+		System::StartDMATransfer(SSD1306::DMAC_Descriptors, 0);
+		
+		SERCOM4->I2CM.ADDR.reg =	SERCOM_I2CM_ADDR_ADDR(SLAVE_ADDR<<1) |
+									SERCOM_I2CM_ADDR_LENEN |
+									SERCOM_I2CM_ADDR_LEN(255) |
+									0;
+					
+	}	
 }
-
-void SSD1306::ClearPage(uint8_t page)
-{
-	for (uint16_t x = 0; x < 128; x++)
-		SSD1306::FrameBuffer[x + (page * 128)] = 0x00;
-}
-
-void SSD1306::WriteChar(uint8_t *chr, uint16_t index)
-{
-	index += 1; //cmd offset
-	
-	for (uint8_t x = 1; x < 32; x += 2)
-	{
-		SSD1306::FrameBuffer[index] = chr[x];
-		index++;
-	}
-	
-	index += 128 - 16; //next Page
-	
-	for (uint8_t x = 0; x < 32; x += 2)
-	{
-		SSD1306::FrameBuffer[index] = chr[x];
-		index++;
-	}
-}
-
-// default destructor
-SSD1306::~SSD1306()
-{
-} //~SSD1306

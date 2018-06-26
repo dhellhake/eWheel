@@ -2,7 +2,7 @@
 * SSD1306.h
 *
 * Created: 30.05.2018 19:34:55
-* Author: domin
+* Author: dominik hellhake
 */
 
 
@@ -20,22 +20,26 @@ class SSD1306 : public I2C
 public:
 protected:
 private:
-static uint8_t FrameBuffer[513];
-static uint8_t ASCII[320];
+	static uint8_t Blank[32];
+	static uint8_t CMDBuffer[27];
+	static uint8_t ASCII[320];
+	
+	COMPILER_ALIGNED(16)
+	static DmacDescriptor DMAC_Descriptors[9];
 
 //functions
 public:
 	static void Init();
-	static void Update();
-	static void WriteInt(uint16_t number, uint8_t row);
+	static void Clear();
+	static void WriteInt(uint32_t number, uint8_t row);
 protected:
 	SSD1306();
 	
 	
 	~SSD1306();
 private:
-	static void ClearPage(uint8_t page);
-	static void WriteChar(uint8_t *chr, uint16_t index);
+	static void SetAddress(uint8_t row);
+	static void InitDMADescriptors();
 
 	SSD1306( const SSD1306 &c );
 	SSD1306& operator=( const SSD1306 &c );
