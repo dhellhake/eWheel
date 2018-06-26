@@ -221,10 +221,10 @@
     <Compile Include="LowLevel\USART\USART.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LSM6D\LSM6D.cpp">
+    <Compile Include="LSM9D\LSM9D.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LSM6D\LSM6D.h">
+    <Compile Include="LSM9D\LSM9D.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.cpp">
@@ -263,7 +263,7 @@
     <Folder Include="LowLevel\System" />
     <Folder Include="LowLevel\System\Device_Startup\" />
     <Folder Include="LowLevel\USART\" />
-    <Folder Include="LSM6D\" />
+    <Folder Include="LSM9D\" />
     <Folder Include="MotorControl" />
     <Folder Include="MotorControl\MotorSensor" />
     <Folder Include="MotorControl\MotorDriver" />
