@@ -8,26 +8,45 @@
 
 #include "System.h"
 
-// static class member
-volatile uint32_t System::SysTick_Overflow = 0;
+COMPILER_ALIGNED(16)
+DmacDescriptor descriptor_section[1];
 
-// default constructor
-System::System()
-{
-} //System
+COMPILER_ALIGNED(16)
+static DmacDescriptor _write_back_section[1];
+
+
+// DMAC transmit complete flag
+volatile bool System::DMAC_TX_Complete[1] = { true };
+
+// Overflow of 16bit-Systick-Counter running at 48Mhz
+volatile uint64_t System::SysTick_Overflow = 0;
 
 /**
  * Initialize the system
  *
- * @brief  Setup the microcontroller system.
+ * @brief  Setup the micro controller system.
  *         Initialize the System and update the SystemCoreClock variable.
  */
 void System::Init()
 {
+	/* Configure Global Clock */
+	System::InitGCLK();	
+	/* Configure SysTick-Counter */
+	System::InitSysTick();	
+	/* Configure Board-LED */
+	System::InitLED();
+	/* Configure External Interrupt */
+	System::InitEIC();
+	/* Configure Direct Memory Access Controller */
+	System::InitDMAC();
+}
+
+void System::InitGCLK()
+{
 	// Set flash wait states for operation at 48 MHz @ 5V
 	NVMCTRL->CTRLB.reg = NVMCTRL_CTRLB_RWS(1) | NVMCTRL_CTRLB_MANW;        //
 	while ((OSCCTRL->STATUS.reg & OSCCTRL_STATUS_OSC48MRDY) == 0 );       // Wait until ready
- 
+	
 	// Default setting for OSC48M
 	OSCCTRL->OSC48MCTRL.reg = OSCCTRL_OSC48MCTRL_ONDEMAND | OSCCTRL_OSC48MCTRL_ENABLE;
 	OSCCTRL->OSC48MDIV.reg = OSCCTRL_OSC48MDIV_DIV(1 - 1) | OSCCTRL_OSC48MCTRL_RUNSTDBY;   // 48MHz
@@ -39,21 +58,22 @@ void System::Init()
 	// Default setting for GEN0 (DIV => 0 & 1 are both 1)
 	GCLK->GENCTRL[0].reg = GCLK_GENCTRL_SRC_OSC48M | GCLK_GENCTRL_GENEN | GCLK_GENCTRL_DIV(1);    // 48MHz
 	GCLK->GENCTRL[1].reg = GCLK_GENCTRL_SRC_OSC48M | GCLK_GENCTRL_GENEN | GCLK_GENCTRL_DIV(6);    // 8MHz
-	
-	/* Configure SysTick-Counter */
+}
+
+void System::InitSysTick()
+{
 	SysTick->CTRL = 0;					// Disable SysTick
 	SysTick->LOAD = 0xFFFFFF;			// Set reload register for overflow interrupts
 	NVIC_SetPriority(SysTick_IRQn, 3);	// Set interrupt priority to least urgency
 	SysTick->VAL = 0;					// Reset the SysTick counter value
 	SysTick->CTRL = 0x00000007;			// Enable SysTick, Enable SysTick Exceptions, Use CPU Clock
-	NVIC_EnableIRQ(SysTick_IRQn);		// Enable SysTick Interrupt
-	
-	/* Configure Board-LED */
+	NVIC_EnableIRQ(SysTick_IRQn);		// Enable SysTick Interrupt	
+}
+
+void System::InitLED()
+{	
 	PORT->Group[0].DIRSET.reg = PORT_PA28;
 	PORT->Group[0].OUTCLR.reg = PORT_PA28;
-	
-	/* Configure External Interrupt */
-	System::InitEIC();
 }
 
 void System::InitEIC()
@@ -83,7 +103,33 @@ void System::InitEIC()
 	
 	EIC->CTRLA.reg = EIC_CTRLA_ENABLE;
 }
- 
+
+void System::InitDMAC()
+{
+	MCLK->AHBMASK.reg |= MCLK_AHBMASK_DMAC;
+	
+	/* Perform a software reset before enable DMA controller */
+	DMAC->CTRL.reg &= ~DMAC_CTRL_DMAENABLE;
+	DMAC->CTRL.reg = DMAC_CTRL_SWRST;
+	
+	/* Setup descriptor base address and write back section base address */
+	DMAC->BASEADDR.reg = (uint32_t)descriptor_section;
+	DMAC->WRBADDR.reg = (uint32_t)_write_back_section;
+	
+	/* Enable all priority level at the same time */
+	DMAC->CTRL.reg = DMAC_CTRL_DMAENABLE | DMAC_CTRL_LVLEN(0xf);
+}
+
+
+void System::StartDMATransfer(DmacDescriptor *descriptor, uint8_t dmaSlot)
+{	
+	System::DMAC_TX_Complete[dmaSlot] = false;
+	/* Set dma-descriptor to the target slot base address */
+	memcpy(&descriptor_section[dmaSlot], descriptor, sizeof(DmacDescriptor));	
+	/* Enable the transfer channel */	
+	DMAC->CHCTRLA.reg |= DMAC_CHCTRLA_ENABLE;
+}
+
 void System::SetPinPeripheralFunction(uint32_t pinmux)
 {
 	uint8_t port = (uint8_t)((pinmux >> 16)/32);
@@ -130,12 +176,14 @@ uint32_t System::GetElapsedMilis()
 	return (uint32_t)(result / 48000);
 }
 
+void DMAC_Handler(void)
+{
+	System::DMAC_TX_Complete[DMAC->INTPEND.bit.ID] = true;
+	
+	DMAC->CHINTFLAG.bit.TCMPL = 1;
+}
+
 void SysTick_Handler(void)
 {
 	System::SysTick_Overflow++;
 }
-
-// default destructor
-System::~System()
-{
-} //~System

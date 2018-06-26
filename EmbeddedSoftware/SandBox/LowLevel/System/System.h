@@ -9,13 +9,19 @@
 #ifndef __SYSTEM_H__
 #define __SYSTEM_H__
 
+#include <string.h>
 #include "samc21.h"
+
+#define COMPILER_ALIGNED(a) __attribute__((__aligned__(a)))
+
 
 class System
 {
 //variables
 public:
-	volatile static uint32_t SysTick_Overflow;
+	volatile static uint64_t SysTick_Overflow;
+	
+	static volatile bool DMAC_TX_Complete[1];
 protected:
 private:
 
@@ -23,7 +29,7 @@ private:
 public:
 	static void Init();
 	
-	static void InitEIC();
+	static void StartDMATransfer(DmacDescriptor *descriptor, uint8_t dmaSlot);
 	
 	static void SetPinPeripheralFunction(uint32_t pinmux);
 	
@@ -42,6 +48,17 @@ public:
 protected:
 private:
 	System();
+		
+	static void InitGCLK();
+	
+	static void InitSysTick();
+	
+	static void InitLED();
+	
+	static void InitEIC();
+	
+	static void InitDMAC();
+	
 	~System();
 	System( const System &c );
 	System& operator=( const System &c );
