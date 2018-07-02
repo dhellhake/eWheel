@@ -12,11 +12,24 @@
 #include <math.h>
 #include "..\LowLevel\SPI\SPI.h"
 
+// Register addresses
+#define STATUS_REG_1					0x27
+#define CTRL_REG5_XL					0x1F
+#define CTRL_REG6_XL					0x20
+#define CTRL_REG7_XL					0x21
+#define OUT_X_L_XL						0x28
+
+// Sensor Sensitivity Constants
+#define SENSITIVITY_ACCELEROMETER_2		0.000061
+#define SENSITIVITY_ACCELEROMETER_4		0.000122
+#define SENSITIVITY_ACCELEROMETER_8		0.000244
+#define SENSITIVITY_ACCELEROMETER_16	0.000732
+
+
 class LSM9D : public SPIPort
 {
 //variables
 public:
-	static float Yaw;
 	static float Pitch;
 	static float Roll;
 protected:
@@ -26,8 +39,9 @@ private:
 public:
 	static void Init();
 	static void Update();
-	static uint8_t ReadRegister(uint8_t address);
-	static int16_t ReadRegisterWord(uint8_t address);
+	
+	static uint8_t ReadBytes(uint8_t address, uint8_t *dest, uint8_t count);
+	
 	static uint8_t WriteRegister(uint8_t address, uint8_t data);
 protected:
 private:
