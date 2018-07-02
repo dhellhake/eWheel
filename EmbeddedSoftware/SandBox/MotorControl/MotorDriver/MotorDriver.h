@@ -31,6 +31,11 @@ class MotorDriver
 	//functions
 	public:
 		static void InitTCC();	//ToBeProtected
+		
+		static inline void Drive_SetDuty(uint32_t duty)
+		{
+			TCC0->CC[0].reg	= duty;
+		}
 	
 		static inline void Drive_SetPhase(HALL_STATE state)
 		{

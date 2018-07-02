@@ -8,7 +8,7 @@
 
 #include "MotorDriver.h"
 
-volatile uint32_t MotorDriver::PhaseDuty = 500;
+volatile uint32_t MotorDriver::PhaseDuty = 200;
 
 // default constructor
 MotorDriver::MotorDriver()
