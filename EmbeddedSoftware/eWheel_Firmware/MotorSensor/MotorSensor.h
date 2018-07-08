@@ -32,14 +32,7 @@ class MotorSensor : public Executable
 	/************************************************************************/
 	public:
 		virtual bool CanExecute() { return true; };		
-		virtual RUN_RESULT Run();		
-		virtual Executable* GetSuccessor(uint8_t index) 
-		{
-			if (index == 0)
-				return this->OLED;
-			
-			return NULL;	
-		};		
+		virtual RUN_RESULT Run();
 		virtual void Propagate();
 				
 	/************************************************************************/

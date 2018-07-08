@@ -17,11 +17,7 @@ enum class RUN_RESULT
 };
 
 class Executable
-{
-	//variables
-	public:
-		uint8_t SuccessorCount = 0;
-		
+{		
 	//functions
 	public:
 
@@ -30,8 +26,6 @@ class Executable
 	virtual RUN_RESULT Run() { return RUN_RESULT::NOT_IMPLEMENTED; };
 		
 	virtual void Propagate() {};
-	
-	virtual Executable* GetSuccessor(uint8_t index) { return NULL; }
 
 }; //Executable
 
