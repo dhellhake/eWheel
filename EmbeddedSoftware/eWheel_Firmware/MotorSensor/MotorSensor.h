@@ -30,6 +30,8 @@ class MotorSensor : public Executable
 	/************************************************************************/
 	/* Executable Interface implementation                                  */
 	/************************************************************************/
+	public:	
+		SSD1306 *OLED = NULL;
 	public:
 		virtual bool CanExecute() { return true; };		
 		virtual RUN_RESULT Run();
@@ -65,7 +67,6 @@ class MotorSensor : public Executable
 			}
 		}
 	public:
-		SSD1306 *OLED = NULL;
 		volatile HALL_STATE HallState = HALL_STATE::UNDEFINED_1;
 
 }; //MotorSensor

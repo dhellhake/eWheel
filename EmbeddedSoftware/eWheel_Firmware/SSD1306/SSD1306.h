@@ -48,8 +48,8 @@ class SSD1306 : public Executable
 	public:
 		SSD1306();	
 		void Clear();	
-		void WriteInt(uint32_t number, uint8_t row);
 	private:
+		void WriteInt(uint32_t number, uint8_t row);
 		void SetAddress(uint8_t row);
 		void InitDMADescriptors();
 

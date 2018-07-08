@@ -9,6 +9,7 @@
 #include "SSD1306/SSD1306.h"
 #include "MotorController/MotorController.h"
 #include "MotorSensor/MotorSensor.h"
+#include "LSM9D/LSM9D.h"
 
 MotorSensor motorSensor;
 MotorController motorController;
@@ -45,16 +46,30 @@ int main(void)
 	/* Initialize BLDC Motor Controller */
 	motorController = MotorController();
 	motorController.Drive_SetPhase(motorSensor.HallState);
+		
+	/* Initialize the lsm9ds1 sensor */
+	LSM9D gyro;
+	gyro.OLED = &mainOLED;
+	System::TaskPool[1] = &gyro;
 	
-	
-	
+	uint64_t t1 = System::GetElapsedMilis();
     while (1) 
     {
-		for (uint8_t ti = 0; ti < System::TaskPoolCount; ti++)
-			if (System::TaskPool[ti]->CanExecute())
+		if ((t1 + 10) <= System::GetElapsedMilis())
+		{
+			t1+= 10;
+			
+			for (uint8_t ti = 0; ti < System::TaskPoolCount; ti++)
 			{
-				System::TaskPool[ti]->Run();
-				System::TaskPool[ti]->Propagate();
+				if (System::TaskPool[ti]->CanExecute())
+				{
+					if (System::TaskPool[ti]->Run() == RUN_RESULT::SUCCESS)
+					{
+						System::TaskPool[ti]->Propagate();
+						break;
+					}
+				}
 			}
+		}
     }
 }
