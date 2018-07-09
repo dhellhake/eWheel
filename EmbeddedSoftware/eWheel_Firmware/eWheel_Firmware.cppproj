@@ -188,6 +188,12 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ADS\ADS.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="ADS\ADS.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Executable.h">
       <SubType>compile</SubType>
     </Compile>
@@ -249,6 +255,7 @@
     <Folder Include="MotorSensor" />
     <Folder Include="MotorController" />
     <Folder Include="LSM9D" />
+    <Folder Include="ADS" />
     <Folder Include="SSD1306" />
   </ItemGroup>
   <ItemGroup>

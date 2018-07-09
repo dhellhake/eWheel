@@ -10,6 +10,7 @@
 #include "MotorController/MotorController.h"
 #include "MotorSensor/MotorSensor.h"
 #include "LSM9D/LSM9D.h"
+#include "ADS/ADS.h"
 
 MotorSensor motorSensor;
 MotorController motorController;
@@ -49,9 +50,15 @@ int main(void)
 		
 	/* Initialize the lsm9ds1 sensor */
 	LSM9D gyro;
-	gyro.OLED = &mainOLED;
+	//gyro.OLED = &mainOLED;
 	System::TaskPool[1] = &gyro;
 	
+	/* Initialize the Analog Sensor */
+	ADS ads;
+	ads.OLED = &mainOLED;
+	System::TaskPool[2] = &ads;
+	
+		
 	uint64_t t1 = System::GetElapsedMilis();
     while (1) 
     {
