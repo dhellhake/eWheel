@@ -21,7 +21,6 @@ class SPIPort
 
 	//functions
 	public:
-	protected:
 		SPIPort();
 	
 		static void InitSERCOM();

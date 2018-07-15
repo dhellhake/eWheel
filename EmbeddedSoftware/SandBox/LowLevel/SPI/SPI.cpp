@@ -40,11 +40,12 @@ void SPIPort::InitSERCOM()
 	//Configure SERCOM0	
 	SERCOM0->SPI.CTRLA.reg =	(0x3 << SERCOM_SPI_CTRLA_MODE_Pos) |
 								(0x1 << SERCOM_SPI_CTRLA_DOPO_Pos) |				//MOSI on PAD2 (PA10); SCLK on PAD3 (PA11)
-								(0x1 << SERCOM_SPI_CTRLA_DIPO_Pos);					//MISO on PAD 1 (PA09)
+								(0x1 << SERCOM_SPI_CTRLA_DIPO_Pos) |				//MISO on PAD 1 (PA09)
+								(0x1 << SERCOM_SPI_CTRLA_CPHA_Pos);
 								
 	SERCOM0->SPI.CTRLB.reg =	(1 << SERCOM_SPI_CTRLB_RXEN_Pos);
 		
-	SERCOM0->SPI.BAUD.reg = (System::GetGCLK_Hz(SERCOM0_GCLK_ID_CORE) / (2 * 9000000)) - 1;
+	SERCOM0->SPI.BAUD.reg = (System::GetGCLK_Hz(SERCOM0_GCLK_ID_CORE) / (2 * 4000000)) - 1;
 	
 	SERCOM0->SPI.CTRLA.bit.ENABLE = 1;
 	while(SERCOM0->SPI.SYNCBUSY.bit.ENABLE);
