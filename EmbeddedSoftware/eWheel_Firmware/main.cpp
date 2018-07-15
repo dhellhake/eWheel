@@ -11,6 +11,7 @@
 #include "MotorSensor/MotorSensor.h"
 #include "LSM9D/LSM9D.h"
 #include "ADS/ADS.h"
+#include "GP2Y/GP2Y.h"
 
 MotorSensor motorSensor;
 MotorController motorController;
@@ -55,9 +56,14 @@ int main(void)
 	
 	/* Initialize the Analog Sensor */
 	ADS ads;
-	ads.OLED = &mainOLED;
+	//ads.OLED = &mainOLED;
 	System::TaskPool[2] = &ads;
 	
+	/* Initialize infrared distance sensor GP2Y */
+	GP2Y ir;
+	ads.IR = &ir;
+	ir.OLED = &mainOLED;
+	System::TaskPool[3] = &ir;
 		
 	uint64_t t1 = System::GetElapsedMilis();
     while (1) 

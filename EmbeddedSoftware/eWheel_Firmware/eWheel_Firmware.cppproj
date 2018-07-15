@@ -197,6 +197,12 @@
     <Compile Include="Executable.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="GP2Y\GP2Y.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="GP2Y\GP2Y.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="LowLevel\I2C\I2C.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -256,6 +262,7 @@
     <Folder Include="MotorController" />
     <Folder Include="LSM9D" />
     <Folder Include="ADS" />
+    <Folder Include="GP2Y" />
     <Folder Include="SSD1306" />
   </ItemGroup>
   <ItemGroup>

@@ -42,6 +42,9 @@ RUN_RESULT ADS::Run()
 
 void ADS::Propagate()
 {
+	if (this->IR != NULL)
+		this->IR->SetDistanceRaw(this->Distance_RAW);
+	
 	if (this->OLED != NULL)
 	{
 		if (this->Distance_RAW < 0)

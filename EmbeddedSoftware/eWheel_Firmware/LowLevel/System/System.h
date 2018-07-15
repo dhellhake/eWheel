@@ -25,7 +25,7 @@ public:
 	volatile static bool DMAC_TX_Complete[1];
 	
 	static uint8_t TaskPoolCount;
-	static Executable* TaskPool[3];
+	static Executable* TaskPool[4];
 //functions
 public:
 	static void Init();
