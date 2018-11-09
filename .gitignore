@@ -1,5 +1,7 @@
 /EmbeddedSoftware/SandBox/Debug/*
 /EmbeddedSoftware/SandBox/.vs/*
+/EmbeddedSoftware/eWheel_Firmware/Debug/*
+/EmbeddedSoftware/eWheel_Firmware/.vs/*
 /DiagMonitor/.vs/*
 /DiagMonitor/obj/Debug/*
 /DiagMonitor/bin/Debug/*

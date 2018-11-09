@@ -15,7 +15,7 @@ float LSM9D::Roll = 0;
 void LSM9D::Init()
 {
 	//Init SPI-SERCOM interface
-	SPIPort::InitSERCOM();
+	SPIPort::InitSERCOM2();
 	
 	//Configure CS-Pin as Output
 	PORT->Group[0].DIRSET.reg = PORT_PA12;
@@ -60,9 +60,9 @@ uint8_t LSM9D::ReadBytes(uint8_t address, uint8_t *dest, uint8_t count)
 	//CS Low
 	PORT->Group[0].OUTCLR.reg = PORT_PA12;
 	
-	SPIPort::TransmitByte(address | 0x80);
+	SPIPort::SERCOM2_TransmitByte(address | 0x80);
 	for (uint8_t x = 0; x < count; x++)
-		dest[x] = SPIPort::TransmitByte(0x00);
+		dest[x] = SPIPort::SERCOM2_TransmitByte(0x00);
 	
 	//CS High
 	PORT->Group[0].OUTSET.reg = PORT_PA12;
@@ -76,8 +76,8 @@ uint8_t LSM9D::WriteRegister(uint8_t address, uint8_t data)
 	//CS Low
 	PORT->Group[0].OUTCLR.reg = PORT_PA12;
 	
-	SPIPort::TransmitByte(address & 0x7F);
-	result = SPIPort::TransmitByte(data);
+	SPIPort::SERCOM2_TransmitByte(address & 0x7F);
+	result = SPIPort::SERCOM2_TransmitByte(data);
 	
 	//CS High
 	PORT->Group[0].OUTSET.reg = PORT_PA12;

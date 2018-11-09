@@ -77,8 +77,8 @@ int16_t ADS::WriteRegister(uint8_t *data)
 	//CS Low
 	PORT->Group[0].OUTCLR.reg = PORT_PA02;	
 	
-	result[0] = SPIPort::TransmitByte(data[0]);
-	result[1] = SPIPort::TransmitByte(data[1]);
+	result[0] = SPIPort::SERCOM2_TransmitByte(data[0]);
+	result[1] = SPIPort::SERCOM2_TransmitByte(data[1]);
 	
 	//CS High
 	PORT->Group[0].OUTSET.reg = PORT_PA02;

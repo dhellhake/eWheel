@@ -44,6 +44,16 @@ public:
 		else
 			PORT->Group[0].OUTSET.reg = PORT_PA28;
 	}
+	
+	static inline float DIVAS_SQRT(float radicand)
+	{
+		/* Write the radicand to DIVIDEND register. */
+		DIVAS->SQRNUM.reg = radicand;
+
+		while(DIVAS->STATUS.bit.BUSY){}
+
+		return (float)DIVAS->RESULT.reg;
+	}
 		
 protected:
 private:

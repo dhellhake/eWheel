@@ -15,13 +15,21 @@ class SPIPort
 {
 	//functions
 	public:
-		static void InitSERCOM();
-		static inline uint8_t TransmitByte(uint8_t byte)
+		static void InitSERCOM0();
+		static void InitSERCOM2();
+		static inline uint8_t SERCOM0_TransmitByte(uint8_t byte)
 		{
 			while(SERCOM0->SPI.INTFLAG.bit.DRE == 0);
 			SERCOM0->SPI.DATA.reg = byte;
 			while(SERCOM0->SPI.INTFLAG.bit.RXC == 0);
 			return SERCOM0->SPI.DATA.reg;
+		}
+		static inline uint8_t SERCOM2_TransmitByte(uint8_t byte)
+		{
+			while(SERCOM2->SPI.INTFLAG.bit.DRE == 0);
+			SERCOM2->SPI.DATA.reg = byte;
+			while(SERCOM2->SPI.INTFLAG.bit.RXC == 0);
+			return SERCOM2->SPI.DATA.reg;
 		}
 }; //USART
 

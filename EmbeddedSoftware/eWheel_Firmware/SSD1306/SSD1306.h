@@ -47,9 +47,9 @@ class SSD1306 : public Executable
 		DmacDescriptor DMAC_Descriptors[9];
 	public:
 		SSD1306();	
-		void Clear();	
-	private:
+		void Clear();
 		void WriteInt(uint32_t number, uint8_t row);
+	private:
 		void SetAddress(uint8_t row);
 		void InitDMADescriptors();
 

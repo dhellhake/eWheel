@@ -11,6 +11,7 @@
 
 #include <math.h>
 #include "..\LowLevel\SPI\SPI.h"
+#include "..\LowLevel\System\System.h"
 
 // Register addresses
 #define STATUS_REG_1					0x27
@@ -20,10 +21,7 @@
 #define OUT_X_L_XL						0x28
 
 // Sensor Sensitivity Constants
-#define SENSITIVITY_ACCELEROMETER_2		0.000061
-#define SENSITIVITY_ACCELEROMETER_4		0.000122
-#define SENSITIVITY_ACCELEROMETER_8		0.000244
-#define SENSITIVITY_ACCELEROMETER_16	0.000732
+#define SENSITIVITY_ACCELEROMETER_4		1.22
 
 
 class LSM9D : public SPIPort

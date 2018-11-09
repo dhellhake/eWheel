@@ -43,7 +43,7 @@ int main(void)
 	/* Initialize BLDC Motor Sensor */
 	motorSensor = MotorSensor();
 	motorSensor.Run();
-	motorSensor.OLED = &mainOLED;
+	//motorSensor.OLED = &mainOLED;
 	
 	/* Initialize BLDC Motor Controller */
 	motorController = MotorController();
@@ -51,7 +51,7 @@ int main(void)
 		
 	/* Initialize the lsm9ds1 sensor */
 	LSM9D gyro;
-	//gyro.OLED = &mainOLED;
+	gyro.OLED = &mainOLED;
 	System::TaskPool[1] = &gyro;
 	
 	/* Initialize the Analog Sensor */
@@ -62,10 +62,11 @@ int main(void)
 	/* Initialize infrared distance sensor GP2Y */
 	GP2Y ir;
 	ads.IR = &ir;
-	ir.OLED = &mainOLED;
+	//ir.OLED = &mainOLED;
 	System::TaskPool[3] = &ir;
 		
 	uint64_t t1 = System::GetElapsedMilis();
+	uint32_t systick = 0;
     while (1) 
     {
 		if ((t1 + 10) <= System::GetElapsedMilis())
@@ -74,13 +75,19 @@ int main(void)
 			
 			for (uint8_t ti = 0; ti < System::TaskPoolCount; ti++)
 			{
+				systick = SysTick->VAL;
 				if (System::TaskPool[ti]->CanExecute())
 				{
 					if (System::TaskPool[ti]->Run() == RUN_RESULT::SUCCESS)
 					{
+						if (ti == 3)
+						{
+							//mainOLED.WriteInt(systick - SysTick->VAL, 1);
+						}						
 						System::TaskPool[ti]->Propagate();
 						break;
 					}
+					
 				}
 			}
 		}

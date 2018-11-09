@@ -321,6 +321,9 @@ void SSD1306::WriteInt(uint32_t number, uint8_t row)
 	/* Wait for pending i2c-transfer */
 	I2C::Wait();
 		
+	/* Start I2C-Idle delay */
+	uint32_t t1 = SysTick->VAL;
+		
 	/* Prepare CMD-PMAC-Descriptor */
 	SSD1306::CMDBuffer[0] = 0x40;
 	
@@ -341,7 +344,10 @@ void SSD1306::WriteInt(uint32_t number, uint8_t row)
 		} else {
 			SSD1306::DMAC_Descriptors[x].SRCADDR.reg = (uint32_t)(((uint8_t*)SSD1306::Blank) + 32);
 		}
-	}	
+}
+
+	/* Wait for rest of I2C-Idle delay */
+	while ((t1 - 1900) < SysTick->VAL){}
 	
 	/* Set channel x descriptor 0 to the descriptor base address */
 	System::StartDMATransfer(SSD1306::DMAC_Descriptors, 0);
