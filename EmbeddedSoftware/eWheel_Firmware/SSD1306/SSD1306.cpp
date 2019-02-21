@@ -282,6 +282,9 @@ SSD1306::SSD1306()
 								SERCOM_I2CM_ADDR_LENEN |
 								SERCOM_I2CM_ADDR_LEN(dataLength) |
 								0;
+								
+	/* Wait for pending i2c-transfer */
+	I2C::Wait();
 }
 
 void SSD1306::InitDMADescriptors()

@@ -36,6 +36,7 @@ int main(void)
 	System::Init();
 	
 	/* Initialize the SSD1306 OLED driver */
+	for (uint32_t x = 0; x < 4000000; x++) {}
 	SSD1306 mainOLED;
 	mainOLED.Clear();
 	System::TaskPool[0] = &mainOLED;
