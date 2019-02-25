@@ -12,6 +12,7 @@
 #include "LSM9D/LSM9D.h"
 #include "ADS/ADS.h"
 #include "GP2Y/GP2Y.h"
+#include "AT45DB/AT45DB.h"
 
 MotorSensor motorSensor;
 MotorController motorController;
@@ -65,9 +66,12 @@ int main(void)
 	ads.IR = &ir;
 	//ir.OLED = &mainOLED;
 	System::TaskPool[3] = &ir;
+	
+	/* Initialize infrared distance sensor GP2Y */
+	AT45DB at45;
+	System::TaskPool[4] = &at45;
 		
 	uint64_t t1 = System::GetElapsedMilis();
-	uint32_t systick = 0;
     while (1) 
     {
 		if ((t1 + 10) <= System::GetElapsedMilis())
@@ -76,15 +80,10 @@ int main(void)
 			
 			for (uint8_t ti = 0; ti < System::TaskPoolCount; ti++)
 			{
-				systick = SysTick->VAL;
 				if (System::TaskPool[ti]->CanExecute())
 				{
 					if (System::TaskPool[ti]->Run() == RUN_RESULT::SUCCESS)
-					{
-						if (ti == 3)
-						{
-							//mainOLED.WriteInt(systick - SysTick->VAL, 1);
-						}						
+					{					
 						System::TaskPool[ti]->Propagate();
 						break;
 					}
