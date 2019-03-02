@@ -15,6 +15,8 @@
 
 #define COMPILER_ALIGNED(a) __attribute__((__aligned__(a)))
 
+#define TASKPOOL_SIZE 5
+
 
 class System
 {
@@ -24,8 +26,7 @@ public:
 	
 	volatile static bool DMAC_TX_Complete[1];
 	
-	static uint8_t TaskPoolCount;
-	static Executable* TaskPool[4];
+	static Executable* TaskPool[TASKPOOL_SIZE];
 //functions
 public:
 	static void Init();

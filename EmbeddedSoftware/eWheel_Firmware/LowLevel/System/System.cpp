@@ -21,8 +21,7 @@ volatile bool System::DMAC_TX_Complete[1] = { true };
 // Overflow of 16bit-Systick-Counter running at 48Mhz
 volatile uint64_t System::SysTick_Overflow = 0;
 
-uint8_t System::TaskPoolCount = 4;
-Executable* System::TaskPool[4];
+Executable* System::TaskPool[TASKPOOL_SIZE];
 
 /**
  * Initialize the system

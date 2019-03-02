@@ -78,7 +78,7 @@ int main(void)
 		{
 			t1+= 10;
 			
-			for (uint8_t ti = 0; ti < System::TaskPoolCount; ti++)
+			for (uint8_t ti = 0; ti < TASKPOOL_SIZE; ti++)
 			{
 				if (System::TaskPool[ti]->CanExecute())
 				{
