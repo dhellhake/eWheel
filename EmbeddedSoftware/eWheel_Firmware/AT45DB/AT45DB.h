@@ -14,6 +14,13 @@
 
 #include "..\Executable.h"
 
+
+#define OP_STATUS			0xD7
+#define OP_PAGE_READ_MEM	0xD2
+#define OP_PAGE_PROG_BUFF_1 0x82
+#define OP_PAGE_PROG_BUFF_2 0x85
+#define OP_PAGE_ERASE		0x81
+
 class AT45DB : public Executable
 {
 	/************************************************************************/
@@ -31,7 +38,8 @@ class AT45DB : public Executable
 	AT45DB();
 	private:
 	bool IsReady();
-	uint8_t ReadBytes(uint8_t address, uint8_t *dest, uint8_t count);
+	uint8_t PageRead(uint16_t pageIndex, uint8_t *dest);
+	uint8_t PageWrite(uint16_t pageIndex, uint8_t *data, bool primBuff);
 	
 }; //AT45DB
 

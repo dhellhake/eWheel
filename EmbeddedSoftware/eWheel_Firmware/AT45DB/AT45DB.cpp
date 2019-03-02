@@ -9,20 +9,18 @@
 #include "AT45DB.h"
 
 /************************************************************************/
-/* Class implementation                                                 */
+/* Executable Interface implementation                                  */
 /************************************************************************/
 RUN_RESULT AT45DB::Run()
-{	
-		
-	return RUN_RESULT::ERROR;
-}
-
-bool AT45DB::IsReady()
-{
-	uint8_t tmp;	
-	this->ReadBytes(0xD7, &tmp, 1);
+{		
+	uint8_t tmp[528];
 	
-	return (tmp >> 7);
+	for (uint16_t x = 0; x < 528; x++)
+		tmp[x] = 255;
+	
+	PageRead(0, tmp);
+	
+	return RUN_RESULT::ERROR;
 }
 
 void AT45DB::Propagate()
@@ -42,17 +40,95 @@ AT45DB::AT45DB()
 	PORT->Group[0].OUTSET.reg = PORT_PA08;
 }
 
-uint8_t AT45DB::ReadBytes(uint8_t address, uint8_t *dest, uint8_t count)
+
+///<summary>
+///Uses the Status Register Read Command (0xD7) to read the devises ready-status (Bit 7)
+///</summary>
+///<returns>1 if device is ready</returns>
+bool AT45DB::IsReady()
 {
 	//CS Low
 	PORT->Group[0].OUTCLR.reg = PORT_PA08;
 	
-	SPIPort::SERCOM0_TransmitByte(address);
-	for (uint8_t x = 0; x < count; x++)
-	dest[x] = SPIPort::SERCOM0_TransmitByte(0x00);
+	SPIPort::SERCOM0_TransmitByte(OP_STATUS);
+	uint8_t result = SPIPort::SERCOM0_TransmitByte(0x00);
+	
+	//CS High
+	PORT->Group[0].OUTSET.reg = PORT_PA08;
+	
+	return (result >> 7);
+}
+
+///<summary>
+///Uses the Main Memory Page Read Command (0xD2) to read 528 bytes out of a certain page
+///</summary>
+///<param name="pageIndex">Index of the page to write to (0 to 8192)</param>
+///<param name="dest">data-buffer holding at least 528 bytes to write the page content to</param>
+///<returns>1 on success</returns>
+uint8_t AT45DB::PageRead(uint16_t pageIndex, uint8_t *dest)
+{	
+	uint32_t op_addr = 0x00000000;
+	op_addr |= (OP_PAGE_READ_MEM << 24);
+	op_addr |= (pageIndex << 10) & 0b11111111111110000000000;
+	
+	uint8_t tmp[4];
+	memcpy(tmp, (const char *) &(op_addr), sizeof(uint32_t));
+	
+	//CS Low
+	PORT->Group[0].OUTCLR.reg = PORT_PA08;
+	
+	// Send OP-Code D2 & page/byte address
+	for (uint8_t x = 0; x < 4; x++)
+		SPIPort::SERCOM0_TransmitByte(tmp[3 - x]);
+	
+	// Send dont-care bytes
+	for (uint8_t x = 0; x < 4; x++)
+		SPIPort::SERCOM0_TransmitByte(0x00);
+	
+	// Read page	
+	for (uint16_t x = 0; x < 528; x++)
+		dest[x] = SPIPort::SERCOM0_TransmitByte(0x00);
 	
 	//CS High
 	PORT->Group[0].OUTSET.reg = PORT_PA08;
 	
 	return 1;
+}
+
+///<summary>
+///Uses the Main Memory Page Program through Buffer Command (0x82) to write 528 bytes to a certain page
+///</summary>
+///<param name="pageIndex">Index of the page to write to (0 to 8192)</param>
+///<param name="data">data-buffer containing 528 bytes to write to page</param>
+///<param name="data">true if Buffer 1 should be used. False for Buffer 2</param>
+///<returns>1 on success</returns>
+uint8_t AT45DB::PageWrite(uint16_t pageIndex, uint8_t *data, bool primBuff)
+{
+	uint32_t op_addr = 0x00000000;
+	
+	if (primBuff)
+		op_addr |= (OP_PAGE_PROG_BUFF_1 << 24);
+	else
+		op_addr |= (OP_PAGE_PROG_BUFF_2 << 24);
+		
+	op_addr |= (pageIndex << 10) & 0b11111111111110000000000;
+	
+	uint8_t tmp[4];
+	memcpy(tmp, (const char *) &(op_addr), sizeof(uint32_t));
+	
+	//CS Low
+	PORT->Group[0].OUTCLR.reg = PORT_PA08;
+	
+	// Send OP-Code & page/byte address
+	for (uint8_t x = 0; x < 4; x++)
+		SPIPort::SERCOM0_TransmitByte(tmp[3 - x]);
+	
+	// Read page
+	for (uint16_t x = 0; x < 528; x++)
+		SPIPort::SERCOM0_TransmitByte(data[x]);
+	
+	//CS High
+	PORT->Group[0].OUTSET.reg = PORT_PA08;
+	
+	return 1;		
 }
