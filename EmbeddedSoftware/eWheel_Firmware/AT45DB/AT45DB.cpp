@@ -13,11 +13,16 @@
 /************************************************************************/
 RUN_RESULT AT45DB::Run()
 {	
-	uint8_t tmp[6];
-	
-	this->ReadBytes(0xD7, tmp, 1);
-	
+		
 	return RUN_RESULT::ERROR;
+}
+
+bool AT45DB::IsReady()
+{
+	uint8_t tmp;	
+	this->ReadBytes(0xD7, &tmp, 1);
+	
+	return (tmp >> 7);
 }
 
 void AT45DB::Propagate()

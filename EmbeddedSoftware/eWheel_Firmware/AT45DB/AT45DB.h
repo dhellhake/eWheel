@@ -19,7 +19,7 @@ class AT45DB : public Executable
 	/************************************************************************/
 	/* Executable Interface implementation                                  */
 	/************************************************************************/
-	virtual bool CanExecute() { return true; };
+	virtual bool CanExecute() { return IsReady(); };
 	virtual RUN_RESULT Run();
 	virtual void Propagate();
 
@@ -30,6 +30,7 @@ class AT45DB : public Executable
 	public:
 	AT45DB();
 	private:
+	bool IsReady();
 	uint8_t ReadBytes(uint8_t address, uint8_t *dest, uint8_t count);
 	
 }; //AT45DB
