@@ -230,6 +230,12 @@
     <Compile Include="LowLevel\System\System.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="LowLevel\USART\USART.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\USART\USART.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="LSM9D\LSM9D.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -261,6 +267,7 @@
   <ItemGroup>
     <Folder Include="LowLevel" />
     <Folder Include="LowLevel\I2C" />
+    <Folder Include="LowLevel\USART" />
     <Folder Include="LowLevel\SPI" />
     <Folder Include="LowLevel\System" />
     <Folder Include="LowLevel\System\Device_Startup\" />

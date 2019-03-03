@@ -6,6 +6,7 @@
  */ 
 #include "sam.h"
 #include "LowLevel/System/System.h"
+#include "LowLevel/USART/USART.h"
 #include "SSD1306/SSD1306.h"
 #include "MotorController/MotorController.h"
 #include "MotorSensor/MotorSensor.h"
@@ -28,6 +29,15 @@ void EIC_Handler()
 		motorSensor.Propagate();
 		
 		EIC->INTFLAG.reg = (1 << 7) | (1 << 12) | (1 << 13);
+	}
+}
+
+void SERCOM5_Handler()
+{
+	if (SERCOM5->USART.INTFLAG.bit.RXC)
+	{
+		uint8_t rxData = SERCOM5->USART.DATA.reg;
+		return;
 	}
 }
 
@@ -70,7 +80,10 @@ int main(void)
 	/* Initialize infrared distance sensor GP2Y */
 	AT45DB at45;
 	System::TaskPool[4] = &at45;
-		
+	
+	USART::InitSERCOM5();
+	USART::SendByte(0xAA);
+	
 	uint64_t t1 = System::GetElapsedMilis();
     while (1) 
     {
