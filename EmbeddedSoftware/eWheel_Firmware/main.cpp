@@ -41,6 +41,16 @@ void SERCOM5_Handler()
 	}
 }
 
+
+void SERCOM1_Handler()
+{
+	if (SERCOM1->USART.INTFLAG.bit.RXC)
+	{
+		uint8_t rxData = SERCOM1->USART.DATA.reg;
+		return;
+	}
+}
+
 int main(void)
 {
 	/* Initialize the SAM system */
@@ -81,8 +91,9 @@ int main(void)
 	AT45DB at45;
 	System::TaskPool[4] = &at45;
 	
-	USART::InitSERCOM5();
-	USART::SendByte(0xAA);
+	USART::InitSERCOM1();
+	USART::SERCOM1_SendByte('A');
+	USART::SERCOM1_SendByte('T');
 	
 	uint64_t t1 = System::GetElapsedMilis();
     while (1) 

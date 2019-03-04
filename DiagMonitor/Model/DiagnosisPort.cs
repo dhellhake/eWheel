@@ -17,7 +17,8 @@ namespace DiagMonitor
 
         public DiagnosisPort()
         {
-            this._SerialPort = new SerialPort("COM3");
+            string[] ports = SerialPort.GetPortNames();
+            this._SerialPort = new SerialPort("COM4");
 
             this._SerialPort.BaudRate = 921600;
             this._SerialPort.Parity = Parity.None;
@@ -32,34 +33,10 @@ namespace DiagMonitor
             {
                 while (true)
                 {
-                    while (this._SerialPort.BytesToRead < 1)
-                        await Task.Delay(50);
+                    while (this._SerialPort.BytesToRead > 0)
+                        _SerialPort.Write(new byte[] { byte.Parse(this._SerialPort.ReadByte() + "") }, 0, 1);
 
-                    DebugMessage message = (DebugMessage)this._SerialPort.ReadByte();
-
-
-                    byte[] bytes = new byte[4];
-                    float result = 0f;
-                    switch (message)
-                    {
-                        case DebugMessage.LSM6D_Pitch:
-                            //4 Bytes of Payload
-                            for (int x = 0; x < bytes.Length; x++)
-                                bytes[x] = (byte)this._SerialPort.ReadByte();
-
-                            this.Pitch = System.BitConverter.ToSingle(bytes, 0); ;
-                            OnPropertyChanged("Pitch");
-                            break;
-
-                        case DebugMessage.SYS_SysTick:
-                            //4 Bytes of Payload
-                            for (int x = 0; x < bytes.Length; x++)
-                                bytes[x] = (byte)this._SerialPort.ReadByte();
-
-                            this.SysTick = System.BitConverter.ToInt32(bytes, 0);
-                            OnPropertyChanged("SysTick");
-                            break;
-                    }
+                    await Task.Delay(100);                  
                 }
             });
         }
