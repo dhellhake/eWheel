@@ -94,6 +94,8 @@ int main(void)
 	USART::InitSERCOM1();
 	USART::SERCOM1_SendByte('A');
 	USART::SERCOM1_SendByte('T');
+	USART::SERCOM1_SendByte('\r');
+	USART::SERCOM1_SendByte('\n');
 	
 	uint64_t t1 = System::GetElapsedMilis();
     while (1) 
