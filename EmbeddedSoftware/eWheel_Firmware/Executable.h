@@ -17,8 +17,7 @@ enum class RUN_RESULT
 };
 
 class Executable
-{		
-	//functions
+{
 	public:
 
 	virtual bool CanExecute() { return false; };
@@ -26,6 +25,14 @@ class Executable
 	virtual RUN_RESULT Run() { return RUN_RESULT::NOT_IMPLEMENTED; };
 		
 	virtual void Propagate() {};
+		
+	virtual void EnableTrace() {};
+	
+	virtual void DisableTrace() {};
+
+	protected:
+	
+	volatile bool TraceEnabled = false;
 
 }; //Executable
 
