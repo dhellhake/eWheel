@@ -20,6 +20,10 @@
 #define OP_PAGE_PROG_BUFF_1 0x82
 #define OP_PAGE_PROG_BUFF_2 0x85
 #define OP_PAGE_ERASE		0x81
+#define OP_CHIP_ERASE_1		0xC7
+#define OP_CHIP_ERASE_2		0x94
+#define OP_CHIP_ERASE_3		0x80
+#define OP_CHIP_ERASE_4		0x9A
 
 enum TraceType {
 	Orientation = 1	
@@ -75,11 +79,13 @@ class AT45DB : public Executable
 	AT45DB();
 	uint8_t AddTracePage(TracePage *page);
 	uint8_t TracePage_Read(uint16_t pageIndex, TracePage *page);
+	uint8_t EraseTrace();
+	bool IsReady();
+	
 	private:
 	uint16_t PageIndex = 0;
 	TraceBuffer Buffer;
 	
-	bool IsReady();
 	uint8_t TracePage_Write(uint16_t pageIndex, TracePage *page, bool primBuff);
 	
 }; //AT45DB

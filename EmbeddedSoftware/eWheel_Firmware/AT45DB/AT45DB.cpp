@@ -70,6 +70,20 @@ bool AT45DB::IsReady()
 	return (result >> 7);
 }
 
+uint8_t AT45DB::EraseTrace()
+{
+	//CS Low
+	PORT->Group[0].OUTCLR.reg = PORT_PA08;
+	
+	SPIPort::SERCOM0_TransmitByte(OP_CHIP_ERASE_1);
+	SPIPort::SERCOM0_TransmitByte(OP_CHIP_ERASE_2);
+	SPIPort::SERCOM0_TransmitByte(OP_CHIP_ERASE_3);
+	SPIPort::SERCOM0_TransmitByte(OP_CHIP_ERASE_4);
+	
+	//CS High
+	PORT->Group[0].OUTSET.reg = PORT_PA08;	
+}
+
 ///<summary>
 ///Uses the Main Memory Page Read Command (0xD2) to read 528 bytes out of a certain page
 ///</summary>
