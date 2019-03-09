@@ -13,6 +13,7 @@
 #include "..\LowLevel\SPI\SPI.h"
 #include "..\LowLevel\System\System.h"
 
+#include "..\AT45DB\AT45DB.h"
 #include "..\SSD1306\SSD1306.h"
 #include "..\Executable.h"
 
@@ -35,6 +36,7 @@ class LSM9D : public Executable
 	/************************************************************************/
 	public:
 		SSD1306 *OLED = NULL;
+		AT45DB *Trace = NULL;
 	public:
 		virtual bool CanExecute() { return ((PORT->Group[0].IN.reg >> 13) & 0x1) != 0x0; };
 		virtual RUN_RESULT Run();
@@ -46,6 +48,9 @@ class LSM9D : public Executable
 	public:
 		float Pitch = 0;
 		float Roll = 0;
+		
+		TracePage Page;
+		volatile uint16_t TraceIndex = 0;
 	public:
 		LSM9D();	
 	private:

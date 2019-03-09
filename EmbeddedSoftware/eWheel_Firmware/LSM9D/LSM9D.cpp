@@ -44,6 +44,21 @@ void LSM9D::Propagate()
 		else
 			this->OLED->SetRow(this->Pitch * 10, 1);
 	}
+	
+	if (this->Trace != NULL)
+	{
+		float *f = (float*) &this->Page._data[this->TraceIndex];
+		f[0] = this->Pitch;
+		f[1] = this->Roll;
+		this->TraceIndex += 8;
+		
+		if (this->TraceIndex >= 520)
+		{
+			this->Trace->AddTracePage(&this->Page);
+			this->TraceIndex = 0;
+			this->Page._position++;
+		}
+	}
 }
 
 /************************************************************************/
@@ -51,6 +66,10 @@ void LSM9D::Propagate()
 /************************************************************************/
 LSM9D::LSM9D()
 {
+	//Set TracePage
+	this->Page._type = TraceType::Orientation;
+	this->Page._position = 0;
+	
 	//Init SPI-SERCOM interface
 	SPIPort::InitSERCOM2();
 	
