@@ -36,11 +36,13 @@ class LSM9D : public Executable
 	/************************************************************************/
 	public:
 		SSD1306 *OLED = NULL;
-		AT45DB *Trace = NULL;
+		AT45DB *TraceLink = NULL;
 	public:
 		virtual bool CanExecute() { return ((PORT->Group[0].IN.reg >> 13) & 0x1) != 0x0; };
 		virtual RUN_RESULT Run();
 		virtual void Propagate();
+		virtual void EnableTrace();
+		virtual void DisableTrace();
 	
 	/************************************************************************/
 	/* Class implementation                                                 */
@@ -53,7 +55,7 @@ class LSM9D : public Executable
 		volatile uint16_t TraceIndex = 0;
 	public:
 		LSM9D();	
-	private:
+	private:				
 		uint8_t ReadBytes(uint8_t address, uint8_t *dest, uint8_t count);	
 		uint8_t WriteRegister(uint8_t address, uint8_t data);
 }; //LSM9D

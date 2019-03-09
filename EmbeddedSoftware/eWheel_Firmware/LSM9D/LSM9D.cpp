@@ -45,7 +45,7 @@ void LSM9D::Propagate()
 			this->OLED->SetRow(this->Pitch * 10, 1);
 	}
 	
-	if (this->Trace != NULL)
+	if (this->TraceEnabled && this->TraceLink != NULL)
 	{
 		float *f = (float*) &this->Page._data[this->TraceIndex];
 		f[0] = this->Pitch;
@@ -54,7 +54,7 @@ void LSM9D::Propagate()
 		
 		if (this->TraceIndex >= 520)
 		{
-			this->Trace->AddTracePage(&this->Page);
+			this->TraceLink->AddTracePage(&this->Page);
 			this->TraceIndex = 0;
 			this->Page._position++;
 		}
@@ -126,4 +126,15 @@ uint8_t LSM9D::WriteRegister(uint8_t address, uint8_t data)
 	PORT->Group[0].OUTSET.reg = PORT_PA12;
 	
 	return result;
+}
+
+void LSM9D::EnableTrace()
+{
+	this->TraceIndex = 0;
+	this->TraceEnabled = true;
+}
+
+void LSM9D::DisableTrace()
+{
+	this->TraceEnabled = false;	
 }
