@@ -15,7 +15,6 @@
 #include "..\SSD1306\SSD1306.h"
 #include "..\Executable.h"
 
-
 #define OP_STATUS			0xD7
 #define OP_PAGE_READ_MEM	0xD2
 #define OP_PAGE_PROG_BUFF_1 0x82
@@ -32,12 +31,37 @@ typedef struct {
 	uint8_t _data[524];
 } TracePage;
 
+
+
+
+#define TRACEBUFFER_SIZE 4
+
+typedef struct {
+	uint8_t _read;
+	uint8_t _write;
+	TracePage* _page[TRACEBUFFER_SIZE];
+} TraceBuffer;
+
+#define TraceBuffer_init(buffer)         { buffer._read = 0; buffer._write = 0; }
+#define TraceBuffer_available(buffer)    ( buffer._read != buffer._write )
+#define TraceBuffer_GetPage(buffer) (																			\
+		(TraceBuffer_available(buffer)) ?																		\
+		buffer._page[buffer._read = (buffer._read + 1) & (TRACEBUFFER_SIZE-1)] : 0							\
+)
+#define TraceBuffer_AddPage(buffer, data) {																		\
+		uint8_t tmphead = ( buffer._write + 1 ) & (TRACEBUFFER_SIZE-1);			/* calculate buffer index */    \
+		if(tmphead != buffer._read) {											/* if buffer is not full */     \
+			buffer._page[tmphead] = data;										/* store data in buffer */      \
+			buffer._write = tmphead;											/* store new index */           \
+		}																										\
+}
+
 class AT45DB : public Executable
 {
 	/************************************************************************/
 	/* Executable Interface implementation                                  */
 	/************************************************************************/
-	virtual bool CanExecute() { return IsReady(); };
+	virtual bool CanExecute() { return TraceBuffer_available(this->Buffer) && IsReady(); };
 	virtual RUN_RESULT Run();
 	virtual void Propagate();
 
@@ -49,11 +73,13 @@ class AT45DB : public Executable
 	SSD1306 *OLED = NULL;
 	
 	AT45DB();
+	uint8_t AddTracePage(TracePage *page);
+	uint8_t TracePage_Read(uint16_t pageIndex, TracePage *page);
 	private:
-	uint16_t PageIndex = 5;
+	uint16_t PageIndex = 0;
+	TraceBuffer Buffer;
 	
 	bool IsReady();
-	uint8_t TracePage_Read(uint16_t pageIndex, TracePage *page);
 	uint8_t TracePage_Write(uint16_t pageIndex, TracePage *page, bool primBuff);
 	
 }; //AT45DB

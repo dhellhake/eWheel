@@ -13,15 +13,12 @@
 /************************************************************************/
 RUN_RESULT AT45DB::Run()
 {
-	TracePage page;
-	page._type = Orientation;
-	page._position = 0;
+	if (TraceBuffer_available(this->Buffer))
+	{
+		TracePage_Write(this->PageIndex, TraceBuffer_GetPage(this->Buffer), true);
+		this->PageIndex++;
+	}
 		
-	for (uint16_t x = 0; x < 524; x++)
-		page._data[x] = 255;
-	
-	//TracePage_Read(0, &page);
-	
 	return RUN_RESULT::SUCCESS;
 }
 
@@ -44,8 +41,16 @@ AT45DB::AT45DB()
 	//Configure CS-Pin as Output
 	PORT->Group[0].DIRSET.reg = PORT_PA08;
 	PORT->Group[0].OUTSET.reg = PORT_PA08;
+	
+	//Init TraceBuffer
+	TraceBuffer_init(this->Buffer)
 }
 
+uint8_t AT45DB::AddTracePage(TracePage *page)
+{	
+	TraceBuffer_AddPage(this->Buffer, page)	
+	return 1;
+}
 
 ///<summary>
 ///Uses the Status Register Read Command (0xD7) to read the devises ready-status (Bit 7)
