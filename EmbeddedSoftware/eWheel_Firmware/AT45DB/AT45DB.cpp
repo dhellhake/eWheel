@@ -22,11 +22,15 @@ RUN_RESULT AT45DB::Run()
 	
 	//TracePage_Read(0, &page);
 	
-	return RUN_RESULT::ERROR;
+	return RUN_RESULT::SUCCESS;
 }
 
 void AT45DB::Propagate()
 {
+	if (this->OLED != NULL)
+	{
+		this->OLED->SetRow(this->PageIndex, 1);
+	}
 }
 
 /************************************************************************/

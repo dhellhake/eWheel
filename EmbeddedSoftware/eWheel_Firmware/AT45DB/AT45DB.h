@@ -12,6 +12,7 @@
 #include "..\LowLevel\SPI\SPI.h"
 #include "..\LowLevel\System\System.h"
 
+#include "..\SSD1306\SSD1306.h"
 #include "..\Executable.h"
 
 
@@ -45,8 +46,12 @@ class AT45DB : public Executable
 	/* Class implementation                                                 */
 	/************************************************************************/
 	public:
+	SSD1306 *OLED = NULL;
+	
 	AT45DB();
 	private:
+	uint16_t PageIndex = 5;
+	
 	bool IsReady();
 	uint8_t TracePage_Read(uint16_t pageIndex, TracePage *page);
 	uint8_t TracePage_Write(uint16_t pageIndex, TracePage *page, bool primBuff);
