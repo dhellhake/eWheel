@@ -21,6 +21,16 @@
 #define OP_PAGE_PROG_BUFF_2 0x85
 #define OP_PAGE_ERASE		0x81
 
+enum TraceType {
+	Orientation = 1	
+};
+
+typedef struct {
+	TraceType _type;
+	uint16_t _position;
+	uint8_t _data[524];
+} TracePage;
+
 class AT45DB : public Executable
 {
 	/************************************************************************/
@@ -38,8 +48,8 @@ class AT45DB : public Executable
 	AT45DB();
 	private:
 	bool IsReady();
-	uint8_t PageRead(uint16_t pageIndex, uint8_t *dest);
-	uint8_t PageWrite(uint16_t pageIndex, uint8_t *data, bool primBuff);
+	uint8_t TracePage_Read(uint16_t pageIndex, TracePage *page);
+	uint8_t TracePage_Write(uint16_t pageIndex, TracePage *page, bool primBuff);
 	
 }; //AT45DB
 
