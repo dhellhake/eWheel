@@ -14,6 +14,7 @@
 #include "ADS/ADS.h"
 #include "GP2Y/GP2Y.h"
 #include "AT45DB/AT45DB.h"
+#include "CC41A/CC41A.h"
 
 MotorSensor motorSensor;
 MotorController motorController;
@@ -32,35 +33,24 @@ void EIC_Handler()
 	}
 }
 
-void SERCOM5_Handler()
-{
-	if (SERCOM5->USART.INTFLAG.bit.RXC)
-	{
-		uint8_t rxData = SERCOM5->USART.DATA.reg;
-		return;
-	}
-}
-
-
-void SERCOM1_Handler()
-{
-	if (SERCOM1->USART.INTFLAG.bit.RXC)
-	{
-		uint8_t rxData = SERCOM1->USART.DATA.reg;
-		return;
-	}
-}
-
 int main(void)
 {
 	/* Initialize the SAM system */
 	System::Init();
+	
+	/* Initialize Diagnostic Link */
+	CC41A cc;
 	
 	/* Initialize the SSD1306 OLED driver */
 	for (uint32_t x = 0; x < 4000000; x++) {}
 	SSD1306 mainOLED;
 	mainOLED.Clear();
 	System::TaskPool[0] = &mainOLED;
+	
+	/* Initialize FlashMemory */
+	AT45DB at45;
+	at45.OLED = &mainOLED;
+	System::TaskPool[4] = &at45;
 	
 	/* Initialize BLDC Motor Sensor */
 	motorSensor = MotorSensor();
@@ -73,7 +63,8 @@ int main(void)
 		
 	/* Initialize the lsm9ds1 sensor */
 	LSM9D gyro;
-	gyro.OLED = &mainOLED;
+	gyro.TraceLink = &at45;
+	//gyro.OLED = &mainOLED;
 	System::TaskPool[1] = &gyro;
 	
 	/* Initialize the Analog Sensor */
@@ -87,19 +78,10 @@ int main(void)
 	//ir.OLED = &mainOLED;
 	System::TaskPool[3] = &ir;
 	
-	/* Initialize infrared distance sensor GP2Y */
-	AT45DB at45;
-	System::TaskPool[4] = &at45;
-	
-	USART::InitSERCOM1();
-	USART::SERCOM1_SendByte('A');
-	USART::SERCOM1_SendByte('T');
-	USART::SERCOM1_SendByte('\r');
-	USART::SERCOM1_SendByte('\n');
-	
+		
 	uint64_t t1 = System::GetElapsedMilis();
     while (1) 
-    {
+    {		
 		if ((t1 + 10) <= System::GetElapsedMilis())
 		{
 			t1+= 10;
@@ -112,8 +94,7 @@ int main(void)
 					{					
 						System::TaskPool[ti]->Propagate();
 						break;
-					}
-					
+					}					
 				}
 			}
 		}

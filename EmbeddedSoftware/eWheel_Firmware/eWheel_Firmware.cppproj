@@ -200,6 +200,12 @@
     <Compile Include="AT45DB\AT45DB.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="CC41A\CC41A.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="CC41A\CC41A.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Executable.h">
       <SubType>compile</SubType>
     </Compile>
@@ -277,6 +283,7 @@
     <Folder Include="ADS" />
     <Folder Include="GP2Y" />
     <Folder Include="AT45DB" />
+    <Folder Include="CC41A" />
     <Folder Include="SSD1306" />
   </ItemGroup>
   <ItemGroup>
