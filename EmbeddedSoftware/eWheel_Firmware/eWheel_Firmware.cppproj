@@ -215,10 +215,40 @@
     <Compile Include="GP2Y\GP2Y.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="LowLevel\DMA\DMA.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\DMA\DMA.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\EIC\EIC.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\EIC\EIC.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\GCLK\GCLK.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\GCLK\GCLK.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="LowLevel\I2C\I2C.cpp">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="LowLevel\I2C\I2C.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\PORT\PORT.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\PORT\PORT.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\SERCOM\SERCOM.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\SERCOM\SERCOM.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="LowLevel\SPI\SPI.cpp">
@@ -234,6 +264,18 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="LowLevel\System\System.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\SysTick\SysTick.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\SysTick\SysTick.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\TCC\TCC.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\TCC\TCC.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="LowLevel\USART\USART.cpp">
@@ -269,10 +311,20 @@
     <Compile Include="SSD1306\SSD1306.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Utilities.h">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="LowLevel" />
     <Folder Include="LowLevel\I2C" />
+    <Folder Include="LowLevel\DMA" />
+    <Folder Include="LowLevel\GCLK" />
+    <Folder Include="LowLevel\EIC" />
+    <Folder Include="LowLevel\PORT" />
+    <Folder Include="LowLevel\SysTick" />
+    <Folder Include="LowLevel\TCC" />
+    <Folder Include="LowLevel\SERCOM" />
     <Folder Include="LowLevel\USART" />
     <Folder Include="LowLevel\SPI" />
     <Folder Include="LowLevel\System" />

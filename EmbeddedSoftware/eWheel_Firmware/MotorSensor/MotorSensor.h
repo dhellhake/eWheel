@@ -2,14 +2,11 @@
 * MotorSensor.h
 *
 * Created: 12.05.2018 10:18:16
-* Author: dominik hellhake
+* Author: Dominik Hellhake
 */
-
 #ifndef __MOTORSENSOR_H__
 #define __MOTORSENSOR_H__
 
-#include "sam.h"
-#include "..\LowLevel\System\System.h"
 #include "..\Executable.h"
 #include "..\SSD1306\SSD1306.h"
 
@@ -41,7 +38,7 @@ class MotorSensor : public Executable
 	/* Class implementation                                                 */
 	/************************************************************************/
 	public:
-		MotorSensor();	
+		void EnableInterrupt();
 						
 		static inline uint8_t StateToIndex(HALL_STATE state)
 		{
@@ -68,7 +65,6 @@ class MotorSensor : public Executable
 		}
 	public:
 		volatile HALL_STATE HallState = HALL_STATE::UNDEFINED_1;
-
 }; //MotorSensor
 
 #endif //__MOTORSENSOR_H__

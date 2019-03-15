@@ -2,18 +2,15 @@
 * AT45DB.h
 *
 * Created: 25.02.2019 20:08:29
-* Author: Domi
+* Author: Dominik Hellhake
 */
-
-
 #ifndef __AT45DB_H__
 #define __AT45DB_H__
 
-#include "..\LowLevel\SPI\SPI.h"
-#include "..\LowLevel\System\System.h"
+#include "..\Executable.h"
 
 #include "..\SSD1306\SSD1306.h"
-#include "..\Executable.h"
+
 
 #define OP_STATUS			0xD7
 #define OP_PAGE_READ_MEM	0xD2
@@ -74,20 +71,19 @@ class AT45DB : public Executable
 	/* Class implementation                                                 */
 	/************************************************************************/
 	public:
-	SSD1306 *OLED = NULL;
-	
-	AT45DB();
-	uint8_t AddTracePage(TracePage *page);
-	uint8_t TracePage_Read(uint16_t pageIndex, TracePage *page);
-	uint8_t EraseTrace();
-	bool IsReady();
-	
+		SSD1306 *OLED = NULL;
+		
+		AT45DB();
+		uint8_t AddTracePage(TracePage *page);
+		uint8_t TracePage_Read(uint16_t pageIndex, TracePage *page);
+		uint8_t EraseTrace();
+		bool IsReady();
+		
 	private:
-	uint16_t PageIndex = 0;
-	TraceBuffer Buffer;
-	
-	uint8_t TracePage_Write(uint16_t pageIndex, TracePage *page, bool primBuff);
-	
+		uint16_t PageIndex = 0;
+		TraceBuffer Buffer;
+		
+		uint8_t TracePage_Write(uint16_t pageIndex, TracePage *page, bool primBuff);	
 }; //AT45DB
 
 #endif //__AT45DB_H__

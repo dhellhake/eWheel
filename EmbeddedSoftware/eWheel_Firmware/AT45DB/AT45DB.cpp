@@ -4,9 +4,9 @@
 * Created: 25.02.2019 20:08:29
 * Author: Dominik Hellhake
 */
-
-
+#include <string.h>
 #include "AT45DB.h"
+#include "..\LowLevel\SPI\SPI.h"
 
 /************************************************************************/
 /* Executable Interface implementation                                  */
@@ -18,7 +18,7 @@ RUN_RESULT AT45DB::Run()
 		TracePage_Write(this->PageIndex, TraceBuffer_GetPage(this->Buffer), true);
 		this->PageIndex++;
 	}
-		
+	
 	return RUN_RESULT::SUCCESS;
 }
 
@@ -34,14 +34,7 @@ void AT45DB::Propagate()
 /* Class implementation                                                 */
 /************************************************************************/
 AT45DB::AT45DB()
-{
-	//Init SPI-SERCOM interface
-	SPIPort::InitSERCOM0();
-	
-	//Configure CS-Pin as Output
-	PORT->Group[0].DIRSET.reg = PORT_PA08;
-	PORT->Group[0].OUTSET.reg = PORT_PA08;
-	
+{	
 	//Init TraceBuffer
 	TraceBuffer_init(this->Buffer)
 }

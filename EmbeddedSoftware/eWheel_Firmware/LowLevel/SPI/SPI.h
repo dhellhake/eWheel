@@ -2,21 +2,16 @@
  * SPI.h
  *
  * Created: 30.04.2018 15:49:37
- *  Author: dominik hellhake
- */ 
-
+ *  Author: Dominik Hellhake
+ */
 #ifndef SPI_H_
 #define SPI_H_
 
-#include "sam.h"
-#include "..\System\System.h"
+#include "samc21.h"
 
 class SPIPort
 {
-	//functions
 	public:
-		static void InitSERCOM0();
-		static void InitSERCOM2();
 		static inline uint8_t SERCOM0_TransmitByte(uint8_t byte)
 		{
 			while(SERCOM0->SPI.INTFLAG.bit.DRE == 0);

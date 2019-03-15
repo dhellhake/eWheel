@@ -2,9 +2,8 @@
 * GP2Y.h
 *
 * Created: 15.07.2018 12:49:11
-* Author: dominik hellhake
+* Author: Dominik Hellhake
 */
-
 #include "..\Executable.h"
 #include "..\SSD1306\SSD1306.h"
 
@@ -36,6 +35,7 @@ class GP2Y : public Executable
 		static uint16_t Characteristics[CHARACTERISTIC_SIZE];
 	public:
 		GP2Y();
+		
 		inline void SetDistanceRaw(float distRaw)
 		{
 			this->Distance_RAW[this->RawIndex] = distRaw;

@@ -2,9 +2,8 @@
 * GP2Y.cpp
 *
 * Created: 15.07.2018 12:49:11
-* Author: dominik hellhake
+* Author: Dominik Hellhake
 */
-
 #include "GP2Y.h"
 
 uint16_t GP2Y::Characteristics[CHARACTERISTIC_SIZE] = {

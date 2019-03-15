@@ -2,16 +2,16 @@
 * ADS.h
 *
 * Created: 09.07.2018 21:35:28
-* Author: dominik hellhake
+* Author: Dominik Hellhake
 */
-
 #ifndef __ADS_H__
 #define __ADS_H__
 
-#include "..\LowLevel\SPI\SPI.h"
+#include "..\Executable.h"
+
+#include "..\LowLevel\SysTick\SysTick.h"
 #include "..\SSD1306\SSD1306.h"
 #include "..\GP2Y\GP2Y.h"
-#include "..\Executable.h"
 
 #define MotorCurrent_Config_Val		0b01000010
 #define Distance_Config_Val			0b01010010
@@ -35,25 +35,22 @@ class ADS : public Executable
 	private:
 		uint64_t LastRun = 0;
 	public:
-		virtual bool CanExecute() { return (this->LastRun + 33) <= System::GetElapsedMilis(); };
+		virtual bool CanExecute() { return (this->LastRun + 33) <= GetElapsedMilis(); };
 		virtual RUN_RESULT Run();
 		virtual void Propagate();
 
 	/************************************************************************/
 	/* Class implementation                                                 */
 	/************************************************************************/
-	//variables
 	public:
 		float Battery = 0;
 		float MotorCurrent_RAW = 0;
 		float Distance_RAW = 0;
-	private:
-		ADS_STATE State = ADS_STATE::MotorCurent;
-
-	//functions
-	public:
+				
 		ADS();
 	private:
+		ADS_STATE State = ADS_STATE::MotorCurent;
+		
 		int16_t WriteRegister(uint8_t *data);
 }; //ADS
 

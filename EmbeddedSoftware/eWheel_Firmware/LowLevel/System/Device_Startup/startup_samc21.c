@@ -28,6 +28,14 @@
 
 #include "samc21.h"
 
+#include "..\..\GCLK\GCLK.h"
+#include "..\..\SysTick\SysTick.h"
+#include "..\..\EIC\EIC.h"
+#include "..\..\DMA\DMA.h"
+#include "..\..\SERCOM\SERCOM.h"
+#include "..\..\TCC\TCC.h"
+#include "..\..\PORT\PORT.h"
+
 /* Initialize segments */
 extern uint32_t _sfixed;
 extern uint32_t _efixed;
@@ -228,36 +236,64 @@ const DeviceVectors exception_table = {
  * To initialize the device, and call the main() routine.
  */
 void Reset_Handler(void)
-{
-        uint32_t *pSrc, *pDest;
+{		
+	uint32_t *pSrc, *pDest;
 
-        /* Initialize the relocate segment */
-        pSrc = &_etext;
-        pDest = &_srelocate;
+	/* Initialize the relocate segment */
+	pSrc = &_etext;
+	pDest = &_srelocate;
 
-        if (pSrc != pDest) {
-                for (; pDest < &_erelocate;) {
-                        *pDest++ = *pSrc++;
-                }
-        }
+	if (pSrc != pDest) {
+			for (; pDest < &_erelocate;) {
+					*pDest++ = *pSrc++;
+			}
+	}
 
-        /* Clear the zero segment */
-        for (pDest = &_szero; pDest < &_ezero;) {
-                *pDest++ = 0;
-        }
+	/* Clear the zero segment */
+	for (pDest = &_szero; pDest < &_ezero;) {
+			*pDest++ = 0;
+	}
 
-        /* Set the vector table base address */
-        pSrc = (uint32_t *) & _sfixed;
-        SCB->VTOR = ((uint32_t) pSrc & SCB_VTOR_TBLOFF_Msk);
+	/* Set the vector table base address */
+	pSrc = (uint32_t *) & _sfixed;
+	SCB->VTOR = ((uint32_t) pSrc & SCB_VTOR_TBLOFF_Msk);
 
-        /* Initialize the C library */
-        __libc_init_array();
 
-        /* Branch to main function */
-        main();
+	/* Initialize the SAM21C */
+		
+	/* Configure Global Clock */
+	InitGCLK();
+	/* Configure SysTick-Counter */
+	InitSysTick();
+	/* Configure External Interrupt */
+	InitEIC();
+	/* Configure Direct Memory Access Controller */
+	InitDMAC();
+		
+	//Init SPI-SERCOM interface
+	InitSERCOM0();	
+	//Init USART-SERCOM interface to CC41-A
+	InitSERCOM1();
+	//Init SPI-SERCOM interface
+	InitSERCOM2();		
+	/* Init I2C peripheral */
+	InitSERCOM4();
+	SetDMAChannel0();
+	//Init USART-SERCOM interface to CP2102
+	InitSERCOM5();
+		
+	InitTCC0();
+		
+	InitPORT();
 
-        /* Infinite loop */
-        while (1);
+	/* Initialize the C library */
+	__libc_init_array();
+
+	/* Branch to main function */
+	main();
+
+	/* Infinite loop */
+	while (1);
 }
 
 /**

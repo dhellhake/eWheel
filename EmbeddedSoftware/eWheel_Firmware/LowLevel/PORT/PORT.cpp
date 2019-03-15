@@ -1,0 +1,107 @@
+/*
+ * PORT.cpp
+ *
+ * Created: 15.03.2019 16:38:48
+ *  Author: Dominik Hellhake
+ */
+#include "PORT.h"
+
+void InitPORT()
+{
+	/* Init PORT interface to Hall-Sensors */
+	// Pin-Config: U-Hall on EXTINT13
+	PORT->Group[0].DIRCLR.reg = PORT_PA25;
+	PORT->Group[0].OUTSET.reg = PORT_PA25;
+	PORT->Group[0].PINCFG[PIN_PA25].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+	SetPinPeripheralFunction(PINMUX_PA25A_EIC_EXTINT13);
+	// Pin-Config: V-Hall on EXTINT12
+	PORT->Group[0].DIRCLR.reg = PORT_PA24;
+	PORT->Group[0].OUTSET.reg = PORT_PA24;
+	PORT->Group[0].PINCFG[PIN_PA24].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+	SetPinPeripheralFunction(PINMUX_PA24A_EIC_EXTINT12);
+	// Pin-Config: W-Hall on EXTINT7
+	PORT->Group[0].DIRCLR.reg = PORT_PA23;
+	PORT->Group[0].OUTSET.reg = PORT_PA23;
+	PORT->Group[0].PINCFG[PIN_PA23].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
+	SetPinPeripheralFunction(PINMUX_PA23A_EIC_EXTINT7);
+	
+	/* Init PORT interface to BLDC-Driver */
+	// Pin-Config: PWM Output for U
+	PORT->Group[0].DIRSET.reg = PORT_PA19;
+	PORT->Group[0].OUTSET.reg = PORT_PA19;
+	SetPinPeripheralFunction(PINMUX_PA19F_TCC0_WO3);	// High
+	PORT->Group[0].DIRSET.reg = PORT_PA21;
+	PORT->Group[0].OUTSET.reg = PORT_PA21;
+	SetPinPeripheralFunction(PINMUX_PA21F_TCC0_WO7);	// Low
+	// Pin-Config: PWM Output for V
+	PORT->Group[0].DIRSET.reg = PORT_PA18;
+	PORT->Group[0].OUTSET.reg = PORT_PA18;
+	SetPinPeripheralFunction(PINMUX_PA18F_TCC0_WO2);	// High
+	PORT->Group[0].DIRSET.reg = PORT_PA20;
+	PORT->Group[0].OUTSET.reg = PORT_PA20;
+	SetPinPeripheralFunction(PINMUX_PA20F_TCC0_WO6);	// Low
+	// Pin-Config: PWM Output for W
+	PORT->Group[0].DIRSET.reg = PORT_PA04;
+	PORT->Group[0].OUTSET.reg = PORT_PA04;
+	SetPinPeripheralFunction(PINMUX_PA04E_TCC0_WO0);	// High
+	PORT->Group[0].DIRSET.reg = PORT_PA22;
+	PORT->Group[0].OUTSET.reg = PORT_PA22;
+	SetPinPeripheralFunction(PINMUX_PA22F_TCC0_WO4);	// Low
+	
+	/* Init PORT interface to LS9M */
+	//Configure CS-Pin as Output
+	PORT->Group[0].DIRSET.reg = PORT_PA12;
+	PORT->Group[0].OUTSET.reg = PORT_PA12;
+	//Configure INT1-Pin as Input
+	PORT->Group[0].DIRCLR.reg = PORT_PA13;
+	PORT->Group[0].OUTCLR.reg = PORT_PA13;
+	PORT->Group[0].PINCFG[13].reg = PORT_PINCFG_INEN;
+	SetPinPeripheralFunction(PINMUX_PA09D_SERCOM2_PAD1);
+	SetPinPeripheralFunction(PINMUX_PA10D_SERCOM2_PAD2);
+	SetPinPeripheralFunction(PINMUX_PA11D_SERCOM2_PAD3);
+	
+	
+	/* Init PORT interface to AT45DB */
+	//Configure CS-Pin as Output
+	PORT->Group[0].DIRSET.reg = PORT_PA08;
+	PORT->Group[0].OUTSET.reg = PORT_PA08;
+	SetPinPeripheralFunction(PINMUX_PA05D_SERCOM0_PAD1);
+	SetPinPeripheralFunction(PINMUX_PA06D_SERCOM0_PAD2);
+	SetPinPeripheralFunction(PINMUX_PA07D_SERCOM0_PAD3);
+	
+	/* Init PORT interface to SSD1306 */
+	PORT->Group[1].OUTSET.reg = PORT_PB08;
+	PORT->Group[1].PINCFG[8].reg = PORT_PINCFG_PULLEN;
+	SetPinPeripheralFunction(PINMUX_PB08D_SERCOM4_PAD0);
+	PORT->Group[1].OUTSET.reg = PORT_PB09;
+	PORT->Group[1].PINCFG[9].reg = PORT_PINCFG_PULLEN;
+	SetPinPeripheralFunction(PINMUX_PB09D_SERCOM4_PAD1);
+	
+	/* Init PORT interface to ADS */
+	//Configure CS-Pin as Output
+	PORT->Group[0].DIRSET.reg = PORT_PA02;
+	PORT->Group[0].OUTSET.reg = PORT_PA02;
+	
+	/* Init PORT interface to CC41-A */
+	SetPinPeripheralFunction(PINMUX_PA17C_SERCOM1_PAD1);
+	SetPinPeripheralFunction(PINMUX_PA16C_SERCOM1_PAD0);
+	
+	/* Init PORT interface to CP2102 */
+	SetPinPeripheralFunction(PINMUX_PB02D_SERCOM5_PAD0);
+	SetPinPeripheralFunction(PINMUX_PB03D_SERCOM5_PAD1);
+	
+	/* Init PORT interface to Board-LED */	
+	PORT->Group[0].DIRSET.reg = PORT_PA28;
+	PORT->Group[0].OUTCLR.reg = PORT_PA28;
+}
+
+
+void SetPinPeripheralFunction(uint32_t pinmux)
+{
+	uint8_t port = (uint8_t)((pinmux >> 16)/32);
+	
+	PORT->Group[port].PINCFG[((pinmux >> 16) - (port*32))].bit.PMUXEN = 1;
+	
+	PORT->Group[port].PMUX[((pinmux >> 16) - (port*32))/2].reg &= ~(0xF << (4 * ((pinmux >> 16) & 0x01u)));
+	PORT->Group[port].PMUX[((pinmux >> 16) - (port*32))/2].reg |= (uint8_t)((pinmux & 0x0000FFFF) << (4 * ((pinmux >> 16) & 0x01u)));
+}

@@ -2,10 +2,11 @@
 * SSD1306.cpp
 *
 * Created: 30.05.2018 19:34:55
-* Author: dominik hellhake
+* Author: Dominik Hellhake
 */
-
 #include "SSD1306.h"
+#include "..\LowLevel\I2C\I2C.h"
+
 
 uint8_t SSD1306::Blank[32] = {
 	0, 0,
@@ -227,6 +228,13 @@ RUN_RESULT SSD1306::Run()
 /************************************************************************/
 SSD1306::SSD1306()
 {
+}
+
+void SSD1306::DeviceInitialization()
+{
+	
+	this->InitDMADescriptors();
+	
 	// ERRATA: Swap ASCII Bit-Pattern for each character.
 	uint8_t tmp;
 	for (uint16_t x = 0; x < 320; x += 2)
@@ -234,12 +242,7 @@ SSD1306::SSD1306()
 		tmp = SSD1306::ASCII[x+1];
 		SSD1306::ASCII[x+1] = SSD1306::ASCII[x];
 		SSD1306::ASCII[x] = tmp;
-	}
-	
-	/* Init I2C peripheral */
-	I2C::InitSERCOM();
-	
-	this->InitDMADescriptors();
+	}	
 	
 	uint8_t dataLength = 27;
 	this->CMDBuffer[0] = 0x00;
@@ -274,15 +277,15 @@ SSD1306::SSD1306()
 	/* Set transfer size, source address and destination address */
 	this->DMAC_Descriptors[0].BTCNT.reg = dataLength;
 	this->DMAC_Descriptors[0].SRCADDR.reg = (uint32_t)(this->CMDBuffer + dataLength);
-		
+	
 	/* Set channel x descriptor 0 to the descriptor base address */
-	System::StartDMATransfer(this->DMAC_Descriptors, 0);
+	StartDMATransfer(this->DMAC_Descriptors, 0);
 	
 	SERCOM4->I2CM.ADDR.reg =	SERCOM_I2CM_ADDR_ADDR(SLAVE_ADDR<<1) |
-								SERCOM_I2CM_ADDR_LENEN |
-								SERCOM_I2CM_ADDR_LEN(dataLength) |
-								0;
-								
+	SERCOM_I2CM_ADDR_LENEN |
+	SERCOM_I2CM_ADDR_LEN(dataLength) |
+	0;
+	
 	/* Wait for pending i2c-transfer */
 	I2C::Wait();
 }
@@ -292,28 +295,29 @@ void SSD1306::InitDMADescriptors()
 	for (uint8_t x = 0; x < 9; x++)
 	{
 		/* Set block transfer control to base descriptor */
-		SSD1306::DMAC_Descriptors[x].BTCTRL.bit.VALID = true;
-		SSD1306::DMAC_Descriptors[x].BTCTRL.bit.EVOSEL = 0;
-		SSD1306::DMAC_Descriptors[x].BTCTRL.bit.BLOCKACT = 0;
-		SSD1306::DMAC_Descriptors[x].BTCTRL.bit.BEATSIZE = 0;
-		SSD1306::DMAC_Descriptors[x].BTCTRL.bit.SRCINC = true;
-		SSD1306::DMAC_Descriptors[x].BTCTRL.bit.DSTINC = false;
-		SSD1306::DMAC_Descriptors[x].BTCTRL.bit.STEPSEL = 0;
-		SSD1306::DMAC_Descriptors[x].BTCTRL.bit.STEPSIZE = 0;
-		SSD1306::DMAC_Descriptors[x].BTCNT.reg = 32;
+		this->DMAC_Descriptors[x].BTCTRL.bit.VALID = true;
+		this->DMAC_Descriptors[x].BTCTRL.bit.EVOSEL = 0;
+		this->DMAC_Descriptors[x].BTCTRL.bit.BLOCKACT = 0;
+		this->DMAC_Descriptors[x].BTCTRL.bit.BEATSIZE = 0;
+		this->DMAC_Descriptors[x].BTCTRL.bit.SRCINC = true;
+		this->DMAC_Descriptors[x].BTCTRL.bit.DSTINC = false;
+		this->DMAC_Descriptors[x].BTCTRL.bit.STEPSEL = 0;
+		this->DMAC_Descriptors[x].BTCTRL.bit.STEPSIZE = 0;
+		this->DMAC_Descriptors[x].BTCNT.reg = 32;
 		
-		SSD1306::DMAC_Descriptors[x].DSTADDR.reg = (uint32_t)(&SERCOM4->I2CM.DATA.reg);
+		this->DMAC_Descriptors[x].DSTADDR.reg = (uint32_t)(&SERCOM4->I2CM.DATA.reg);
 		
 		/* Set next transfer descriptor address */
 		if (x > 0 && x < 8)
-		SSD1306::DMAC_Descriptors[x].DESCADDR.reg = (uint32_t)&(SSD1306::DMAC_Descriptors[x + 1]);
+			this->DMAC_Descriptors[x].DESCADDR.reg = (uint32_t)&(this->DMAC_Descriptors[x + 1]);
 		else
 		{
-			SSD1306::DMAC_Descriptors[x].BTCNT.reg = 30;
-			SSD1306::DMAC_Descriptors[x].DESCADDR.reg = 0;
+			this->DMAC_Descriptors[x].BTCNT.reg = 30;
+			this->DMAC_Descriptors[x].DESCADDR.reg = 0;
 		}
 	}
 }
+
 
 void SSD1306::SetAddress(uint8_t row)
 {	
@@ -330,7 +334,7 @@ void SSD1306::SetAddress(uint8_t row)
 	this->DMAC_Descriptors[0].DESCADDR.reg = 0;
 	
 	/* Set channel x descriptor 0 to the descriptor base address */
-	System::StartDMATransfer(this->DMAC_Descriptors, 0);
+	StartDMATransfer(this->DMAC_Descriptors, 0);
 	
 	SERCOM4->I2CM.ADDR.reg =	SERCOM_I2CM_ADDR_ADDR(SLAVE_ADDR<<1) |
 								SERCOM_I2CM_ADDR_LENEN |
@@ -374,7 +378,7 @@ void SSD1306::WriteInt(uint32_t number, uint8_t row)
 	while ((t1 - 1900) < SysTick->VAL){}
 	
 	/* Set channel x descriptor 0 to the descriptor base address */
-	System::StartDMATransfer(this->DMAC_Descriptors, 0);
+	StartDMATransfer(this->DMAC_Descriptors, 0);
 	
 	SERCOM4->I2CM.ADDR.reg =	SERCOM_I2CM_ADDR_ADDR(SLAVE_ADDR<<1) |
 								SERCOM_I2CM_ADDR_LENEN |
@@ -411,7 +415,7 @@ void SSD1306::Clear()
 		while ((t1 - 1900) < SysTick->VAL){}
 		
 		/* Set channel x descriptor 0 to the descriptor base address */
-		System::StartDMATransfer(this->DMAC_Descriptors, 0);
+		StartDMATransfer(this->DMAC_Descriptors, 0);
 		
 		SERCOM4->I2CM.ADDR.reg =	SERCOM_I2CM_ADDR_ADDR(SLAVE_ADDR<<1) |
 									SERCOM_I2CM_ADDR_LENEN |

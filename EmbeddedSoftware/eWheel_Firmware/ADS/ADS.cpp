@@ -2,16 +2,17 @@
 * ADS.cpp
 *
 * Created: 09.07.2018 21:35:27
-* Author: dominik hellhake
+* Author: Dominik Hellhake
 */
-
 #include "ADS.h"
+
+#include "..\LowLevel\SPI\SPI.h"
 
 /************************************************************************/
 /* Executable Interface implementation                                  */
 /************************************************************************/
 RUN_RESULT ADS::Run()
-{	
+{
 	uint8_t config[2];
 	config[0] = 0b01000010;
 	config[1] = 0b11100011;
@@ -19,23 +20,23 @@ RUN_RESULT ADS::Run()
 	switch(this->State)
 	{
 		case ADS_STATE::MotorCurent:
-			config[0] = Distance_Config_Val;
-			this->MotorCurrent_RAW = (this->WriteRegister(config) * 0.125);		
-			this->State = ADS_STATE::Distance;
+		config[0] = Distance_Config_Val;
+		this->MotorCurrent_RAW = (this->WriteRegister(config) * 0.125);
+		this->State = ADS_STATE::Distance;
 		break;
-		case ADS_STATE::Distance:		
-			config[0] = Battery_Config_Val;
-			this->Distance_RAW = (this->WriteRegister(config) * 0.125);
-			this->State = ADS_STATE::Battery;
+		case ADS_STATE::Distance:
+		config[0] = Battery_Config_Val;
+		this->Distance_RAW = (this->WriteRegister(config) * 0.125);
+		this->State = ADS_STATE::Battery;
 		break;
-		case ADS_STATE::Battery:		
-			config[0] = MotorCurrent_Config_Val;
-			this->Battery = (this->WriteRegister(config) * 0.125);
-			this->State = ADS_STATE::MotorCurent;
-		break;		
+		case ADS_STATE::Battery:
+		config[0] = MotorCurrent_Config_Val;
+		this->Battery = (this->WriteRegister(config) * 0.125);
+		this->State = ADS_STATE::MotorCurent;
+		break;
 	}
-		
-	this->LastRun = System::GetElapsedMilis();
+	
+	this->LastRun = GetElapsedMilis();
 	
 	return RUN_RESULT::SUCCESS;
 }
@@ -43,19 +44,19 @@ RUN_RESULT ADS::Run()
 void ADS::Propagate()
 {
 	if (this->IR != NULL)
-		this->IR->SetDistanceRaw(this->Distance_RAW);
+	this->IR->SetDistanceRaw(this->Distance_RAW);
 	
 	if (this->OLED != NULL)
 	{
 		if (this->Distance_RAW < 0)
-			this->OLED->SetRow(this->Distance_RAW * -1, 1);
+		this->OLED->SetRow(this->Distance_RAW * -1, 1);
 		else
-			this->OLED->SetRow(this->Distance_RAW, 1);
-			
+		this->OLED->SetRow(this->Distance_RAW, 1);
+		
 		if (this->MotorCurrent_RAW < 0)
-			this->OLED->SetRow(this->MotorCurrent_RAW * -1, 0);
+		this->OLED->SetRow(this->MotorCurrent_RAW * -1, 0);
 		else
-			this->OLED->SetRow(this->MotorCurrent_RAW, 0);
+		this->OLED->SetRow(this->MotorCurrent_RAW, 0);
 	}
 }
 
@@ -65,9 +66,6 @@ void ADS::Propagate()
 /************************************************************************/
 ADS::ADS()
 {
-	//Configure CS-Pin as Output
-	PORT->Group[0].DIRSET.reg = PORT_PA02;
-	PORT->Group[0].OUTSET.reg = PORT_PA02;
 } //ADS
 
 int16_t ADS::WriteRegister(uint8_t *data)
@@ -85,3 +83,8 @@ int16_t ADS::WriteRegister(uint8_t *data)
 	
 	return ((result[0] << 8) | result[1]);
 }
+
+
+
+
+

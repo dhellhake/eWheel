@@ -2,20 +2,14 @@
 * LSM9D.h
 *
 * Created: 26.06.2018 23:08:02
-* Author: dominik hellhake
+* Author: Dominik Hellhake
 */
-
-
 #ifndef __LSM9D_H__
 #define __LSM9D_H__
 
-#include <math.h>
-#include "..\LowLevel\SPI\SPI.h"
-#include "..\LowLevel\System\System.h"
-
+#include "..\Executable.h"
 #include "..\AT45DB\AT45DB.h"
 #include "..\SSD1306\SSD1306.h"
-#include "..\Executable.h"
 
 // Register addresses
 #define STATUS_REG_1					0x27

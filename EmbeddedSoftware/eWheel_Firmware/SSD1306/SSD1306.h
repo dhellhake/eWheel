@@ -2,15 +2,13 @@
 * SSD1306.h
 *
 * Created: 30.05.2018 19:34:55
-* Author: dominik hellhake
+* Author: Dominik Hellhake
 */
-
-
 #ifndef __SSD1306_H__
 #define __SSD1306_H__
 
 #include <math.h>
-#include "..\LowLevel\I2C\I2C.h"
+#include "..\LowLevel\DMA\DMA.h"
 #include "..\Executable.h"
 
 #define SLAVE_ADDR 0b0111100
@@ -38,21 +36,21 @@ class SSD1306 : public Executable
 	/* Class implementation                                                 */
 	/************************************************************************/
 	private:
+		COMPILER_ALIGNED(16)
+		DmacDescriptor DMAC_Descriptors[9];
+	
 		static uint8_t Blank[32];
 		static uint8_t ASCII[320];
 	
 		uint8_t CMDBuffer[27] = {};
 			
-		COMPILER_ALIGNED(16)
-		DmacDescriptor DMAC_Descriptors[9];
-	public:
-		SSD1306();	
-		void Clear();
-		void WriteInt(uint32_t number, uint8_t row);
-	private:
 		void SetAddress(uint8_t row);
 		void InitDMADescriptors();
-
+	public:
+		SSD1306();
+		void DeviceInitialization();
+		void Clear();
+		void WriteInt(uint32_t number, uint8_t row);
 }; //SSD1306
 
 #endif //__SSD1306_H__

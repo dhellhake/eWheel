@@ -2,11 +2,11 @@
 * LSM9D.cpp
 *
 * Created: 26.06.2018 23:08:02
-* Author: dominik hellhake
+* Author: Dominik Hellhake
 */
-
-
+#include <math.h>
 #include "LSM9D.h"
+#include "..\LowLevel\SPI\SPI.h"
 
 /************************************************************************/
 /* Executable Interface implementation                                  */
@@ -69,17 +69,6 @@ LSM9D::LSM9D()
 	//Set TracePage
 	this->Page._type = TraceType::Orientation;
 	this->Page._position = 0;
-	
-	//Init SPI-SERCOM interface
-	SPIPort::InitSERCOM2();
-	
-	//Configure CS-Pin as Output
-	PORT->Group[0].DIRSET.reg = PORT_PA12;
-	PORT->Group[0].OUTSET.reg = PORT_PA12;
-	//Configure INT1-Pin as Input
-	PORT->Group[0].DIRCLR.reg = PORT_PA13;
-	PORT->Group[0].OUTCLR.reg = PORT_PA13;
-	PORT->Group[0].PINCFG[13].reg = PORT_PINCFG_INEN;
 	
 	/* CTRL_REG5_XL (0x1F) */
 	//[DEC_1][DEC_0][Zen_XL][Yen_XL][Zen_XL][0][0][0]

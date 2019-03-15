@@ -2,17 +2,13 @@
 * MotorDriver.h
 *
 * Created: 12.05.2018 13:25:12
-* Author: dominik hellhake
+* Author: Dominik Hellhake
 */
-
-
 #ifndef __MOTORDRIVER_H__
 #define __MOTORDRIVER_H__
 
-#include "sam.h"
+#include "samc21.h"
 #include "..\MotorSensor\MotorSensor.h"
-#include "..\LowLevel\System\System.h"
-#include "..\Executable.h"
 
 #define U_HIGH_PATT_Pos		3
 #define V_HIGH_PATT_Pos		2
@@ -21,20 +17,11 @@
 #define V_LOW_PATT_Pos		6
 #define W_LOW_PATT_Pos		4
 
-class MotorController : public Executable
+class MotorController
 {
-	/************************************************************************/
-	/* Executable Interface implementation                                  */
-	/************************************************************************/
-	
-	/************************************************************************/
-	/* Class implementation                                                 */
-	/************************************************************************/
 	public:
 		volatile uint32_t PhaseDuty = 200;
-	public:
-		MotorController();
-		
+				
 		inline void Drive_SetDuty(uint32_t duty)
 		{
 			TCC0->CC[0].reg	= duty;
