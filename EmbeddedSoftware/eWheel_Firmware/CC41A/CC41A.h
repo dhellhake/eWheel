@@ -8,13 +8,26 @@
 #define __CC41A_H__
 
 #include "samc21.h"
+#include "..\Executable.h"
 
-class CC41A
+class CC41A : public Executable
 {
+	/************************************************************************/
+	/* Executable Interface implementation                                  */
+	/************************************************************************/
+	virtual bool CanExecute() 
+	{ 
+		return true; 
+	};
+	virtual RUN_RESULT Run();
+	virtual void Propagate();
+
+
+	/************************************************************************/
+	/* Class implementation                                                 */
+	/************************************************************************/
 	public:
 		CC41A();
-	protected:
-	private:
 }; //CC41A
 
 #endif //__CC41A_H__
