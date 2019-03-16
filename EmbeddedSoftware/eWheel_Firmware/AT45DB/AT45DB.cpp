@@ -6,7 +6,7 @@
 */
 #include <string.h>
 #include "AT45DB.h"
-#include "..\LowLevel\SPI\SPI.h"
+#include "..\LowLevel/SPI/SPI.h"
 
 /************************************************************************/
 /* Executable Interface implementation                                  */

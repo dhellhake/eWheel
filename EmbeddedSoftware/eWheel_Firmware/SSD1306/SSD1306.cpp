@@ -5,7 +5,7 @@
 * Author: Dominik Hellhake
 */
 #include "SSD1306.h"
-#include "..\LowLevel\I2C\I2C.h"
+#include "..\LowLevel/I2C/I2C.h"
 
 
 uint8_t SSD1306::Blank[32] = {

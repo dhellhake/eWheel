@@ -8,7 +8,7 @@
 #define __I2C_H__
 
 #include "samc21.h"
-#include "..\DMA\DMA.h"
+#include "..\Device/DMA/DMA.h"
 
 class I2C
 {

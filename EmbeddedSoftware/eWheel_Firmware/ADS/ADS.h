@@ -9,7 +9,7 @@
 
 #include "..\Executable.h"
 
-#include "..\LowLevel\SysTick\SysTick.h"
+#include "..\LowLevel/Device/SysTick/SysTick.h"
 #include "..\SSD1306\SSD1306.h"
 #include "..\GP2Y\GP2Y.h"
 

@@ -5,7 +5,7 @@
  * Author : Dominik Hellhake
  */
 #include "samc21.h"
-#include "LowLevel/System/System.h"
+#include "System/System.h"
 
 
 int main(void)

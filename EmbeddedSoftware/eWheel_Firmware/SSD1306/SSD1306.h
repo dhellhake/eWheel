@@ -8,7 +8,7 @@
 #define __SSD1306_H__
 
 #include <math.h>
-#include "..\LowLevel\DMA\DMA.h"
+#include "..\LowLevel/Device/DMA/DMA.h"
 #include "..\Executable.h"
 
 #define SLAVE_ADDR 0b0111100

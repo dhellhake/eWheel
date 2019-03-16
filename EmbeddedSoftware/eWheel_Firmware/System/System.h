@@ -8,16 +8,16 @@
 #define __SYSTEM_H__
 
 #include "samc21.h"
-#include "..\..\Executable.h"
+#include "..\Executable.h"
 
-#include "..\..\ADS/ADS.h"
-#include "..\..\AT45DB/AT45DB.h"
-#include "..\..\CC41A/CC41A.h"
-#include "..\..\GP2Y/GP2Y.h"
-#include "..\..\LSM9D/LSM9D.h"
-#include "..\..\MotorController\MotorController.h"
-#include "..\..\MotorSensor\MotorSensor.h"
-#include "..\..\SSD1306/SSD1306.h"
+#include "..\ADS\ADS.h"
+#include "..\AT45DB/AT45DB.h"
+#include "..\CC41A/CC41A.h"
+#include "..\GP2Y/GP2Y.h"
+#include "..\LSM9D/LSM9D.h"
+#include "..\MotorController\MotorController.h"
+#include "..\MotorSensor\MotorSensor.h"
+#include "..\SSD1306/SSD1306.h"
 
 #define TASKPOOL_SIZE 5
 

@@ -28,13 +28,13 @@
 
 #include "samc21.h"
 
-#include "..\..\GCLK\GCLK.h"
-#include "..\..\SysTick\SysTick.h"
-#include "..\..\EIC\EIC.h"
-#include "..\..\DMA\DMA.h"
-#include "..\..\SERCOM\SERCOM.h"
-#include "..\..\TCC\TCC.h"
-#include "..\..\PORT\PORT.h"
+#include "GCLK\GCLK.h"
+#include "SysTick\SysTick.h"
+#include "EIC\EIC.h"
+#include "DMA\DMA.h"
+#include "SERCOM\SERCOM.h"
+#include "TCC\TCC.h"
+#include "PORT\PORT.h"
 
 /* Initialize segments */
 extern uint32_t _sfixed;

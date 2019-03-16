@@ -12,7 +12,7 @@ extern "C" {
 #endif
 
 #include "samc21.h"
-#include "..\..\Utilities.h"
+#include "..\..\..\Utilities.h"
 
 void InitSERCOM0();
 void InitSERCOM1();

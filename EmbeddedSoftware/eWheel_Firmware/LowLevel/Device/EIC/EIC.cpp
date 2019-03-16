@@ -5,7 +5,7 @@
  *  Author: Dominik Hellhake
  */ 
 #include "EIC.h"
-#include "..\System\System.h"
+#include "..\..\..\System\System.h"
 
 void InitEIC()
 {

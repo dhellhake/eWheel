@@ -123,68 +123,68 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
       <ArmGccCpp>
-        <armgcc.common.outputfiles.hex>True</armgcc.common.outputfiles.hex>
-        <armgcc.common.outputfiles.lss>True</armgcc.common.outputfiles.lss>
-        <armgcc.common.outputfiles.eep>True</armgcc.common.outputfiles.eep>
-        <armgcc.common.outputfiles.bin>True</armgcc.common.outputfiles.bin>
-        <armgcc.common.outputfiles.srec>True</armgcc.common.outputfiles.srec>
-        <armgcc.compiler.symbols.DefSymbols>
-          <ListValues>
-            <Value>DEBUG</Value>
-          </ListValues>
-        </armgcc.compiler.symbols.DefSymbols>
-        <armgcc.compiler.directories.IncludePaths>
-          <ListValues>
-            <Value>%24(PackRepoDir)\arm\cmsis\5.0.1\CMSIS\Include\</Value>
-            <Value>%24(PackRepoDir)\atmel\SAMC21_DFP\1.1.105\samc21\include</Value>
-          </ListValues>
-        </armgcc.compiler.directories.IncludePaths>
-        <armgcc.compiler.optimization.level>Optimize (-O1)</armgcc.compiler.optimization.level>
-        <armgcc.compiler.optimization.PrepareFunctionsForGarbageCollection>True</armgcc.compiler.optimization.PrepareFunctionsForGarbageCollection>
-        <armgcc.compiler.optimization.DebugLevel>Maximum (-g3)</armgcc.compiler.optimization.DebugLevel>
-        <armgcc.compiler.warnings.AllWarnings>True</armgcc.compiler.warnings.AllWarnings>
-        <armgcccpp.compiler.symbols.DefSymbols>
-          <ListValues>
-            <Value>DEBUG</Value>
-          </ListValues>
-        </armgcccpp.compiler.symbols.DefSymbols>
-        <armgcccpp.compiler.directories.IncludePaths>
-          <ListValues>
-            <Value>%24(PackRepoDir)\arm\cmsis\5.0.1\CMSIS\Include\</Value>
-            <Value>%24(PackRepoDir)\atmel\SAMC21_DFP\1.1.105\samc21\include</Value>
-          </ListValues>
-        </armgcccpp.compiler.directories.IncludePaths>
-        <armgcccpp.compiler.optimization.PrepareFunctionsForGarbageCollection>True</armgcccpp.compiler.optimization.PrepareFunctionsForGarbageCollection>
-        <armgcccpp.compiler.optimization.DebugLevel>Maximum (-g3)</armgcccpp.compiler.optimization.DebugLevel>
-        <armgcccpp.compiler.warnings.AllWarnings>True</armgcccpp.compiler.warnings.AllWarnings>
-        <armgcccpp.linker.libraries.Libraries>
-          <ListValues>
-            <Value>libm</Value>
-          </ListValues>
-        </armgcccpp.linker.libraries.Libraries>
-        <armgcccpp.linker.libraries.LibrarySearchPaths>
-          <ListValues>
-            <Value>%24(ProjectDir)\LowLevel\System\Device_Startup</Value>
-          </ListValues>
-        </armgcccpp.linker.libraries.LibrarySearchPaths>
-        <armgcccpp.linker.optimization.GarbageCollectUnusedSections>True</armgcccpp.linker.optimization.GarbageCollectUnusedSections>
-        <armgcccpp.linker.memorysettings.ExternalRAM />
-        <armgcccpp.linker.miscellaneous.LinkerFlags>-Tsamc21g18a_flash.ld</armgcccpp.linker.miscellaneous.LinkerFlags>
-        <armgcccpp.assembler.general.IncludePaths>
-          <ListValues>
-            <Value>%24(PackRepoDir)\arm\cmsis\5.0.1\CMSIS\Include\</Value>
-            <Value>%24(PackRepoDir)\atmel\SAMC21_DFP\1.1.105\samc21\include</Value>
-          </ListValues>
-        </armgcccpp.assembler.general.IncludePaths>
-        <armgcccpp.assembler.debugging.DebugLevel>Default (-g)</armgcccpp.assembler.debugging.DebugLevel>
-        <armgcccpp.preprocessingassembler.general.IncludePaths>
-          <ListValues>
-            <Value>%24(PackRepoDir)\arm\cmsis\5.0.1\CMSIS\Include\</Value>
-            <Value>%24(PackRepoDir)\atmel\SAMC21_DFP\1.1.105\samc21\include</Value>
-          </ListValues>
-        </armgcccpp.preprocessingassembler.general.IncludePaths>
-        <armgcccpp.preprocessingassembler.debugging.DebugLevel>Default (-Wa,-g)</armgcccpp.preprocessingassembler.debugging.DebugLevel>
-      </ArmGccCpp>
+  <armgcc.common.outputfiles.hex>True</armgcc.common.outputfiles.hex>
+  <armgcc.common.outputfiles.lss>True</armgcc.common.outputfiles.lss>
+  <armgcc.common.outputfiles.eep>True</armgcc.common.outputfiles.eep>
+  <armgcc.common.outputfiles.bin>True</armgcc.common.outputfiles.bin>
+  <armgcc.common.outputfiles.srec>True</armgcc.common.outputfiles.srec>
+  <armgcc.compiler.symbols.DefSymbols>
+    <ListValues>
+      <Value>DEBUG</Value>
+    </ListValues>
+  </armgcc.compiler.symbols.DefSymbols>
+  <armgcc.compiler.directories.IncludePaths>
+    <ListValues>
+      <Value>%24(PackRepoDir)\arm\cmsis\5.0.1\CMSIS\Include\</Value>
+      <Value>%24(PackRepoDir)\atmel\SAMC21_DFP\1.1.105\samc21\include</Value>
+    </ListValues>
+  </armgcc.compiler.directories.IncludePaths>
+  <armgcc.compiler.optimization.level>Optimize (-O1)</armgcc.compiler.optimization.level>
+  <armgcc.compiler.optimization.PrepareFunctionsForGarbageCollection>True</armgcc.compiler.optimization.PrepareFunctionsForGarbageCollection>
+  <armgcc.compiler.optimization.DebugLevel>Maximum (-g3)</armgcc.compiler.optimization.DebugLevel>
+  <armgcc.compiler.warnings.AllWarnings>True</armgcc.compiler.warnings.AllWarnings>
+  <armgcccpp.compiler.symbols.DefSymbols>
+    <ListValues>
+      <Value>DEBUG</Value>
+    </ListValues>
+  </armgcccpp.compiler.symbols.DefSymbols>
+  <armgcccpp.compiler.directories.IncludePaths>
+    <ListValues>
+      <Value>%24(PackRepoDir)\arm\cmsis\5.0.1\CMSIS\Include\</Value>
+      <Value>%24(PackRepoDir)\atmel\SAMC21_DFP\1.1.105\samc21\include</Value>
+    </ListValues>
+  </armgcccpp.compiler.directories.IncludePaths>
+  <armgcccpp.compiler.optimization.PrepareFunctionsForGarbageCollection>True</armgcccpp.compiler.optimization.PrepareFunctionsForGarbageCollection>
+  <armgcccpp.compiler.optimization.DebugLevel>Maximum (-g3)</armgcccpp.compiler.optimization.DebugLevel>
+  <armgcccpp.compiler.warnings.AllWarnings>True</armgcccpp.compiler.warnings.AllWarnings>
+  <armgcccpp.linker.libraries.Libraries>
+    <ListValues>
+      <Value>libm</Value>
+    </ListValues>
+  </armgcccpp.linker.libraries.Libraries>
+  <armgcccpp.linker.libraries.LibrarySearchPaths>
+    <ListValues>
+      <Value>%24(ProjectDir)\LowLevel\Device</Value>
+    </ListValues>
+  </armgcccpp.linker.libraries.LibrarySearchPaths>
+  <armgcccpp.linker.optimization.GarbageCollectUnusedSections>True</armgcccpp.linker.optimization.GarbageCollectUnusedSections>
+  <armgcccpp.linker.memorysettings.ExternalRAM />
+  <armgcccpp.linker.miscellaneous.LinkerFlags>-Tsamc21g18a_flash.ld</armgcccpp.linker.miscellaneous.LinkerFlags>
+  <armgcccpp.assembler.general.IncludePaths>
+    <ListValues>
+      <Value>%24(PackRepoDir)\arm\cmsis\5.0.1\CMSIS\Include\</Value>
+      <Value>%24(PackRepoDir)\atmel\SAMC21_DFP\1.1.105\samc21\include</Value>
+    </ListValues>
+  </armgcccpp.assembler.general.IncludePaths>
+  <armgcccpp.assembler.debugging.DebugLevel>Default (-g)</armgcccpp.assembler.debugging.DebugLevel>
+  <armgcccpp.preprocessingassembler.general.IncludePaths>
+    <ListValues>
+      <Value>%24(PackRepoDir)\arm\cmsis\5.0.1\CMSIS\Include\</Value>
+      <Value>%24(PackRepoDir)\atmel\SAMC21_DFP\1.1.105\samc21\include</Value>
+    </ListValues>
+  </armgcccpp.preprocessingassembler.general.IncludePaths>
+  <armgcccpp.preprocessingassembler.debugging.DebugLevel>Default (-Wa,-g)</armgcccpp.preprocessingassembler.debugging.DebugLevel>
+</ArmGccCpp>
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
@@ -215,22 +215,49 @@
     <Compile Include="GP2Y\GP2Y.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LowLevel\DMA\DMA.cpp">
+    <Compile Include="LowLevel\Device\DMA\DMA.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LowLevel\DMA\DMA.h">
+    <Compile Include="LowLevel\Device\DMA\DMA.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LowLevel\EIC\EIC.cpp">
+    <Compile Include="LowLevel\Device\EIC\EIC.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LowLevel\EIC\EIC.h">
+    <Compile Include="LowLevel\Device\EIC\EIC.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LowLevel\GCLK\GCLK.cpp">
+    <Compile Include="LowLevel\Device\GCLK\GCLK.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LowLevel\GCLK\GCLK.h">
+    <Compile Include="LowLevel\Device\GCLK\GCLK.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\Device\PORT\PORT.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\Device\PORT\PORT.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\Device\SERCOM\SERCOM.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\Device\SERCOM\SERCOM.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\Device\startup_samc21.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\Device\SysTick\SysTick.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\Device\SysTick\SysTick.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\Device\TCC\TCC.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\Device\TCC\TCC.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="LowLevel\I2C\I2C.cpp">
@@ -239,43 +266,10 @@
     <Compile Include="LowLevel\I2C\I2C.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LowLevel\PORT\PORT.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="LowLevel\PORT\PORT.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="LowLevel\SERCOM\SERCOM.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="LowLevel\SERCOM\SERCOM.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="LowLevel\SPI\SPI.cpp">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="LowLevel\SPI\SPI.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="LowLevel\System\Device_Startup\startup_samc21.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="LowLevel\System\System.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="LowLevel\System\System.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="LowLevel\SysTick\SysTick.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="LowLevel\SysTick\SysTick.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="LowLevel\TCC\TCC.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="LowLevel\TCC\TCC.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="LowLevel\USART\USART.cpp">
@@ -311,24 +305,29 @@
     <Compile Include="SSD1306\SSD1306.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="System\System.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="System\System.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Utilities.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="LowLevel" />
+    <Folder Include="LowLevel\Device" />
+    <Folder Include="LowLevel\Device\DMA\" />
+    <Folder Include="LowLevel\Device\EIC\" />
+    <Folder Include="LowLevel\Device\GCLK\" />
+    <Folder Include="LowLevel\Device\PORT\" />
+    <Folder Include="LowLevel\Device\SERCOM\" />
+    <Folder Include="LowLevel\Device\SysTick\" />
+    <Folder Include="LowLevel\Device\TCC\" />
     <Folder Include="LowLevel\I2C" />
-    <Folder Include="LowLevel\DMA" />
-    <Folder Include="LowLevel\GCLK" />
-    <Folder Include="LowLevel\EIC" />
-    <Folder Include="LowLevel\PORT" />
-    <Folder Include="LowLevel\SysTick" />
-    <Folder Include="LowLevel\TCC" />
-    <Folder Include="LowLevel\SERCOM" />
     <Folder Include="LowLevel\USART" />
     <Folder Include="LowLevel\SPI" />
-    <Folder Include="LowLevel\System" />
-    <Folder Include="LowLevel\System\Device_Startup\" />
     <Folder Include="MotorSensor" />
     <Folder Include="MotorController" />
     <Folder Include="LSM9D" />
@@ -337,12 +336,13 @@
     <Folder Include="AT45DB" />
     <Folder Include="CC41A" />
     <Folder Include="SSD1306" />
+    <Folder Include="System\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="LowLevel\System\Device_Startup\samc21g18a_flash.ld">
+    <None Include="LowLevel\Device\samc21g18a_flash.ld">
       <SubType>compile</SubType>
     </None>
-    <None Include="LowLevel\System\Device_Startup\samc21g18a_sram.ld">
+    <None Include="LowLevel\Device\samc21g18a_sram.ld">
       <SubType>compile</SubType>
     </None>
   </ItemGroup>
