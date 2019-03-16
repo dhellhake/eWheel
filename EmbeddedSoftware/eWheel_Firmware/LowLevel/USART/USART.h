@@ -12,7 +12,7 @@
 class USART
 {
 	public:
-		static void SendByte(uint8_t byte);
+		static void SERCOM5_SendByte(uint8_t byte);
 		static void SERCOM1_SendByte(uint8_t byte);
 	protected:	
 	private:

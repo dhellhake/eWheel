@@ -6,7 +6,7 @@
 */
 #include "USART.h"
 
-void USART::SendByte(uint8_t byte)
+void USART::SERCOM5_SendByte(uint8_t byte)
 {
 	while(!SERCOM5->USART.INTFLAG.bit.DRE);
 	SERCOM5->USART.DATA.reg = byte;
