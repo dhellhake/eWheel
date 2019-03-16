@@ -76,7 +76,7 @@ class AT45DB : public Executable
 		AT45DB();
 		uint8_t AddTracePage(TracePage *page);
 		uint8_t TracePage_Read(uint16_t pageIndex, TracePage *page);
-		uint8_t EraseTrace();
+		void EraseTrace();
 		bool IsReady();
 		
 	private:

@@ -63,7 +63,7 @@ bool AT45DB::IsReady()
 	return (result >> 7);
 }
 
-uint8_t AT45DB::EraseTrace()
+void AT45DB::EraseTrace()
 {
 	//CS Low
 	PORT->Group[0].OUTCLR.reg = PORT_PA08;
