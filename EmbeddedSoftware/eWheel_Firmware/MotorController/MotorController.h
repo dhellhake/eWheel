@@ -17,17 +17,34 @@
 #define V_LOW_PATT_Pos		6
 #define W_LOW_PATT_Pos		4
 
+enum class CONTROLLER_STATE
+{
+	IDLE,
+	DRIVE	
+};
+
+
 class MotorController
 {
 	public:
 		volatile uint32_t PhaseDuty = 200;
-				
+		
+		volatile CONTROLLER_STATE State = CONTROLLER_STATE::IDLE;
+			
 		inline void Drive_SetDuty(uint32_t duty)
 		{
 			TCC0->CC[0].reg	= duty;
 		}
+		
+		inline void SetHallState(HALL_STATE state)
+		{
+			if (this->State == CONTROLLER_STATE::DRIVE)
+			{
+				this->Drive_SetHallState(state);
+			}
+		}
 	
-		inline void Drive_SetPhase(HALL_STATE state)
+		inline void Drive_SetHallState(HALL_STATE state)
 		{
 			switch (state)
 			{

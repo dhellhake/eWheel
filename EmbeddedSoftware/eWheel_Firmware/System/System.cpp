@@ -25,7 +25,7 @@ System::System()
 	//motorSensor.OLED = &eWheel.OLED;
 
 	/* Initialize BLDC Motor Controller */
-	eWheel.BLDCController.Drive_SetPhase(eWheel.BLDCSensor.HallState);
+	eWheel.BLDCController.SetHallState(eWheel.BLDCSensor.HallState);
 
 	/* Initialize the lsm9ds1 sensor */
 	eWheel.Orientation.TraceLink = &eWheel.TraceLink;

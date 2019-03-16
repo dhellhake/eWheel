@@ -41,7 +41,7 @@ void EIC_Handler()
 	{
 		/* Hall Sensor caused interrupt */
 		eWheel.BLDCSensor.Run();
-		eWheel.BLDCController.Drive_SetPhase(eWheel.BLDCSensor.HallState);
+		eWheel.BLDCController.SetHallState(eWheel.BLDCSensor.HallState);
 		eWheel.BLDCSensor.Propagate();
 		
 		EIC->INTFLAG.reg = (1 << 7) | (1 << 12) | (1 << 13);
