@@ -15,7 +15,7 @@ int main(void)
 	Executable* highPriorityPool[HIGHPRIORITY_POOL_SIZE] = {
 		&eWheel.Orientation,
 		&eWheel.AnalogSensor,
-		&eWheel.InfraRedSensor	 
+		&eWheel.BLDCSensor 
 	};	
 	
 	Executable* lowPriorityPool[LOWPRIORITY_POOL_SIZE] = {

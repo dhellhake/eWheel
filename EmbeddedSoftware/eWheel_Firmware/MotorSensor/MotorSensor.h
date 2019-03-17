@@ -30,19 +30,27 @@ class MotorSensor : public Executable
 	public:	
 		SSD1306 *OLED = NULL;
 	public:
-		virtual bool CanExecute() { return true; };		
+		virtual bool CanExecute() { return this->HallStateChanged >= 90; };		
 		virtual RUN_RESULT Run(uint32_t timeStamp);
 		virtual void Propagate();
 				
 	/************************************************************************/
 	/* Class implementation                                                 */
 	/************************************************************************/
+	private:		
+		volatile uint32_t HallStateChanged = 0;
+		uint32_t LastRPMMeasure = 0;
+		
+		float RPM = 0;		
 	public:
+		volatile HALL_STATE HallState = HALL_STATE::UNDEFINED_1;		
+		
 		void EnableInterrupt();
 		
 		inline void UpdateHallState()
 		{			
 			this->HallState = (HALL_STATE)((PORT->Group[0].IN.reg >> 23) & 0b111);
+			this->HallStateChanged++;
 		}
 				
 		static inline uint8_t StateToIndex(HALL_STATE state)
@@ -68,8 +76,6 @@ class MotorSensor : public Executable
 					return 0;
 			}
 		}
-	public:
-		volatile HALL_STATE HallState = HALL_STATE::UNDEFINED_1;
 }; //MotorSensor
 
 #endif //__MOTORSENSOR_H__

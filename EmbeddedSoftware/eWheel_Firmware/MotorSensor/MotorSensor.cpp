@@ -11,6 +11,13 @@
 /************************************************************************/
 RUN_RESULT MotorSensor::Run(uint32_t timeStamp)
 {
+	float scaled = (((float)(this->HallStateChanged)) / 90);
+	this->HallStateChanged = 0;
+	
+	float elapsed = ((float)timeStamp - (float)this->LastRPMMeasure);
+	this->LastRPMMeasure = timeStamp;
+	
+	this->RPM = 1 / ((elapsed * scaled) / 1000.0f);
 	
 	return RUN_RESULT::SUCCESS;
 }
@@ -18,7 +25,7 @@ RUN_RESULT MotorSensor::Run(uint32_t timeStamp)
 void MotorSensor::Propagate()
 {
 	if (this->OLED != NULL)
-		this->OLED->SetRow(this->StateToIndex(this->HallState), 0);
+		this->OLED->SetRow(this->RPM * 100.0f, 0);
 }
 
 /************************************************************************/
