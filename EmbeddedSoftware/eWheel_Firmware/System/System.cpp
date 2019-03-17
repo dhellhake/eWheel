@@ -18,7 +18,7 @@ System::System()
 	eWheel.OLED.DeviceInitialization();
 
 	/* Initialize FlashMemory */
-	//at45.OLED = &eWheel.OLED;
+	eWheel.TraceLink.OLED = &eWheel.OLED;
 
 	/* Initialize BLDC Motor Sensor */
 	eWheel.BLDCSensor.EnableInterrupt();
@@ -32,7 +32,7 @@ System::System()
 	//gyro.OLED = &eWheel.OLED;
 
 	/* Initialize the Analog Sensor */
-	eWheel.AnalogSensor.OLED = &eWheel.OLED;
+	//eWheel.AnalogSensor.OLED = &eWheel.OLED;
 
 	/* Initialize infrared distance sensor GP2Y */
 	eWheel.AnalogSensor.IR = &eWheel.InfraRedSensor;
@@ -42,7 +42,7 @@ System::System()
 void System::SetLED(bool state)
 {
 	if (state)
-	PORT->Group[0].OUTSET.reg = PORT_PA28;
+		PORT->Group[0].OUTSET.reg = PORT_PA28;
 	else
-	PORT->Group[0].OUTSET.reg = PORT_PA28;
+		PORT->Group[0].OUTCLR.reg = PORT_PA28;
 }
