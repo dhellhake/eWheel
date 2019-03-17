@@ -19,15 +19,13 @@
 #include "..\MotorSensor\MotorSensor.h"
 #include "..\SSD1306/SSD1306.h"
 
-#define TASKPOOL_SIZE 5
+#define TASKPOOL_SIZE 6
 
 class System
 {
 	public:
 		System();
-		
-		Executable* TaskPool[TASKPOOL_SIZE];
-		
+				
 		void SetLED(bool state);	
 	
 	/************************************************************************/
