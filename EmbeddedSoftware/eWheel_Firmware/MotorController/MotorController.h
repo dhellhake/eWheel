@@ -8,6 +8,7 @@
 #define __MOTORDRIVER_H__
 
 #include "samc21.h"
+#include "BLDCPattern.h"
 #include "..\MotorSensor\MotorSensor.h"
 
 #define U_HIGH_PATT_Pos		3
@@ -24,131 +25,52 @@ enum class CONTROLLER_STATE
 };
 
 
+
 class MotorController
 {
+	private:	
+		volatile CONTROLLER_STATE ControllerState = CONTROLLER_STATE::IDLE;
+	
 	public:
-		volatile uint32_t PhaseDuty = 200;
+		volatile uint32_t PhaseDuty = 600;
 		
-		volatile CONTROLLER_STATE State = CONTROLLER_STATE::IDLE;
-			
-		inline void Drive_SetDuty(uint32_t duty)
-		{
-			TCC0->CC[0].reg	= duty;
-		}
+		void SetState(CONTROLLER_STATE state);
+					
+		void SetDuty(uint32_t duty);
 		
-		inline void SetHallState(HALL_STATE state)
-		{
-			if (this->State == CONTROLLER_STATE::DRIVE)
-			{
-				this->Drive_SetHallState(state);
-			}
-		}
+		void SetHallState(HALL_STATE state);
 	
 		inline void Drive_SetHallState(HALL_STATE state)
 		{
 			switch (state)
 			{
 				case HALL_STATE::HALL_STATE_1:
-				TCC0->PATT.reg =	((	(1 << U_HIGH_PATT_Pos)						|
-										(1 << U_LOW_PATT_Pos)						|
-										(0 << V_HIGH_PATT_Pos)						|
-										(0 << V_LOW_PATT_Pos)						|
-										(1 << W_HIGH_PATT_Pos)						|
-										(1 << W_LOW_PATT_Pos)) << TCC_PATT_PGE_Pos) |
-									((	(0 << U_HIGH_PATT_Pos)						|
-										(1 << U_LOW_PATT_Pos)						|
-										(0 << V_HIGH_PATT_Pos)						|
-										(0 << V_LOW_PATT_Pos)						|
-										(0 << W_HIGH_PATT_Pos)						|
-										(0 << W_LOW_PATT_Pos)) << TCC_PATT_PGV_Pos);
+					TCC0->PATT.reg = BLDC_PATTERN_STEP1;
 				break;
 				case HALL_STATE::HALL_STATE_2:
-				TCC0->PATT.reg =	((	(1 << U_HIGH_PATT_Pos)						|
-									(1 << U_LOW_PATT_Pos)						|
-									(0 << V_HIGH_PATT_Pos)						|
-									(0 << V_LOW_PATT_Pos)						|
-									(1 << W_HIGH_PATT_Pos)						|
-									(1 << W_LOW_PATT_Pos)) << TCC_PATT_PGE_Pos) |
-								((	(0 << U_HIGH_PATT_Pos)						|
-									(0 << U_LOW_PATT_Pos)						|
-									(0 << V_HIGH_PATT_Pos)						|
-									(0 << V_LOW_PATT_Pos)						|
-									(0 << W_HIGH_PATT_Pos)						|
-									(1 << W_LOW_PATT_Pos)) << TCC_PATT_PGV_Pos);
+					TCC0->PATT.reg = BLDC_PATTERN_STEP2;
 				break;
 				case HALL_STATE::HALL_STATE_3:
-				TCC0->PATT.reg =	((	(0 << U_HIGH_PATT_Pos)						|
-										(0 << U_LOW_PATT_Pos)						|
-										(1 << V_HIGH_PATT_Pos)						|
-										(1 << V_LOW_PATT_Pos)						|
-										(1 << W_HIGH_PATT_Pos)						|
-										(1 << W_LOW_PATT_Pos)) << TCC_PATT_PGE_Pos) |
-									((	(0 << U_HIGH_PATT_Pos)						|
-										(0 << U_LOW_PATT_Pos)						|
-										(0 << V_HIGH_PATT_Pos)						|
-										(0 << V_LOW_PATT_Pos)						|
-										(0 << W_HIGH_PATT_Pos)						|
-										(1 << W_LOW_PATT_Pos)) << TCC_PATT_PGV_Pos);
+					TCC0->PATT.reg = BLDC_PATTERN_STEP3;
 				break;
 				case HALL_STATE::HALL_STATE_4:
-				TCC0->PATT.reg =	((	(0 << U_HIGH_PATT_Pos)						|
-										(0 << U_LOW_PATT_Pos)						|
-										(1 << V_HIGH_PATT_Pos)						|
-										(1 << V_LOW_PATT_Pos)						|
-										(1 << W_HIGH_PATT_Pos)						|
-										(1 << W_LOW_PATT_Pos)) << TCC_PATT_PGE_Pos) |
-									((	(0 << U_HIGH_PATT_Pos)						|
-										(0 << U_LOW_PATT_Pos)						|
-										(0 << V_HIGH_PATT_Pos)						|
-										(1 << V_LOW_PATT_Pos)						|
-										(0 << W_HIGH_PATT_Pos)						|
-										(0 << W_LOW_PATT_Pos)) << TCC_PATT_PGV_Pos);
+					TCC0->PATT.reg = BLDC_PATTERN_STEP4;
 				break;
 				case HALL_STATE::HALL_STATE_5:
-				TCC0->PATT.reg =	((	(1 << U_HIGH_PATT_Pos)						|
-										(1 << U_LOW_PATT_Pos)						|
-										(1 << V_HIGH_PATT_Pos)						|
-										(1 << V_LOW_PATT_Pos)						|
-										(0 << W_HIGH_PATT_Pos)						|
-										(0 << W_LOW_PATT_Pos)) << TCC_PATT_PGE_Pos) |
-									((	(0 << U_HIGH_PATT_Pos)						|
-										(0 << U_LOW_PATT_Pos)						|
-										(0 << V_HIGH_PATT_Pos)						|
-										(1 << V_LOW_PATT_Pos)						|
-										(0 << W_HIGH_PATT_Pos)						|
-										(0 << W_LOW_PATT_Pos)) << TCC_PATT_PGV_Pos);
+					TCC0->PATT.reg = BLDC_PATTERN_STEP5;
 				break;
 				case HALL_STATE::HALL_STATE_6:
-				TCC0->PATT.reg =	((	(1 << U_HIGH_PATT_Pos)						|
-										(1 << U_LOW_PATT_Pos)						|
-										(1 << V_HIGH_PATT_Pos)						|
-										(1 << V_LOW_PATT_Pos)						|
-										(0 << W_HIGH_PATT_Pos)						|
-										(0 << W_LOW_PATT_Pos)) << TCC_PATT_PGE_Pos) |
-									((	(0 << U_HIGH_PATT_Pos)						|
-										(1 << U_LOW_PATT_Pos)						|
-										(0 << V_HIGH_PATT_Pos)						|
-										(0 << V_LOW_PATT_Pos)						|
-										(0 << W_HIGH_PATT_Pos)						|
-										(0 << W_LOW_PATT_Pos)) << TCC_PATT_PGV_Pos);
+					TCC0->PATT.reg = BLDC_PATTERN_STEP6;
 				break;
 				case HALL_STATE::UNDEFINED_1:
 				case HALL_STATE::UNDEFINED_2:
-				TCC0->PATT.reg =	((	(1 << U_HIGH_PATT_Pos)						|
-										(1 << U_LOW_PATT_Pos)						|
-										(1 << V_HIGH_PATT_Pos)						|
-										(1 << V_LOW_PATT_Pos)						|
-										(1 << W_HIGH_PATT_Pos)						|
-										(1 << W_LOW_PATT_Pos)) << TCC_PATT_PGE_Pos) |
-									((	(0 << U_HIGH_PATT_Pos)						|
-										(0 << U_LOW_PATT_Pos)						|
-										(0 << V_HIGH_PATT_Pos)						|
-										(0 << V_LOW_PATT_Pos)						|
-										(0 << W_HIGH_PATT_Pos)						|
-										(0 << W_LOW_PATT_Pos)) << TCC_PATT_PGV_Pos);
+					TCC0->PATT.reg = BLDC_PATTERN_IDLE;
 				break;
 			}
 		}
+
+		MotorController();
+		~MotorController();
 }; //MotorDriver
 
 #endif //__MOTORDRIVER_H__
