@@ -39,7 +39,12 @@ class MotorSensor : public Executable
 	/************************************************************************/
 	public:
 		void EnableInterrupt();
-						
+		
+		inline void UpdateHallState()
+		{			
+			this->HallState = (HALL_STATE)((PORT->Group[0].IN.reg >> 23) & 0b111);
+		}
+				
 		static inline uint8_t StateToIndex(HALL_STATE state)
 		{
 			switch (state)

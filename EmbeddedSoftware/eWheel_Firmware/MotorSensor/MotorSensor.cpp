@@ -11,7 +11,6 @@
 /************************************************************************/
 RUN_RESULT MotorSensor::Run()
 {
-	this->HallState = (HALL_STATE)((PORT->Group[0].IN.reg >> 23) & 0b111);
 	
 	return RUN_RESULT::SUCCESS;
 }
@@ -19,7 +18,7 @@ RUN_RESULT MotorSensor::Run()
 void MotorSensor::Propagate()
 {
 	if (this->OLED != NULL)
-	this->OLED->SetRow(this->StateToIndex(this->HallState), 0);
+		this->OLED->SetRow(this->StateToIndex(this->HallState), 0);
 }
 
 /************************************************************************/

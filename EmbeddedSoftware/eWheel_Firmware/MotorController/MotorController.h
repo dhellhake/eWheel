@@ -32,7 +32,7 @@ class MotorController
 		volatile CONTROLLER_STATE ControllerState = CONTROLLER_STATE::IDLE;
 	
 	public:
-		volatile uint32_t PhaseDuty = 600;
+		volatile uint32_t PhaseDuty = 250;
 		
 		void SetState(CONTROLLER_STATE state);
 					

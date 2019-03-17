@@ -40,9 +40,8 @@ void EIC_Handler()
 	if ((EIC->INTFLAG.reg & ((1 << 7) | (1 << 12) | (1 << 13))) != 0x00)
 	{
 		/* Hall Sensor caused interrupt */
-		eWheel.BLDCSensor.Run();
+		eWheel.BLDCSensor.UpdateHallState();
 		eWheel.BLDCController.SetHallState(eWheel.BLDCSensor.HallState);
-		eWheel.BLDCSensor.Propagate();
 		
 		EIC->INTFLAG.reg = (1 << 7) | (1 << 12) | (1 << 13);
 	}
