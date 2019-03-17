@@ -6,6 +6,7 @@
 */
 #include <math.h>
 #include "LSM9D.h"
+#include "..\LowLevel\Device\SysTick\SysTick.h"
 #include "..\LowLevel\SPI\SPI.h"
 
 /************************************************************************/
@@ -47,12 +48,16 @@ void LSM9D::Propagate()
 	
 	if (this->TraceEnabled && this->TraceLink != NULL)
 	{
+		uint32_t *t = (uint32_t*) &this->Page._data[this->TraceIndex];
+		t[0] = GetElapsedMilis();
+		this->TraceIndex += 4;
+		
 		float *f = (float*) &this->Page._data[this->TraceIndex];
 		f[0] = this->Pitch;
 		f[1] = this->Roll;
 		this->TraceIndex += 8;
 		
-		if (this->TraceIndex >= 520)
+		if (this->TraceIndex >= 516)
 		{
 			this->TraceLink->AddTracePage(&this->Page);
 			this->TraceIndex = 0;
