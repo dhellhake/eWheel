@@ -189,13 +189,3 @@ void InitSERCOM5()
 	/* synchronization busy */
 	while(SERCOM5->USART.SYNCBUSY.reg & SERCOM_USART_SYNCBUSY_ENABLE);
 }
-
-void SERCOM1_Handler()
-{
-	if (SERCOM1->USART.INTFLAG.bit.RXC)
-	{
-		uint8_t rxData = SERCOM1->USART.DATA.reg;
-		
-		return;
-	}
-}
