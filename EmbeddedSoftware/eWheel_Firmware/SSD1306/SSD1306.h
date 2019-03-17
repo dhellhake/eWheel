@@ -20,7 +20,7 @@ class SSD1306 : public Executable
 	/************************************************************************/
 	public:
 		virtual bool CanExecute() { return this->RowHasChanged[0] || this->RowHasChanged[1]; };
-		virtual RUN_RESULT Run();
+		virtual RUN_RESULT Run(uint32_t timeStamp);
 		
 		inline void SetRow(uint32_t number, uint8_t row)
 		{

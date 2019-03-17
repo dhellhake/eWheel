@@ -11,7 +11,7 @@
 /************************************************************************/
 /* Executable Interface implementation                                  */
 /************************************************************************/
-RUN_RESULT ADS::Run()
+RUN_RESULT ADS::Run(uint32_t timeStamp)
 {
 	uint8_t config[2];
 	config[0] = 0b01000010;

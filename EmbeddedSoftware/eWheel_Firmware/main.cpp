@@ -31,7 +31,6 @@ int main(void)
     {		
 		if ((t1 + 10) <= GetElapsedMilis())
 		{
-			t1+= 10;
 			slotUsed = false;
 			
 			for (uint8_t ti = 0; ti < HIGHPRIORITY_POOL_SIZE; ti++)
@@ -39,7 +38,7 @@ int main(void)
 				if (highPriorityPool[ti]->CanExecute())
 				{
 					slotUsed = true;
-					if (highPriorityPool[ti]->Run() == RUN_RESULT::SUCCESS)
+					if (highPriorityPool[ti]->Run(t1) == RUN_RESULT::SUCCESS)
 					{					
 						highPriorityPool[ti]->Propagate();
 						break;
@@ -54,7 +53,7 @@ int main(void)
 					if (lowPriorityPool[ti]->CanExecute())
 					{
 						slotUsed = true;
-						if (lowPriorityPool[ti]->Run() == RUN_RESULT::SUCCESS)
+						if (lowPriorityPool[ti]->Run(t1) == RUN_RESULT::SUCCESS)
 						{
 							lowPriorityPool[ti]->Propagate();
 							break;
@@ -65,7 +64,10 @@ int main(void)
 				lowPriorityIndex++;
 				if (lowPriorityIndex >= LOWPRIORITY_POOL_SIZE)
 					lowPriorityIndex = 0;
-			}			
+			}
+			
+			
+			t1+= 10;			
 		}
     }
 }

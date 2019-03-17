@@ -31,7 +31,7 @@ class MotorSensor : public Executable
 		SSD1306 *OLED = NULL;
 	public:
 		virtual bool CanExecute() { return true; };		
-		virtual RUN_RESULT Run();
+		virtual RUN_RESULT Run(uint32_t timeStamp);
 		virtual void Propagate();
 				
 	/************************************************************************/

@@ -38,7 +38,7 @@ class CC41A : public Executable
 			break;
 		}		
 	};
-	virtual RUN_RESULT Run();
+	virtual RUN_RESULT Run(uint32_t timeStamp);
 	virtual void Propagate();
 
 

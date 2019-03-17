@@ -9,7 +9,7 @@
 /************************************************************************/
 /* Executable Interface implementation                                  */
 /************************************************************************/
-RUN_RESULT MotorSensor::Run()
+RUN_RESULT MotorSensor::Run(uint32_t timeStamp)
 {
 	
 	return RUN_RESULT::SUCCESS;

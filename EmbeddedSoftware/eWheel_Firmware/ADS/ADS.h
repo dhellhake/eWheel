@@ -36,7 +36,7 @@ class ADS : public Executable
 		uint64_t LastRun = 0;
 	public:
 		virtual bool CanExecute() { return (this->LastRun + 33) <= GetElapsedMilis(); };
-		virtual RUN_RESULT Run();
+		virtual RUN_RESULT Run(uint32_t timeStamp);
 		virtual void Propagate();
 
 	/************************************************************************/

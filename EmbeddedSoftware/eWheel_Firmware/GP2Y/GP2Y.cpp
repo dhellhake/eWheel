@@ -28,7 +28,7 @@ uint16_t GP2Y::Characteristics[CHARACTERISTIC_SIZE] = {
 /************************************************************************/
 /* Executable Interface implementation                                  */
 /************************************************************************/
-RUN_RESULT GP2Y::Run()
+RUN_RESULT GP2Y::Run(uint32_t timeStamp)
 {
 	float tmpRaw = 0;
 	for (uint8_t x = 0; x < RAW_BUFFER_SIZE; x++)

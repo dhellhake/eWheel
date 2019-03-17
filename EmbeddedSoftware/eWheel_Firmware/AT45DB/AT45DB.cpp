@@ -11,7 +11,7 @@
 /************************************************************************/
 /* Executable Interface implementation                                  */
 /************************************************************************/
-RUN_RESULT AT45DB::Run()
+RUN_RESULT AT45DB::Run(uint32_t timeStamp)
 {
 	if (TraceBuffer_available(this->Buffer))
 	{

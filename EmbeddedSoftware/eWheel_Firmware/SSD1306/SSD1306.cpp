@@ -202,7 +202,7 @@ uint8_t SSD1306::ASCII[320] = {
 /************************************************************************/
 /* Executable Interface implementation                                  */
 /************************************************************************/
-RUN_RESULT SSD1306::Run()
+RUN_RESULT SSD1306::Run(uint32_t timeStamp)
 {
 	if (this->RowHasChanged[0])
 	{

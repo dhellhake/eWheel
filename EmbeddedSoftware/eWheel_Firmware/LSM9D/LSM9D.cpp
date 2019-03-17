@@ -12,7 +12,7 @@
 /************************************************************************/
 /* Executable Interface implementation                                  */
 /************************************************************************/
-RUN_RESULT LSM9D::Run()
+RUN_RESULT LSM9D::Run(uint32_t timeStamp)
 {
 	uint8_t status[1];
 	this->ReadBytes(STATUS_REG_1, status, 1);

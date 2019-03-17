@@ -10,7 +10,7 @@
 /************************************************************************/
 /* Executable Interface implementation                                  */
 /************************************************************************/
-RUN_RESULT CC41A::Run()
+RUN_RESULT CC41A::Run(uint32_t timeStamp)
 {
 	uint8_t cmd = this->ReceiveBuffer[0];
 	

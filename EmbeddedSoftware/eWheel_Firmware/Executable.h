@@ -7,6 +7,8 @@
 #ifndef EXECUTABLE_H_
 #define EXECUTABLE_H_
 
+#include "samc21.h"
+
 enum class RUN_RESULT
 {
 	SUCCESS,
@@ -20,7 +22,7 @@ class Executable
 
 	virtual bool CanExecute() { return false; };
 
-	virtual RUN_RESULT Run() { return RUN_RESULT::NOT_IMPLEMENTED; };
+	virtual RUN_RESULT Run(uint32_t timeStamp) { return RUN_RESULT::NOT_IMPLEMENTED; };
 		
 	virtual void Propagate() {};
 		
