@@ -10,11 +10,23 @@
 #include "samc21.h"
 #include "..\Executable.h"
 
+enum class PackageType
+{
+	Orientation = 1	
+};
+
 enum class DEBUG_CMD
 {
 	SetLED = 65,
 	UnSetLED = 66
 };
+
+typedef struct {
+	PackageType _type;
+	uint32_t _timeStamp;
+	uint8_t _length;
+	uint8_t* _data;
+} DataPackage;
 
 #define RECEIVE_BUFFER_SIZE 64
 
@@ -48,9 +60,10 @@ class CC41A : public Executable
 	private:	
 		uint8_t ReceiveBufferIndex = 0;
 		uint8_t ReceiveBuffer[RECEIVE_BUFFER_SIZE];	
-	public:	
+	public:
 		CC41A();
 		void ReceiveByte(uint8_t data);
+		void SendDataPackage(DataPackage *pkg);
 }; //CC41A
 
 #endif //__CC41A_H__
