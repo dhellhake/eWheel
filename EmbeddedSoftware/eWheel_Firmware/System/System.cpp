@@ -28,7 +28,7 @@ System::System()
 	eWheel.BLDCController.SetHallState(eWheel.BLDCSensor.HallState);
 
 	/* Initialize the lsm9ds1 sensor */
-	eWheel.Orientation.TraceLink = &eWheel.TraceLink;
+	eWheel.Orientation.TraceLink = &eWheel.DebugLink;
 	//eWheel.Orientation.OLED = &eWheel.OLED;
 
 	/* Initialize the Analog Sensor */

@@ -8,7 +8,7 @@
 #define __LSM9D_H__
 
 #include "..\Executable.h"
-#include "..\AT45DB\AT45DB.h"
+#include "..\CC41A\CC41A.h"
 #include "..\SSD1306\SSD1306.h"
 
 // Register addresses
@@ -30,7 +30,7 @@ class LSM9D : public Executable
 	/************************************************************************/
 	public:
 		SSD1306 *OLED = NULL;
-		AT45DB *TraceLink = NULL;
+		CC41A *TraceLink = NULL;
 	public:
 		virtual bool CanExecute() { return ((PORT->Group[0].IN.reg >> 13) & 0x1) != 0x0; };
 		virtual RUN_RESULT Run(uint32_t timeStamp);
@@ -43,10 +43,7 @@ class LSM9D : public Executable
 	/************************************************************************/
 	public:
 		float Pitch = 0;
-		float Roll = 0;
-		
-		TracePage Page;
-		volatile uint16_t TraceIndex = 0;
+		float Roll = 0;		
 	public:
 		LSM9D();	
 	private:				

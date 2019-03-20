@@ -48,21 +48,18 @@ void LSM9D::Propagate()
 	
 	if (this->TraceEnabled && this->TraceLink != NULL)
 	{
-		uint32_t *t = (uint32_t*) &this->Page._data[this->TraceIndex];
-		t[0] = GetElapsedMilis();
-		this->TraceIndex += 4;
-		
-		float *f = (float*) &this->Page._data[this->TraceIndex];
+		uint8_t data[8];
+		float *f = (float*) data;
 		f[0] = this->Pitch;
 		f[1] = this->Roll;
-		this->TraceIndex += 8;
+				
+		DataPackage pkg;
+		pkg._timeStamp = GetElapsedMilis();
+		pkg._type = PackageType::Orientation;
+		pkg._length = 8;
+		pkg._data = data;
 		
-		if (this->TraceIndex >= 516)
-		{
-			this->TraceLink->AddTracePage(&this->Page);
-			this->TraceIndex = 0;
-			this->Page._position++;
-		}
+		this->TraceLink->SendDataPackage(&pkg);
 	}
 }
 
@@ -70,11 +67,7 @@ void LSM9D::Propagate()
 /* Class implementation                                                 */
 /************************************************************************/
 LSM9D::LSM9D()
-{
-	//Set TracePage
-	this->Page._type = TraceType::Orientation;
-	this->Page._position = 0;
-	
+{	
 	/* CTRL_REG5_XL (0x1F) */
 	//[DEC_1][DEC_0][Zen_XL][Yen_XL][Zen_XL][0][0][0]
 	this->WriteRegister(CTRL_REG5_XL, (1<<5) | (1<<4) | (1<<3));
@@ -124,7 +117,6 @@ uint8_t LSM9D::WriteRegister(uint8_t address, uint8_t data)
 
 void LSM9D::EnableTrace()
 {
-	this->TraceIndex = 0;
 	this->TraceEnabled = true;
 }
 
