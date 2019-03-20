@@ -9,17 +9,7 @@
 
 #include "samc21.h"
 
-class USART
-{
-	public:
-		static void SERCOM5_SendByte(uint8_t byte);
-		static void SERCOM1_SendByte(uint8_t byte);
-	protected:	
-	private:
-		USART();
-		~USART();
-		USART( const USART &c );
-		USART& operator=( const USART &c );
-}; //USART
+void SERCOM5_SendByte(uint8_t byte);
+void SERCOM1_SendByte(uint8_t byte);
 
 #endif //__USART_H__
