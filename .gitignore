@@ -5,6 +5,14 @@
 /DiagMonitor/.vs/*
 /DiagMonitor/obj/Debug/*
 /DiagMonitor/bin/Debug/*
+/TraceView/TracePersistence/bin/*
+
+/TraceView/TracePersistence/obj/*
+
+/TraceView/TraceView/obj/*
+
+/TraceView/TraceView/bin/*
+
 *.atsln
 
 *.atsuo
