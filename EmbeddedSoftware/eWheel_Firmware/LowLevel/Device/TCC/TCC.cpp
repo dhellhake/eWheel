@@ -5,6 +5,7 @@
  *  Author: Dominik Hellhake
  */
 #include "TCC.h"
+#include "..\..\..\MotorController\BLDCPattern.h"
 
 void InitTCC0()
 {
@@ -43,4 +44,5 @@ void InitTCC0()
 						TCC_WEXCTRL_DTHS(150);				//Set Dead-Time-Insertion of 10x20,8ns (208ns) (min: 133ns)
 	
 	TCC0->CTRLA.bit.ENABLE = 1;
+	TCC0->PATT.reg = BLDC_PATTERN_IDLE;
 }
