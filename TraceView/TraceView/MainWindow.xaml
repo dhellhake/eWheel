@@ -4,9 +4,31 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TraceView"
+        xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <Grid>
+
+            <ListBox x:Name="lst" Margin="5" ItemsSource="{Binding PlotViewModels}" HorizontalContentAlignment="Stretch">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <Expander Name="expender" IsExpanded="{Binding IsActive}">
+                                <Expander.Header>
+                                    <StackPanel>
+                                        <TextBlock Margin="5" FontSize="12" FontWeight="Bold" Text="{Binding Path=Title}"/>
+                                    </StackPanel>
+                                </Expander.Header>
+                                <Grid Height="200">
+                                    <oxy:PlotView VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Model="{Binding Path=PlotModel}"/>
+                                </Grid>
+                            </Expander>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+
     </Grid>
 </Window>

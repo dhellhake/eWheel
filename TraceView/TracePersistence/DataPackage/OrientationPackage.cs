@@ -18,4 +18,14 @@ namespace TracePersistence
             this.Pitch = BitConverter.ToSingle(payLoad, 4);
         }
     }
+
+    public class OrientationEventArgs : EventArgs
+    {
+        public OrientationPackage DataPackage { get; private set; }
+
+        public OrientationEventArgs(OrientationPackage package)
+        {
+            this.DataPackage = package;
+        }
+    }
 }

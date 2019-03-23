@@ -8,7 +8,7 @@
         { }
         public DataPackage(int timeStamp)
         {
-            this.TimeStamp = TimeStamp;
+            this.TimeStamp = timeStamp;
         }
     }
 }

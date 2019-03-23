@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 
 namespace TraceView
 {
@@ -13,5 +7,12 @@ namespace TraceView
     /// </summary>
     public partial class App : Application
     {
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            MainWindowViewModel viewModel = new MainWindowViewModel();
+            MainWindow view = new MainWindow(viewModel);
+
+            view.Show();
+        }
     }
 }

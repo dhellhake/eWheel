@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.Devices.Enumeration;
@@ -8,6 +7,16 @@ using Windows.Storage.Streams;
 
 namespace TracePersistence
 {
+
+    /// <summary>
+    /// BLEService == DEBUG_CMD
+    /// </summary>
+    public enum BLEService
+    {
+        None = 0,
+        Orientation = 1
+    }
+
     public enum BLEDeviceStatus
     {
         Connected,
@@ -23,20 +32,20 @@ namespace TracePersistence
     public class BLEDevice
     {
         public string Name { get; set; }
+        public BLEDeviceStatus Status { get; private set; }
 
         private GattCharacteristic DeviceCharacteristic { get; set; }
 
         private ReceiveState ReceiveState { get; set; }
         private List<byte> ReceiveBuffer { get; set; }
 
-        private ObservableCollection<DataPackage> DataPackages { get; set; }
+        public event EventHandler<OrientationEventArgs> OrientationPackageReceived;
 
         public BLEDevice(string name)
         {
             this.Name = name;
             this.ReceiveState = ReceiveState.Idle;
             this.ReceiveBuffer = new List<byte>();
-            this.DataPackages = new ObservableCollection<DataPackage>();
 
             // Query for extra properties you want returned
             string[] requestedProperties = { "System.Devices.Aep.DeviceAddress", "System.Devices.Aep.IsConnected" };
@@ -59,7 +68,20 @@ namespace TracePersistence
 
             // Start the watcher.
             deviceWatcher.Start();
+            this.Status = BLEDeviceStatus.Enumerating;
         }
+
+
+        public void Subscribe(BLEService service)
+        {
+            this.WriteBytes(new byte[] { (byte)service, 1 });
+        }
+        public void UnSubscribe(BLEService service)
+        {
+            this.WriteBytes(new byte[] { (byte)service, 0 });
+        }
+
+
 
         private void DeviceWatcher_Removed(DeviceWatcher sender, DeviceInformationUpdate args)
         {
@@ -97,7 +119,7 @@ namespace TracePersistence
                                 {
                                     this.DeviceCharacteristic = characteristic;
                                     characteristic.ValueChanged += Characteristic_ValueChangedAsync;
-                                    Console.WriteLine("Successfully subscribed to read-characteristic");
+                                    this.Status = BLEDeviceStatus.Connected;
                                 }
                             }
                             catch (Exception ex)
@@ -109,7 +131,7 @@ namespace TracePersistence
             }
         }
 
-        public async void WriteBytes(byte[] bytes)
+        private async void WriteBytes(byte[] bytes)
         {
             var writer = new DataWriter();
             writer.WriteBytes(bytes);
@@ -119,6 +141,11 @@ namespace TracePersistence
             {
                 // Successfully wrote to device
             }
+        }
+
+        protected virtual void OnOrientationDataPackageReceived(OrientationPackage package)
+        {
+            this.OrientationPackageReceived?.Invoke(this, new OrientationEventArgs(package));
         }
 
         private void Characteristic_ValueChangedAsync(GattCharacteristic sender, GattValueChangedEventArgs args)
@@ -142,7 +169,7 @@ namespace TracePersistence
                             int timeStamp = BitConverter.ToInt32(this.ReceiveBuffer.ToArray(), 0);
                             this.ReceiveBuffer.RemoveRange(0, 4);
 
-                            this.DataPackages.Add(new OrientationPackage(timeStamp, this.ReceiveBuffer.ToArray()));
+                            this.OnOrientationDataPackageReceived(new OrientationPackage(timeStamp, this.ReceiveBuffer.ToArray()));
                             this.ReceiveState = ReceiveState.Idle;
                         }
                         break;
