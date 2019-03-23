@@ -9,6 +9,13 @@
 
 #include "samc21.h"
 
+#define U_HIGH_PATT_Pos		3
+#define V_HIGH_PATT_Pos		2
+#define W_HIGH_PATT_Pos		0
+#define U_LOW_PATT_Pos		7
+#define V_LOW_PATT_Pos		6
+#define W_LOW_PATT_Pos		4
+
 #define BLDC_PATTERN_STEP1 ((	(1 << U_HIGH_PATT_Pos)						| \
 								(1 << U_LOW_PATT_Pos)						| \
 								(0 << V_HIGH_PATT_Pos)						| \

@@ -11,13 +11,6 @@
 #include "BLDCPattern.h"
 #include "..\MotorSensor\MotorSensor.h"
 
-#define U_HIGH_PATT_Pos		3
-#define V_HIGH_PATT_Pos		2
-#define W_HIGH_PATT_Pos		0
-#define U_LOW_PATT_Pos		7
-#define V_LOW_PATT_Pos		6
-#define W_LOW_PATT_Pos		4
-
 enum class CONTROLLER_STATE
 {
 	IDLE,
