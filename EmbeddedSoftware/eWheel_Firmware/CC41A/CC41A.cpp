@@ -47,10 +47,10 @@ void CC41A::SendDataPackage(DataPackage *pkg)
 	//TimeStamp
 	for (uint8_t x = 0; x < 4; x++)
 		SERCOM1_SendByte(*(((uint8_t*)&(pkg->_timeStamp)) + x));
-	
+		
 	//PayLoad
 	for (uint8_t x = 0; x < pkg->_length; x++)
-		SERCOM1_SendByte(*(((uint8_t*)&(pkg->_data)) + x));
+		SERCOM1_SendByte(pkg->_data[x]);
 }
 
 void CC41A::ReceiveByte(uint8_t data)
