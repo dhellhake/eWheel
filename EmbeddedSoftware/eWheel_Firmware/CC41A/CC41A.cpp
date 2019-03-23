@@ -12,16 +12,14 @@
 /* Executable Interface implementation                                  */
 /************************************************************************/
 RUN_RESULT CC41A::Run(uint32_t timeStamp)
-{
-	uint8_t cmd = this->ReceiveBuffer[0];
-		
+{		
 	switch ((DEBUG_CMD)this->ReceiveBuffer[0])
 	{
-		case DEBUG_CMD::SetLED:
-			eWheel.BLDCController.SetState(CONTROLLER_STATE::DRIVE);
+		case DEBUG_CMD::DEBUG_LS9M:
+			eWheel.Orientation.TraceEnabled = this->ReceiveBuffer[1] > 0;
 		break;
-		case DEBUG_CMD::UnSetLED:
-			eWheel.BLDCController.SetState(CONTROLLER_STATE::IDLE);
+		case DEBUG_CMD::SetLED:
+			eWheel.SetLED(this->ReceiveBuffer[1] > 0);
 		break;
 	}		
 	//Reset Command Buffer

@@ -17,8 +17,8 @@ enum class PackageType
 
 enum class DEBUG_CMD
 {
-	SetLED = 65,
-	UnSetLED = 66
+	DEBUG_LS9M = 1,
+	SetLED = 65
 };
 
 typedef struct {
@@ -42,14 +42,15 @@ class CC41A : public Executable
 		
 		switch ((DEBUG_CMD)this->ReceiveBuffer[0])
 		{
+			case DEBUG_CMD::DEBUG_LS9M:
 			case DEBUG_CMD::SetLED:
-				return true;
+				return this->ReceiveBufferIndex >= 2;
 			break;
-			case DEBUG_CMD::UnSetLED:
-				return true;
-			break;
-		}		
+		}
+		
+		return false;		
 	};
+	
 	virtual RUN_RESULT Run(uint32_t timeStamp);
 	virtual void Propagate();
 
