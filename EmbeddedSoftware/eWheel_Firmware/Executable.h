@@ -19,6 +19,7 @@ enum class RUN_RESULT
 class Executable
 {
 	public:
+	volatile bool TraceEnabled = false;
 
 	virtual bool CanExecute() { return false; };
 
@@ -29,10 +30,6 @@ class Executable
 	virtual void EnableTrace() {};
 	
 	virtual void DisableTrace() {};
-
-	protected:
-	
-	volatile bool TraceEnabled = false;
 }; //Executable
 
 #endif /* EXECUTABLE_H_ */

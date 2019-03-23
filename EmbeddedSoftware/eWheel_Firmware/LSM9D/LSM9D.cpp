@@ -114,13 +114,3 @@ uint8_t LSM9D::WriteRegister(uint8_t address, uint8_t data)
 	
 	return result;
 }
-
-void LSM9D::EnableTrace()
-{
-	this->TraceEnabled = true;
-}
-
-void LSM9D::DisableTrace()
-{
-	this->TraceEnabled = false;	
-}

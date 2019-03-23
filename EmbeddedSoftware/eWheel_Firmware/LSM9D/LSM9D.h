@@ -35,8 +35,6 @@ class LSM9D : public Executable
 		virtual bool CanExecute() { return ((PORT->Group[0].IN.reg >> 13) & 0x1) != 0x0; };
 		virtual RUN_RESULT Run(uint32_t timeStamp);
 		virtual void Propagate();
-		virtual void EnableTrace();
-		virtual void DisableTrace();
 	
 	/************************************************************************/
 	/* Class implementation                                                 */
