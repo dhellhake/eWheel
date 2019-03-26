@@ -13,6 +13,9 @@
 
 /TraceView/TraceView/bin/*
 
+/TraceView/packages/*
+
+TraceView/TraceView/.vs/*
 *.atsln
 
 *.atsuo
