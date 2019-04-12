@@ -53,10 +53,6 @@ void ADS::Propagate()
 		else
 		this->OLED->SetRow(this->Distance_RAW, 1);
 		
-		if (this->MotorCurrent_RAW < 0)
-		this->OLED->SetRow(this->MotorCurrent_RAW * -1, 0);
-		else
-		this->OLED->SetRow(this->MotorCurrent_RAW, 0);
 	}
 }
 
