@@ -5,6 +5,8 @@
 /DiagMonitor/.vs/*
 /DiagMonitor/obj/Debug/*
 /DiagMonitor/bin/Debug/*
+/TraceView/.vs/*
+/TraceView/TraceView/.vs/*
 /TraceView/TracePersistence/bin/*
 
 /TraceView/TracePersistence/obj/*
@@ -15,7 +17,7 @@
 
 /TraceView/packages/*
 
-TraceView/TraceView/.vs/*
+
 *.atsln
 
 *.atsuo
@@ -25,3 +27,4 @@ TraceView/TraceView/.vs/*
 *.suo
 
 *.cache
+
