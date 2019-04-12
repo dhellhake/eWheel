@@ -7,15 +7,14 @@
 #include "samc21.h"
 #include "System/System.h"
 
-#define HIGHPRIORITY_POOL_SIZE	3
+#define HIGHPRIORITY_POOL_SIZE	2
 #define LOWPRIORITY_POOL_SIZE	3
 
 int main(void)
 {	
 	Executable* highPriorityPool[HIGHPRIORITY_POOL_SIZE] = {
 		&eWheel.Orientation,
-		&eWheel.AnalogSensor,
-		&eWheel.BLDCSensor 
+		&eWheel.AnalogSensor
 	};	
 	
 	Executable* lowPriorityPool[LOWPRIORITY_POOL_SIZE] = {

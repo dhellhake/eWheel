@@ -15,8 +15,6 @@
 #include "..\CC41A/CC41A.h"
 #include "..\GP2Y/GP2Y.h"
 #include "..\LSM9D/LSM9D.h"
-#include "..\MotorController\MotorController.h"
-#include "..\MotorSensor\MotorSensor.h"
 #include "..\SSD1306/SSD1306.h"
 
 #define TASKPOOL_SIZE 6
@@ -41,9 +39,6 @@ class System
 		GP2Y InfraRedSensor;
 
 		LSM9D Orientation;
-		
-		MotorSensor BLDCSensor;
-		MotorController BLDCController;
 
 		SSD1306 OLED;	
 		

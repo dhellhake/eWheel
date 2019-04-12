@@ -221,12 +221,6 @@
     <Compile Include="LowLevel\Device\DMA\DMA.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LowLevel\Device\EIC\EIC.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="LowLevel\Device\EIC\EIC.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="LowLevel\Device\GCLK\GCLK.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -252,12 +246,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="LowLevel\Device\SysTick\SysTick.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="LowLevel\Device\TCC\TCC.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="LowLevel\Device\TCC\TCC.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="LowLevel\I2C\I2C.cpp">
@@ -287,21 +275,6 @@
     <Compile Include="main.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MotorController\BLDCPattern.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="MotorController\MotorController.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="MotorController\MotorController.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="MotorSensor\MotorSensor.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="MotorSensor\MotorSensor.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="SSD1306\SSD1306.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -322,17 +295,13 @@
     <Folder Include="LowLevel" />
     <Folder Include="LowLevel\Device" />
     <Folder Include="LowLevel\Device\DMA\" />
-    <Folder Include="LowLevel\Device\EIC\" />
     <Folder Include="LowLevel\Device\GCLK\" />
     <Folder Include="LowLevel\Device\PORT\" />
     <Folder Include="LowLevel\Device\SERCOM\" />
     <Folder Include="LowLevel\Device\SysTick\" />
-    <Folder Include="LowLevel\Device\TCC\" />
     <Folder Include="LowLevel\I2C" />
     <Folder Include="LowLevel\USART" />
     <Folder Include="LowLevel\SPI" />
-    <Folder Include="MotorSensor" />
-    <Folder Include="MotorController" />
     <Folder Include="LSM9D" />
     <Folder Include="ADS" />
     <Folder Include="GP2Y" />

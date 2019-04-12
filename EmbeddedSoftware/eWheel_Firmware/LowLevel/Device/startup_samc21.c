@@ -30,10 +30,8 @@
 
 #include "GCLK\GCLK.h"
 #include "SysTick\SysTick.h"
-#include "EIC\EIC.h"
 #include "DMA\DMA.h"
 #include "SERCOM\SERCOM.h"
-#include "TCC\TCC.h"
 #include "PORT\PORT.h"
 
 /* Initialize segments */
@@ -265,8 +263,6 @@ void Reset_Handler(void)
 	InitGCLK();
 	/* Configure SysTick-Counter */
 	InitSysTick();
-	/* Configure External Interrupt */
-	InitEIC();
 	/* Configure Direct Memory Access Controller */
 	InitDMAC();
 		
@@ -281,8 +277,6 @@ void Reset_Handler(void)
 	SetDMAChannel0();
 	//Init USART-SERCOM interface to CP2102
 	InitSERCOM5();
-		
-	InitTCC0();
 		
 	InitPORT();
 

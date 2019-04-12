@@ -20,19 +20,12 @@ System::System()
 	/* Initialize FlashMemory */
 	//eWheel.TraceLink.OLED = &eWheel.OLED;
 
-	/* Initialize BLDC Motor Sensor */
-	eWheel.BLDCSensor.EnableInterrupt();
-	eWheel.BLDCSensor.OLED = &eWheel.OLED;
-
-	/* Initialize BLDC Motor Controller */
-	eWheel.BLDCController.SetHallState(eWheel.BLDCSensor.HallState);
-
 	/* Initialize the lsm9ds1 sensor */
 	eWheel.Orientation.TraceLink = &eWheel.DebugLink;
 	//eWheel.Orientation.OLED = &eWheel.OLED;
 
 	/* Initialize the Analog Sensor */
-	//eWheel.AnalogSensor.OLED = &eWheel.OLED;
+	eWheel.AnalogSensor.OLED = &eWheel.OLED;
 
 	/* Initialize infrared distance sensor GP2Y */
 	eWheel.AnalogSensor.IR = &eWheel.InfraRedSensor;
