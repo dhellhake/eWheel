@@ -8,6 +8,13 @@
 
 void InitPORT()
 {
+	/* Init PORT interface to CAN transreceiver */
+	// Configure STBY-Pin as Output
+	PORT->Group[0].DIRSET.reg = PORT_PA27;
+	PORT->Group[0].OUTCLR.reg = PORT_PA27;	
+	SetPinPeripheralFunction(PINMUX_PB22G_CAN0_TX);
+	SetPinPeripheralFunction(PINMUX_PB23G_CAN0_RX);
+	
 	/* Init PORT interface to LS9M */
 	//Configure CS-Pin as Output
 	PORT->Group[0].DIRSET.reg = PORT_PA12;

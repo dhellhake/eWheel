@@ -215,6 +215,12 @@
     <Compile Include="GP2Y\GP2Y.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="LowLevel\Device\CAN\CANCont.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\Device\CAN\CANCont.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="LowLevel\Device\DMA\DMA.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -296,6 +302,7 @@
     <Folder Include="LowLevel\Device" />
     <Folder Include="LowLevel\Device\DMA\" />
     <Folder Include="LowLevel\Device\GCLK\" />
+    <Folder Include="LowLevel\Device\CAN" />
     <Folder Include="LowLevel\Device\PORT\" />
     <Folder Include="LowLevel\Device\SERCOM\" />
     <Folder Include="LowLevel\Device\SysTick\" />
