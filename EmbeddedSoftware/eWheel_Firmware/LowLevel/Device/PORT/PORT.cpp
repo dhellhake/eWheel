@@ -8,46 +8,6 @@
 
 void InitPORT()
 {
-	/* Init PORT interface to Hall-Sensors */
-	// Pin-Config: U-Hall on EXTINT13
-	PORT->Group[0].DIRCLR.reg = PORT_PA25;
-	PORT->Group[0].OUTSET.reg = PORT_PA25;
-	PORT->Group[0].PINCFG[PIN_PA25].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
-	SetPinPeripheralFunction(PINMUX_PA25A_EIC_EXTINT13);
-	// Pin-Config: V-Hall on EXTINT12
-	PORT->Group[0].DIRCLR.reg = PORT_PA24;
-	PORT->Group[0].OUTSET.reg = PORT_PA24;
-	PORT->Group[0].PINCFG[PIN_PA24].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
-	SetPinPeripheralFunction(PINMUX_PA24A_EIC_EXTINT12);
-	// Pin-Config: W-Hall on EXTINT7
-	PORT->Group[0].DIRCLR.reg = PORT_PA23;
-	PORT->Group[0].OUTSET.reg = PORT_PA23;
-	PORT->Group[0].PINCFG[PIN_PA23].reg = PORT_PINCFG_INEN | PORT_PINCFG_PULLEN;
-	SetPinPeripheralFunction(PINMUX_PA23A_EIC_EXTINT7);
-	
-	/* Init PORT interface to BLDC-Driver */
-	// Pin-Config: PWM Output for U
-	PORT->Group[0].DIRSET.reg = PORT_PA19;
-	PORT->Group[0].OUTSET.reg = PORT_PA19;
-	SetPinPeripheralFunction(PINMUX_PA19F_TCC0_WO3);	// High
-	PORT->Group[0].DIRSET.reg = PORT_PA21;
-	PORT->Group[0].OUTSET.reg = PORT_PA21;
-	SetPinPeripheralFunction(PINMUX_PA21F_TCC0_WO7);	// Low
-	// Pin-Config: PWM Output for V
-	PORT->Group[0].DIRSET.reg = PORT_PA18;
-	PORT->Group[0].OUTSET.reg = PORT_PA18;
-	SetPinPeripheralFunction(PINMUX_PA18F_TCC0_WO2);	// High
-	PORT->Group[0].DIRSET.reg = PORT_PA20;
-	PORT->Group[0].OUTSET.reg = PORT_PA20;
-	SetPinPeripheralFunction(PINMUX_PA20F_TCC0_WO6);	// Low
-	// Pin-Config: PWM Output for W
-	PORT->Group[0].DIRSET.reg = PORT_PA04;
-	PORT->Group[0].OUTSET.reg = PORT_PA04;
-	SetPinPeripheralFunction(PINMUX_PA04E_TCC0_WO0);	// High
-	PORT->Group[0].DIRSET.reg = PORT_PA22;
-	PORT->Group[0].OUTSET.reg = PORT_PA22;
-	SetPinPeripheralFunction(PINMUX_PA22F_TCC0_WO4);	// Low
-	
 	/* Init PORT interface to LS9M */
 	//Configure CS-Pin as Output
 	PORT->Group[0].DIRSET.reg = PORT_PA12;
