@@ -9,6 +9,7 @@
 
 void InitSERCOM0()
 {
+	//AT45DB
 	//Set bits in the clock mask for an APBx bus.
 	MCLK->APBCMASK.bit.SERCOM0_ = 1;
 	
@@ -38,9 +39,7 @@ void InitSERCOM0()
 
 void InitSERCOM1()
 {
-	//USART:
-	//CP2102.RX => PB02 / SERCOM5.PAD0 (MUX_D)
-	//CP2102.TX => PB03 / SERCOM5.PAD1 (MUX_D)
+	//USART: CC41A
 	//921600 / 115200
 	uint32_t baud_val = calculate_baud_value(230400 , GetGCLK_Hz(SERCOM1_GCLK_ID_CORE), 16);
 	//Enable Clock for SERCOM5
@@ -81,6 +80,7 @@ void InitSERCOM1()
 
 void InitSERCOM2()
 {	
+	// LS9M
 	//Enable Clock for SERCOM2
 	//Set bits in the clock mask for an APBx bus.
 	MCLK->APBCMASK.bit.SERCOM2_ = 1;

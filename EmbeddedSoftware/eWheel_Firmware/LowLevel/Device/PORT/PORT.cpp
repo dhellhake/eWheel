@@ -35,12 +35,7 @@ void InitPORT()
 	SetPinPeripheralFunction(PINMUX_PA05D_SERCOM0_PAD1);
 	SetPinPeripheralFunction(PINMUX_PA06D_SERCOM0_PAD2);
 	SetPinPeripheralFunction(PINMUX_PA07D_SERCOM0_PAD3);
-	
-	/* Init PORT interface to ADS */
-	//Configure CS-Pin as Output
-	PORT->Group[0].DIRSET.reg = PORT_PA02;
-	PORT->Group[0].OUTSET.reg = PORT_PA02;
-	
+		
 	/* Init PORT interface to CC41-A */
 	SetPinPeripheralFunction(PINMUX_PA17C_SERCOM1_PAD1);
 	SetPinPeripheralFunction(PINMUX_PA16C_SERCOM1_PAD0);
