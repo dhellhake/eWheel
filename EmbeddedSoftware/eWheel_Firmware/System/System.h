@@ -12,7 +12,6 @@
 
 #include "..\AT45DB/AT45DB.h"
 #include "..\CC41A/CC41A.h"
-#include "..\GP2Y/GP2Y.h"
 #include "..\LSM9D/LSM9D.h"
 #include "..\ESC\ESC.h"
 
@@ -32,8 +31,6 @@ class System
 		AT45DB TraceLink;
 		
 		CC41A DebugLink;
-
-		GP2Y InfraRedSensor;
 
 		LSM9D Orientation;
 		

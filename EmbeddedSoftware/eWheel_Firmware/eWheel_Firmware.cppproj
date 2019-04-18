@@ -209,12 +209,6 @@
     <Compile Include="Executable.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="GP2Y\GP2Y.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="GP2Y\GP2Y.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="LowLevel\Device\CAN\CANCont.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -304,7 +298,6 @@
     <Folder Include="LowLevel\USART" />
     <Folder Include="LowLevel\SPI" />
     <Folder Include="LSM9D" />
-    <Folder Include="GP2Y" />
     <Folder Include="AT45DB" />
     <Folder Include="CC41A" />
     <Folder Include="ESC" />
