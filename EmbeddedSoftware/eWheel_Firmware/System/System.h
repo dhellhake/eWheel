@@ -16,6 +16,7 @@
 #include "..\GP2Y/GP2Y.h"
 #include "..\LSM9D/LSM9D.h"
 #include "..\SSD1306/SSD1306.h"
+#include "..\ESC\ESC.h"
 
 #define TASKPOOL_SIZE 6
 
@@ -40,7 +41,9 @@ class System
 
 		LSM9D Orientation;
 
-		SSD1306 OLED;	
+		SSD1306 OLED;
+		
+		ESC vESC;
 		
 	private:
 		System( const System &c );

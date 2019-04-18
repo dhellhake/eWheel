@@ -206,6 +206,12 @@
     <Compile Include="CC41A\CC41A.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="ESC\ESC.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="ESC\ESC.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Executable.h">
       <SubType>compile</SubType>
     </Compile>
@@ -314,6 +320,7 @@
     <Folder Include="GP2Y" />
     <Folder Include="AT45DB" />
     <Folder Include="CC41A" />
+    <Folder Include="ESC" />
     <Folder Include="SSD1306" />
     <Folder Include="System\" />
   </ItemGroup>
