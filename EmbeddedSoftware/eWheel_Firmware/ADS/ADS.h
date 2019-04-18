@@ -10,7 +10,6 @@
 #include "..\Executable.h"
 
 #include "..\LowLevel/Device/SysTick/SysTick.h"
-#include "..\SSD1306\SSD1306.h"
 #include "..\GP2Y\GP2Y.h"
 
 #define MotorCurrent_Config_Val		0b01000010
@@ -30,8 +29,7 @@ class ADS : public Executable
 	/* Executable Interface implementation                                  */
 	/************************************************************************/
 	public:
-		GP2Y *IR = NULL;
-		SSD1306 *OLED = NULL;
+		GP2Y *IR = 0x0;
 	private:
 		uint64_t LastRun = 0;
 	public:

@@ -51,8 +51,6 @@ RUN_RESULT GP2Y::Run(uint32_t timeStamp)
 
 void GP2Y::Propagate()
 {
-	if (this->OLED != NULL)
-		this->OLED->SetRow(this->Distance, 1);
 }
 
 /************************************************************************/

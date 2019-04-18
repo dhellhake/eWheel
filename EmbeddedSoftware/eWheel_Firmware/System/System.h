@@ -15,7 +15,6 @@
 #include "..\CC41A/CC41A.h"
 #include "..\GP2Y/GP2Y.h"
 #include "..\LSM9D/LSM9D.h"
-#include "..\SSD1306/SSD1306.h"
 #include "..\ESC\ESC.h"
 
 #define TASKPOOL_SIZE 6
@@ -40,8 +39,6 @@ class System
 		GP2Y InfraRedSensor;
 
 		LSM9D Orientation;
-
-		SSD1306 OLED;
 		
 		ESC vESC;
 		

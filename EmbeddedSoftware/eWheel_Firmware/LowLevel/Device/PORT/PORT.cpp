@@ -36,14 +36,6 @@ void InitPORT()
 	SetPinPeripheralFunction(PINMUX_PA06D_SERCOM0_PAD2);
 	SetPinPeripheralFunction(PINMUX_PA07D_SERCOM0_PAD3);
 	
-	/* Init PORT interface to SSD1306 */
-	PORT->Group[1].OUTSET.reg = PORT_PB08;
-	PORT->Group[1].PINCFG[8].reg = PORT_PINCFG_PULLEN;
-	SetPinPeripheralFunction(PINMUX_PB08D_SERCOM4_PAD0);
-	PORT->Group[1].OUTSET.reg = PORT_PB09;
-	PORT->Group[1].PINCFG[9].reg = PORT_PINCFG_PULLEN;
-	SetPinPeripheralFunction(PINMUX_PB09D_SERCOM4_PAD1);
-	
 	/* Init PORT interface to ADS */
 	//Configure CS-Pin as Output
 	PORT->Group[0].DIRSET.reg = PORT_PA02;

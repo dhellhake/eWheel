@@ -24,10 +24,6 @@ RUN_RESULT AT45DB::Run(uint32_t timeStamp)
 
 void AT45DB::Propagate()
 {
-	if (this->OLED != NULL)
-	{
-		this->OLED->SetRow(this->PageIndex, 1);
-	}
 }
 
 /************************************************************************/

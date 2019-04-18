@@ -9,8 +9,6 @@
 
 #include "..\Executable.h"
 
-#include "..\SSD1306\SSD1306.h"
-
 
 #define OP_STATUS			0xD7
 #define OP_PAGE_READ_MEM	0xD2
@@ -70,9 +68,7 @@ class AT45DB : public Executable
 	/************************************************************************/
 	/* Class implementation                                                 */
 	/************************************************************************/
-	public:
-		SSD1306 *OLED = NULL;
-		
+	public:		
 		AT45DB();
 		uint8_t AddTracePage(TracePage *page);
 		uint8_t TracePage_Read(uint16_t pageIndex, TracePage *page);

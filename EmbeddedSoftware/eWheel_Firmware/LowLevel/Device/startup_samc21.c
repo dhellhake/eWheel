@@ -275,10 +275,7 @@ void Reset_Handler(void)
 	//Init USART-SERCOM interface to CC41-A
 	InitSERCOM1();
 	//Init SPI-SERCOM interface
-	InitSERCOM2();		
-	/* Init I2C peripheral */
-	InitSERCOM4();
-	SetDMAChannel0();
+	InitSERCOM2();
 	//Init USART-SERCOM interface to CP2102
 	InitSERCOM5();
 		

@@ -43,17 +43,8 @@ RUN_RESULT ADS::Run(uint32_t timeStamp)
 
 void ADS::Propagate()
 {
-	if (this->IR != NULL)
-	this->IR->SetDistanceRaw(this->Distance_RAW);
-	
-	if (this->OLED != NULL)
-	{
-		if (this->Distance_RAW < 0)
-		this->OLED->SetRow(this->Distance_RAW * -1, 1);
-		else
-		this->OLED->SetRow(this->Distance_RAW, 1);
-		
-	}
+	if (this->IR != 0x0)
+		this->IR->SetDistanceRaw(this->Distance_RAW);
 }
 
 

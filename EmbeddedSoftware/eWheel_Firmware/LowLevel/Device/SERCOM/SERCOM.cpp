@@ -110,43 +110,6 @@ void InitSERCOM2()
 	while(SERCOM2->SPI.SYNCBUSY.bit.ENABLE);
 }
 
-void InitSERCOM4()
-{	
-	//Enable Clock for SERCOM4
-	//Set bits in the clock mask for an APBx bus.
-	MCLK->APBCMASK.bit.SERCOM4_ = 1;
-	
-	/* Disable the peripheral channel */
-	GCLK->PCHCTRL[SERCOM4_GCLK_ID_CORE].reg &= ~GCLK_PCHCTRL_CHEN;
-	while (GCLK->PCHCTRL[SERCOM4_GCLK_ID_CORE].reg & GCLK_PCHCTRL_CHEN);
-
-	/* Configure the peripheral channel */
-	GCLK->PCHCTRL[SERCOM4_GCLK_ID_CORE].reg = GCLK_PCHCTRL_GEN(0);
-
-	// Enable GCLK for peripheral
-	GCLK->PCHCTRL[SERCOM4_GCLK_ID_CORE].reg |= GCLK_PCHCTRL_CHEN;	
-	
-	SERCOM4->I2CM.CTRLA.reg =	(0x0 << SERCOM_I2CM_CTRLA_SPEED_Pos) |				//Select fast mode for 400kHz
-								(0x5 << SERCOM_I2CM_CTRLA_MODE_Pos)	;				//Do run in master mode
-								
-	/* smart mode enabled by setting the bit SMEN as 1 */
-	SERCOM4->I2CM.CTRLB.reg = SERCOM_I2CM_CTRLB_SMEN;
-	/* synchronization busy */
-	while(SERCOM4->I2CM.SYNCBUSY.bit.SYSOP);
-	/* BAUD = 120 for 400kHz-SCL @ 48Mhz GCLK */
-	SERCOM4->I2CM.BAUD.reg = SERCOM_I2CM_BAUD_BAUD(40);
-	/* synchronization busy */
-	while(SERCOM4->I2CM.SYNCBUSY.bit.SYSOP);
-	/* SERCOM4 peripheral enabled by setting the ENABLE bit as 1*/
-	SERCOM4->I2CM.CTRLA.reg |= SERCOM_I2CM_CTRLA_ENABLE;
-	/* SERCOM Enable synchronization busy */
-	while((SERCOM4->I2CM.SYNCBUSY.reg & SERCOM_I2CM_SYNCBUSY_ENABLE));
-	/* bus state is forced into idle state */
-	SERCOM4->I2CM.STATUS.bit.BUSSTATE = 0x1;
-	/* synchronization busy */
-	while(SERCOM4->I2CM.SYNCBUSY.bit.SYSOP);	
-}
-
 void InitSERCOM5()
 {
 	//USART:

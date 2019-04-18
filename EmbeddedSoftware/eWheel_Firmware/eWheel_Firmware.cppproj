@@ -287,12 +287,6 @@
     <Compile Include="main.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="SSD1306\SSD1306.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="SSD1306\SSD1306.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="System\System.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -321,7 +315,6 @@
     <Folder Include="AT45DB" />
     <Folder Include="CC41A" />
     <Folder Include="ESC" />
-    <Folder Include="SSD1306" />
     <Folder Include="System\" />
   </ItemGroup>
   <ItemGroup>

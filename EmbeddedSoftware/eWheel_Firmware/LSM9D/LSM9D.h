@@ -9,7 +9,6 @@
 
 #include "..\Executable.h"
 #include "..\CC41A\CC41A.h"
-#include "..\SSD1306\SSD1306.h"
 
 // Register addresses
 #define STATUS_REG_1					0x27
@@ -29,8 +28,7 @@ class LSM9D : public Executable
 	/* Executable Interface implementation                                  */
 	/************************************************************************/
 	public:
-		SSD1306 *OLED = NULL;
-		CC41A *TraceLink = NULL;
+		CC41A *TraceLink = 0x0;
 	public:
 		virtual bool CanExecute() { return ((PORT->Group[0].IN.reg >> 13) & 0x1) != 0x0; };
 		virtual RUN_RESULT Run(uint32_t timeStamp);

@@ -37,15 +37,7 @@ RUN_RESULT LSM9D::Run(uint32_t timeStamp)
 }
 
 void LSM9D::Propagate()
-{
-	if (this->OLED != NULL)
-	{
-		if (this->Pitch < 0)
-			this->OLED->SetRow(this->Pitch * -10, 1);
-		else
-			this->OLED->SetRow(this->Pitch * 10, 1);
-	}
-	
+{	
 	if (this->TraceEnabled && this->TraceLink != NULL)
 	{
 		uint8_t data[8];

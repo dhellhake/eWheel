@@ -5,7 +5,6 @@
 * Author: Dominik Hellhake
 */
 #include "..\Executable.h"
-#include "..\SSD1306\SSD1306.h"
 
 #ifndef __GP2Y_H__
 #define __GP2Y_H__
@@ -21,7 +20,6 @@ class GP2Y : public Executable
 	private:
 		bool UpdateReceived = false;
 	public:
-		SSD1306 *OLED = NULL;
 	public:
 		virtual bool CanExecute() { return this->UpdateReceived; };
 		virtual RUN_RESULT Run(uint32_t timeStamp);
