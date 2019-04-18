@@ -188,12 +188,6 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ADS\ADS.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="ADS\ADS.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="AT45DB\AT45DB.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -310,7 +304,6 @@
     <Folder Include="LowLevel\USART" />
     <Folder Include="LowLevel\SPI" />
     <Folder Include="LSM9D" />
-    <Folder Include="ADS" />
     <Folder Include="GP2Y" />
     <Folder Include="AT45DB" />
     <Folder Include="CC41A" />

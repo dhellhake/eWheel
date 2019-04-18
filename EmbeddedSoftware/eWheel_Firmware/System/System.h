@@ -10,7 +10,6 @@
 #include "samc21.h"
 #include "..\Executable.h"
 
-#include "..\ADS\ADS.h"
 #include "..\AT45DB/AT45DB.h"
 #include "..\CC41A/CC41A.h"
 #include "..\GP2Y/GP2Y.h"
@@ -29,9 +28,7 @@ class System
 	/************************************************************************/
 	/* System-Components	                                                */
 	/************************************************************************/	
-	public:	
-		ADS AnalogSensor;
-		
+	public:		
 		AT45DB TraceLink;
 		
 		CC41A DebugLink;

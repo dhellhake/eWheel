@@ -16,18 +16,13 @@ System::System()
 	/* Initialize the CC41A DebugLink */
 
 	/* Initialize FlashMemory */
-	//eWheel.TraceLink.OLED = &eWheel.OLED;
 
 	/* Initialize the lsm9ds1 sensor */
 	eWheel.Orientation.TraceLink = &eWheel.DebugLink;
-	//eWheel.Orientation.OLED = &eWheel.OLED;
 
 	/* Initialize the Analog Sensor */
-	//eWheel.AnalogSensor.OLED = &eWheel.OLED;
 
 	/* Initialize infrared distance sensor GP2Y */
-	eWheel.AnalogSensor.IR = &eWheel.InfraRedSensor;
-	//ir.OLED = &eWheel.OLED;
 }
 
 void System::SetLED(bool state)

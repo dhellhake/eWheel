@@ -5,6 +5,7 @@
 * Author: Dominik Hellhake
 */
 #include "CANCont.h"
+#include "..\SysTick\SysTick.h"
 #include "..\..\..\System\System.h"
 
 COMPILER_ALIGNED(4)

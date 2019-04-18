@@ -5,6 +5,7 @@
  * Author : Dominik Hellhake
  */
 #include "samc21.h"
+#include "LowLevel/Device/SysTick/SysTick.h"
 #include "System/System.h"
 
 #define HIGHPRIORITY_POOL_SIZE	2
