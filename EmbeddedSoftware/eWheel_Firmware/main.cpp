@@ -8,19 +8,18 @@
 #include "System/System.h"
 
 #define HIGHPRIORITY_POOL_SIZE	2
-#define LOWPRIORITY_POOL_SIZE	3
+#define LOWPRIORITY_POOL_SIZE	2
 
 int main(void)
 {	
 	Executable* highPriorityPool[HIGHPRIORITY_POOL_SIZE] = {
-		&eWheel.Orientation,
-		&eWheel.AnalogSensor
+		&eWheel.vESC,
+		&eWheel.Orientation
 	};	
 	
 	Executable* lowPriorityPool[LOWPRIORITY_POOL_SIZE] = {
 		&eWheel.TraceLink,
-		&eWheel.DebugLink,
-		&eWheel.OLED
+		&eWheel.DebugLink
 	};
 	uint8_t lowPriorityIndex = 0;
 	

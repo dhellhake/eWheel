@@ -11,11 +11,9 @@ System eWheel;
 
 System::System()
 {
-	/* Initialize the CC41A DebugLink */
+	/* Initialize VESC */	
 	
-	/* Initialize the SSD1306 OLED driver */
-	for (uint32_t x = 0; x < 7000000; x++) {}
-	eWheel.OLED.DeviceInitialization();
+	/* Initialize the CC41A DebugLink */
 
 	/* Initialize FlashMemory */
 	//eWheel.TraceLink.OLED = &eWheel.OLED;
@@ -25,7 +23,7 @@ System::System()
 	//eWheel.Orientation.OLED = &eWheel.OLED;
 
 	/* Initialize the Analog Sensor */
-	eWheel.AnalogSensor.OLED = &eWheel.OLED;
+	//eWheel.AnalogSensor.OLED = &eWheel.OLED;
 
 	/* Initialize infrared distance sensor GP2Y */
 	eWheel.AnalogSensor.IR = &eWheel.InfraRedSensor;
