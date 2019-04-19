@@ -73,22 +73,6 @@ void InitCAN0()
 	while (CAN0->CCCR.reg & CAN_CCCR_INIT);
 }
 
-inline int32_t buffer_get_int32(const uint8_t *buffer, uint8_t index) 
-{
-	return 	(buffer[index] << 24)		|
-			(buffer[index + 1]) << 16	|
-			(buffer[index + 2]) << 8	|
-			(buffer[index + 3]);
-}
-inline int16_t buffer_get_int16(const uint8_t *buffer, uint8_t index) 
-{
-	return	(buffer[index]) << 8 |
-			(buffer[index + 1]);
-}
-
-
-volatile uint8_t el = 0;
-volatile uint32_t elapsed[100] = { 0 };
 
 void CAN0_Handler(void)
 {
@@ -100,34 +84,11 @@ void CAN0_Handler(void)
 		CAN0->IR.reg = CAN_IE_RF0NE;
 		
 		can_rx_element_fifo_0 *received = &can0_rx_fifo_0[receive_index];
-		
-		uint32_t id = received->R0.bit.ID;
-		
-		uint8_t vesc_id = id & 0xFF;
-		uint8_t vesc_cmd = id >> 8;
-		
-		if (vesc_cmd == 9)
-		{
-			uint8_t tmp[8] = {0};
-			int32_t index = 0;
-			
-			for (uint8_t x = 0; x < 8; x++)
-				tmp[x] = received->data[x];
-			
-			float rpm = (float)buffer_get_int32(&tmp[0], 0);
-			float curr = (float)buffer_get_int16(&tmp[0], 4) / 10.0f;
-			float duty = (float)buffer_get_int16(&tmp[0], 6) / 1000.0f;
-			
-			
-			elapsed[el++] = GetElapsedMilis();
-			
-			if (el >= 100)
-				el = 0;
-			
-			
-			
-			
-			
+				
+		// VESC Package
+		if ((received->R0.bit.ID & 0xFF) == 124)
+		{			
+			eWheel.vESC.ReceiveVESCPackage(received->R0.bit.ID >> 8, received->data);
 		}
 		
 		//Ack received Message
