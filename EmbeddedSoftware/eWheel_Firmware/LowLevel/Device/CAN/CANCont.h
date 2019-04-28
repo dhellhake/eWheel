@@ -46,8 +46,9 @@ extern "C" {
 
 
 /* The value should be 8/12/16/20/24/32/48/64. */
-#define CONF_CAN_ELEMENT_DATA_SIZE         12
-#define CONF_CAN0_RX_FIFO_0_NUM         16            /* Range: 1..64 */ 
+#define CONF_CAN_ELEMENT_DATA_SIZE			12
+#define CONF_CAN0_RX_FIFO_0_NUM				16            /* Range: 1..64 */
+#define CONF_CAN0_TX_BUFFER_NUM				4             /* Range: 1..16 */
 
 /* -------- CAN_RX_ELEMENT_R0 : (CAN RX element: 0x00) (R/W 32) Rx Element R0 Configuration -------- */
 typedef union {
@@ -83,11 +84,50 @@ struct can_rx_element_fifo_0 {
 	uint8_t data[CONF_CAN_ELEMENT_DATA_SIZE];
 };
 
+
+
+/* -------- CAN_TX_ELEMENT_T0 : (CAN TX element: 0x00) (R/W 32) Tx Element T0 Configuration -------- */
+typedef union {
+	struct {
+		uint32_t ID:29;            /*!< bit:  0..28  Identifier */
+		uint32_t RTR:1;            /*!< bit:  29     Remote Transmission Request */
+		uint32_t XTD:1;            /*!< bit:  30     Extended Identifier */
+		uint32_t ESI:1;            /*!< bit:  31     Error State Indicator */
+		} bit;                       /*!< Structure used for bit  access */
+		uint32_t reg;                /*!< Type used for register access */
+} CAN_TX_ELEMENT_T0_Type;
+/* -------- CAN_TX_ELEMENT_T1 : (CAN TX element: 0x01) (R/W 32) Tx Element T1 Configuration -------- */
+typedef union {
+	struct {
+		uint32_t :16;           /*!< bit: 0..15   Reserved */
+		uint32_t DLC:4;         /*!< bit: 16..19  Data Length Code */
+		uint32_t BRS:1;         /*!< bit: 20      Bit Rate Switch */
+		uint32_t FDF:1;         /*!< bit: 21      FD Format */
+		uint32_t :1;			/*!< bit: 22      Reserved */
+		uint32_t EFC:1;			/*!< bit: 23      Event FIFO Control */
+		uint32_t MM:8;			/*!< bit: 24..31  Message Marker */
+	} bit;                      /*!< Structure used for bit  access */
+	uint32_t reg;               /*!< Type used for register access */
+} CAN_TX_ELEMENT_T1_Type;
+
+/**
+ * \brief CAN transfer element structure.
+ *
+ *  Common element structure for transfer buffer and FIFO/QUEUE.
+ */
+struct can_tx_element {
+	__IO CAN_TX_ELEMENT_T0_Type T0;
+	__IO CAN_TX_ELEMENT_T1_Type T1;
+	uint8_t data[CONF_CAN_ELEMENT_DATA_SIZE];
+};
+
 static volatile uint32_t receive_index = 0;
 
 
 
 void InitCAN0();
+
+void CAN_SendExtMessage(uint32_t id, uint8_t *data, uint32_t data_length, uint8_t tx_buffer_index);
 
 #ifdef __cplusplus
 }

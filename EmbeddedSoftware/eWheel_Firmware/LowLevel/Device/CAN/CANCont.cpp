@@ -10,6 +10,8 @@
 
 COMPILER_ALIGNED(4)
 struct can_rx_element_fifo_0 can0_rx_fifo_0[CONF_CAN0_RX_FIFO_0_NUM];
+COMPILER_ALIGNED(4)
+static struct can_tx_element can0_tx_buffer[CONF_CAN0_TX_BUFFER_NUM];
 
 
 void InitCAN0()
@@ -52,9 +54,10 @@ void InitCAN0()
 	
 	/* Rx FIFO 0 Configuration */
 	CAN0->RXF0C.reg =	CAN_RXF0C_F0SA((uint32_t)can0_rx_fifo_0)	|	// Set FIFO Start Address
-	CAN_RXF0C_F0S(CONF_CAN0_RX_FIFO_0_NUM)		|	// Set FIFO Size
-	CAN_RXF0C_F0OM;									// Enable Override Mode
-	
+						CAN_RXF0C_F0S(CONF_CAN0_RX_FIFO_0_NUM)		|	// Set FIFO Size
+						CAN_RXF0C_F0OM;									// Enable Override Mode
+	CAN0->TXBC.reg =	CAN_TXBC_TBSA((uint32_t)can0_tx_buffer) |
+						CAN_TXBC_NDTB(CONF_CAN0_TX_BUFFER_NUM);
 	
 	/* Enable the interrupt setting which no need change. */
 	CAN0->ILE.reg = CAN_ILE_EINT0 | CAN_ILE_EINT1;
@@ -73,6 +76,18 @@ void InitCAN0()
 	while (CAN0->CCCR.reg & CAN_CCCR_INIT);
 }
 
+void CAN_SendExtMessage(uint32_t id, uint8_t *data, uint32_t data_length, uint8_t tx_buffer_index)
+{
+	can0_tx_buffer[tx_buffer_index].T0.bit.ID = id;
+	can0_tx_buffer[tx_buffer_index].T0.bit.XTD = 1;
+	can0_tx_buffer[tx_buffer_index].T1.bit.DLC = data_length;
+	
+	for (uint8_t i = 0; i < CONF_CAN_ELEMENT_DATA_SIZE; i++)
+		can0_tx_buffer[tx_buffer_index].data[i] = data[i];
+		
+	while (CAN0->CCCR.reg & CAN_CCCR_CCE) {	}		
+	CAN0->TXBAR.reg = (1 << tx_buffer_index);
+}
 
 void CAN0_Handler(void)
 {
