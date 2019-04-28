@@ -30,7 +30,7 @@ class LSM9D : public Executable
 	public:
 		CC41A *TraceLink = 0x0;
 	public:
-		virtual bool CanExecute() { return ((PORT->Group[0].IN.reg >> 13) & 0x1) != 0x0; };
+		virtual bool CanExecute(uint32_t timeStamp) { return ((PORT->Group[0].IN.reg >> 13) & 0x1) != 0x0; };
 		virtual RUN_RESULT Run(uint32_t timeStamp);
 		virtual void Propagate();
 	

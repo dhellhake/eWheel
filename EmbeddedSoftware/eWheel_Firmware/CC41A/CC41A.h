@@ -35,7 +35,7 @@ class CC41A : public Executable
 	/************************************************************************/
 	/* Executable Interface implementation                                  */
 	/************************************************************************/
-	virtual bool CanExecute() 
+	virtual bool CanExecute(uint32_t timeStamp) 
 	{
 		if (this->ReceiveBufferIndex == 0)
 			return false;

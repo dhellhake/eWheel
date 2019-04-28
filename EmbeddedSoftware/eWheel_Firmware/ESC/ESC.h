@@ -57,7 +57,7 @@ class ESC : public Executable
 	/************************************************************************/
 	/* Executable Interface implementation                                  */
 	/************************************************************************/
-	virtual bool CanExecute()
+	virtual bool CanExecute(uint32_t timeStamp)
 	{
 		if (this->CANRcvBufferIndex == 0)
 			return false;

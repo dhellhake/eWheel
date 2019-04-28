@@ -21,7 +21,7 @@ class Executable
 	public:
 	volatile bool TraceEnabled = false;
 
-	virtual bool CanExecute() { return false; };
+	virtual bool CanExecute(uint32_t timeStamp) { return false; };
 
 	virtual RUN_RESULT Run(uint32_t timeStamp) { return RUN_RESULT::NOT_IMPLEMENTED; };
 		

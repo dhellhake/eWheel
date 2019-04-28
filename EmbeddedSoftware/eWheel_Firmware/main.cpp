@@ -34,7 +34,7 @@ int main(void)
 			
 			for (uint8_t ti = 0; ti < HIGHPRIORITY_POOL_SIZE; ti++)
 			{
-				if (highPriorityPool[ti]->CanExecute())
+				if (highPriorityPool[ti]->CanExecute(t1))
 				{
 					slotUsed = true;
 					if (highPriorityPool[ti]->Run(t1) == RUN_RESULT::SUCCESS)
@@ -49,7 +49,7 @@ int main(void)
 			{
 				for (uint8_t ti = lowPriorityIndex; ti < LOWPRIORITY_POOL_SIZE; ti++)
 				{
-					if (lowPriorityPool[ti]->CanExecute())
+					if (lowPriorityPool[ti]->CanExecute(t1))
 					{
 						slotUsed = true;
 						if (lowPriorityPool[ti]->Run(t1) == RUN_RESULT::SUCCESS)
