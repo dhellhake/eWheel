@@ -76,6 +76,13 @@ class ESC : public Executable
 		volatile uint8_t CANRcvBufferIndex = 0;
 		VESCPackage CANRcvBuffer[CAN_RECEIVE_BUFFER_SIZE];
 		
+		static inline void buffer_set_int32(uint8_t *buffer, int32_t value)
+		{
+			uint8_t *v = (uint8_t*)&value;
+			for (uint8_t i = 0; i < 4; i++)
+				buffer[i] = v[3-i];						
+		}
+		
 		static inline int32_t buffer_get_int32(const uint8_t *buffer, uint8_t index)
 		{
 			return 	(buffer[index] << 24)		|
@@ -90,21 +97,23 @@ class ESC : public Executable
 		}
 	public:
 		// CAN_PACKET_STATUS
-		float RPM;
-		float Current;
-		float Duty;
+		float Avl_RPM;
+		float Avl_Current;
+		float Avl_Duty;
 		// CAN_PACKET_STATUS_2
-		float Ah;
-		float AhCharged;
+		float Avl_Ah;
+		float Avl_AhCharged;
 		// CAN_PACKET_STATUS_3
-		float Wh;
-		float WhCharged;
+		float Avl_Wh;
+		float Avl_WhCharged;
 		// CAN_PACKET_STATUS_4
-		float TempFET;
-		float TempMotor;
-		float CurrentIn;
-		float PIDPosNow;
-	
+		float Avl_TempFET;
+		float Avl_TempMotor;
+		float Avl_CurrentIn;
+		float Avl_PIDPosNow;
+		
+		float Tar_Duty;
+		
 		ESC();
 		void ReceiveVESCPackage(uint8_t id, uint8_t *data);
 }; //ESC
