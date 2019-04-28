@@ -10,11 +10,12 @@
 #include "samc21.h"
 #include "..\Executable.h"
 
-#define STATUS_1_RECEIVED	1
-#define STATUS_2_RECEIVED	2
-#define STATUS_3_RECEIVED	4
-#define STATUS_4_RECEIVED	8
-#define STATUS_COMPLETE		0xF
+#define STATUS_None_RECEIVED	0
+#define STATUS_1_RECEIVED		1
+#define STATUS_2_RECEIVED		2
+#define STATUS_3_RECEIVED		4
+#define STATUS_4_RECEIVED		8
+#define STATUS_COMPLETE			0xF
 
 
 #define CAN_RECEIVE_BUFFER_SIZE 4
@@ -74,6 +75,11 @@ class ESC : public Executable
 		return false;
 	}	
 	virtual RUN_RESULT Run(uint32_t timeStamp);
+	virtual void Reset() 
+	{
+		this->VESTStatusReceived = STATUS_None_RECEIVED; 
+		this->Status = TASK_STATUS::WAIT; 
+	}
 
 	/************************************************************************/
 	/* Class implementation                                                 */

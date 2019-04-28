@@ -14,6 +14,7 @@
 #include "..\CC41A/CC41A.h"
 #include "..\LSM9D/LSM9D.h"
 #include "..\ESC\ESC.h"
+#include "..\Chassis/Chassis.h"
 
 class System
 {
@@ -25,7 +26,9 @@ class System
 	/************************************************************************/
 	/* System-Components	                                                */
 	/************************************************************************/	
-	public:		
+	public:
+		Chassis Board;
+		
 		AT45DB Trace;
 		
 		CC41A Bluetooth;
@@ -33,6 +36,7 @@ class System
 		LSM9D Gyroscope;
 		
 		ESC vESC;
+		
 		
 	private:
 		System( const System &c );

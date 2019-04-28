@@ -8,11 +8,12 @@
 #include "LowLevel/Device/SysTick/SysTick.h"
 #include "System/System.h"
 
-#define TASKPOOL_SIZE	4
+#define TASKPOOL_SIZE	5
 
 int main(void)
-{	
+{		
 	Executable* taskPool[TASKPOOL_SIZE] = {
+		&eWheel.Board,
 		&eWheel.vESC,
 		&eWheel.Gyroscope,
 		&eWheel.Trace,
@@ -31,6 +32,6 @@ int main(void)
 		// If last task is complete, reset computation
 		if (taskPool[0]->Status == TASK_STATUS::COMPLETE)
 			for (uint8_t ti = 0; ti < TASKPOOL_SIZE; ti++)
-				taskPool[ti]->Status =TASK_STATUS::WAIT;
+				taskPool[ti]->Reset();
     }
 }

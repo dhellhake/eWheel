@@ -36,6 +36,8 @@ class Executable
 	
 	virtual RUN_RESULT Run(uint32_t timeStamp) { return RUN_RESULT::NOT_IMPLEMENTED; };
 		
+	virtual void Reset() { this->Status = TASK_STATUS::WAIT; }
+		
 	virtual void EnableTrace() {};
 	
 	virtual void DisableTrace() {};

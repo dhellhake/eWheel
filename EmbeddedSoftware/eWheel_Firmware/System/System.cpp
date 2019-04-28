@@ -23,6 +23,9 @@ System::System()
 	/* Initialize the Analog Sensor */
 
 	/* Initialize infrared distance sensor GP2Y */
+	
+	/* Initialize Orientation Task */
+	Board.Gyroscope = &this->Gyroscope;
 }
 
 void System::SetLED(bool state)
