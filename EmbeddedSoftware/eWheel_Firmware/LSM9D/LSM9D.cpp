@@ -14,29 +14,25 @@
 /************************************************************************/
 RUN_RESULT LSM9D::Run(uint32_t timeStamp)
 {
-	if (((PORT->Group[0].IN.reg >> 13) & 0x1) != 0x0)
+	uint8_t status[1];
+	this->ReadBytes(STATUS_REG_1, status, 1);
+	
+	if ((status[0] && 0x1) != 0x00)
 	{
-		uint8_t status[1];
-		this->ReadBytes(STATUS_REG_1, status, 1);
+		uint8_t tmp[6];
 		
-		if ((status[0] && 0x1) != 0x00)
+		if (this->ReadBytes(OUT_X_L_XL, tmp, 6) != 0x00)
 		{
-			uint8_t tmp[6];
+			float	ax_val = ((int16_t)((tmp[1] << 8) | tmp[0])) * SENSITIVITY_ACCELEROMETER_4;
+			float	ay_val = ((int16_t)((tmp[3] << 8) | tmp[2])) * SENSITIVITY_ACCELEROMETER_4;
+			float	az_val = ((int16_t)((tmp[5] << 8) | tmp[4])) * SENSITIVITY_ACCELEROMETER_4;
 			
-			if (this->ReadBytes(OUT_X_L_XL, tmp, 6) != 0x00)
-			{
-				float	ax_val = ((int16_t)((tmp[1] << 8) | tmp[0])) * SENSITIVITY_ACCELEROMETER_4;
-				float	ay_val = ((int16_t)((tmp[3] << 8) | tmp[2])) * SENSITIVITY_ACCELEROMETER_4;
-				float	az_val = ((int16_t)((tmp[5] << 8) | tmp[4])) * SENSITIVITY_ACCELEROMETER_4;
-				
-				this->Pitch = (atan2(ax_val, (float)sqrt((float)(ay_val * ay_val) + (float)(az_val * az_val))) * (float)180.0) / M_PI;
-				this->Roll = (atan2(-ay_val, az_val) * 180.0) / M_PI;
-			}
+			this->Pitch = (atan2(ax_val, (float)sqrt((float)(ay_val * ay_val) + (float)(az_val * az_val))) * (float)180.0) / M_PI;
+			this->Roll = (atan2(-ay_val, az_val) * 180.0) / M_PI;
 		}
 	}
-	else
-		return RUN_RESULT::INACTIVE;
-		
+	
+	this->Status = TASK_STATUS::COMPLETE;	
 	this->LastExecuted = timeStamp;
 	return RUN_RESULT::SUCCESS;
 }

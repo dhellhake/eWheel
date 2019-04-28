@@ -35,6 +35,10 @@ class CC41A : public Executable
 	/************************************************************************/
 	/* Executable Interface implementation                                  */
 	/************************************************************************/
+	virtual bool IsReady(uint32_t timeStamp)
+	{
+		return this->ReceiveBufferIndex >= 2;
+	}
 	virtual RUN_RESULT Run(uint32_t timeStamp);
 
 	/************************************************************************/

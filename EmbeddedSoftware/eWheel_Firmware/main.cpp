@@ -19,15 +19,18 @@ int main(void)
 		&eWheel.Bluetooth
 	};
 	
-	uint32_t t1 = GetElapsedMilis();
+	uint32_t t1 = 0;
     while (1) 
-    {		
-		if (t1 <= GetElapsedMilis())
-		{			
+    {	
+		t1 = GetElapsedMilis();
+		
+		for (uint8_t ti = 0; ti < TASKPOOL_SIZE; ti++)
+			if (taskPool[ti]->IsReady(t1))
+				taskPool[ti]->Run(t1);
+		
+		// If last task is complete, reset computation
+		if (taskPool[0]->Status == TASK_STATUS::COMPLETE)
 			for (uint8_t ti = 0; ti < TASKPOOL_SIZE; ti++)
-				if (taskPool[ti]->Run(t1) == RUN_RESULT::SUCCESS)
-					break;		
-			t1+= 10;			
-		}
+				taskPool[ti]->Status =TASK_STATUS::WAIT;
     }
 }

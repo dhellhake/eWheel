@@ -10,6 +10,13 @@
 #include "samc21.h"
 #include "..\Executable.h"
 
+#define STATUS_1_RECEIVED	1
+#define STATUS_2_RECEIVED	2
+#define STATUS_3_RECEIVED	4
+#define STATUS_4_RECEIVED	8
+#define STATUS_COMPLETE		0xF
+
+
 #define CAN_RECEIVE_BUFFER_SIZE 4
 
 #define VESC_PACKAGE_SIZE 8
@@ -57,6 +64,15 @@ class ESC : public Executable
 	/************************************************************************/
 	/* Executable Interface implementation                                  */
 	/************************************************************************/	
+	virtual bool IsReady(uint32_t timeStamp)
+	{
+		if (this->CANRcvBufferIndex > 0)
+			return true;
+		else if (timeStamp - this->LastTarValueUpdate >= 100)
+			return true;
+			
+		return false;
+	}	
 	virtual RUN_RESULT Run(uint32_t timeStamp);
 
 	/************************************************************************/
@@ -107,6 +123,8 @@ class ESC : public Executable
 		ESC();
 		void ReceiveVESCPackage(uint8_t id, uint8_t *data);
 	private:
+		uint8_t VESTStatusReceived;
+	
 		uint32_t LastTarValueUpdate;
 	
 		void ProcessVESCPackages();

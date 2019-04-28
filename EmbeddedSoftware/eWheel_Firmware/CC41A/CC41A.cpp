@@ -12,24 +12,20 @@
 /* Executable Interface implementation                                  */
 /************************************************************************/
 RUN_RESULT CC41A::Run(uint32_t timeStamp)
-{	
-	if (this->ReceiveBufferIndex >= 2)
+{
+	switch ((DEBUG_CMD)this->ReceiveBuffer[0])
 	{
-		switch ((DEBUG_CMD)this->ReceiveBuffer[0])
-		{
-			case DEBUG_CMD::DEBUG_LS9M:
-				eWheel.Gyroscope.TraceEnabled = this->ReceiveBuffer[1] > 0;
-			break;
-			case DEBUG_CMD::SetLED:
-				eWheel.SetLED(this->ReceiveBuffer[1] > 0);
-			break;
-		}
-		//Reset Command Buffer
-		this->ReceiveBufferIndex -= 2;
+		case DEBUG_CMD::DEBUG_LS9M:
+			eWheel.Gyroscope.TraceEnabled = this->ReceiveBuffer[1] > 0;
+		break;
+		case DEBUG_CMD::SetLED:
+			eWheel.SetLED(this->ReceiveBuffer[1] > 0);
+		break;
 	}
-	else
-		return RUN_RESULT::INACTIVE;	
+	//Reset Command Buffer
+	this->ReceiveBufferIndex -= 2;
 	
+	this->Status = TASK_STATUS::SUSPEND;	
 	this->LastExecuted = timeStamp;
 	return RUN_RESULT::SUCCESS;
 }

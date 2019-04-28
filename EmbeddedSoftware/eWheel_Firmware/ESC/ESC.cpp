@@ -13,11 +13,20 @@
 RUN_RESULT ESC::Run(uint32_t timeStamp)
 {	
 	if (this->CANRcvBufferIndex > 0)
+	{
 		this->ProcessVESCPackages();
-	else if (timeStamp - this->LastTarValueUpdate >= 100)
+	}
+	
+	if (timeStamp - this->LastTarValueUpdate >= 100)
+	{		
 		this->SendTarValues(timeStamp);
+	}
+	
+	
+	if (this->VESTStatusReceived == STATUS_COMPLETE)
+		this->Status = TASK_STATUS::COMPLETE;
 	else
-		return RUN_RESULT::INACTIVE;
+		this->Status = TASK_STATUS::SUSPEND;
 	
 	this->LastExecuted = timeStamp;
 	return RUN_RESULT::SUCCESS;
@@ -51,20 +60,24 @@ void ESC::ProcessVESCPackages()
 				this->Avl_RPM =			(float)buffer_get_int32(this->CANRcvBuffer[index]._data, 0);
 				this->Avl_Current =		(float)buffer_get_int16(this->CANRcvBuffer[index]._data, 4) / 10.0f;
 				this->Avl_Duty =		(float)buffer_get_int16(this->CANRcvBuffer[index]._data, 6) / 1000.0f;
+				this->VESTStatusReceived |= STATUS_1_RECEIVED;
 			break;
 			case VESCPackageType::CAN_PACKET_STATUS_2:
 				this->Avl_Ah =			(float)buffer_get_int32(this->CANRcvBuffer[index]._data, 0) / 1e4;
 				this->Avl_AhCharged =	(float)buffer_get_int32(this->CANRcvBuffer[index]._data, 4) / 1e4;
+				this->VESTStatusReceived |= STATUS_2_RECEIVED;
 			break;
 			case VESCPackageType::CAN_PACKET_STATUS_3:
 				this->Avl_Wh =			(float)buffer_get_int32(this->CANRcvBuffer[index]._data, 0) / 1e4;
 				this->Avl_WhCharged =	(float)buffer_get_int32(this->CANRcvBuffer[index]._data, 4) / 1e4;
+				this->VESTStatusReceived |= STATUS_3_RECEIVED;
 			break;
 			case VESCPackageType::CAN_PACKET_STATUS_4:
 				this->Avl_TempFET =		(float)buffer_get_int16(this->CANRcvBuffer[index]._data, 0) / 10.0f;
 				this->Avl_TempMotor =	(float)buffer_get_int16(this->CANRcvBuffer[index]._data, 2) / 10.0f;
 				this->Avl_CurrentIn =	(float)buffer_get_int16(this->CANRcvBuffer[index]._data, 4) / 10.0f;
 				this->Avl_PIDPosNow =	(float)buffer_get_int16(this->CANRcvBuffer[index]._data, 6) / 50.0f;
+				this->VESTStatusReceived |= STATUS_4_RECEIVED;
 			break;
 			default:
 			break;

@@ -13,14 +13,10 @@
 /************************************************************************/
 RUN_RESULT AT45DB::Run(uint32_t timeStamp)
 {
-	if (TraceBuffer_available(this->Buffer) && IsReady())
-	{
-		TracePage_Write(this->PageIndex, TraceBuffer_GetPage(this->Buffer), true);
-		this->PageIndex++;
-	}
-	else
-		return RUN_RESULT::INACTIVE;
+	TracePage_Write(this->PageIndex, TraceBuffer_GetPage(this->Buffer), true);
+	this->PageIndex++;
 	
+	this->Status = TASK_STATUS::SUSPEND;
 	this->LastExecuted = timeStamp;
 	return RUN_RESULT::SUCCESS;
 }
