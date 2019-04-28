@@ -28,7 +28,7 @@ RUN_RESULT ESC::Run(uint32_t timeStamp)
 /************************************************************************/
 ESC::ESC()
 {
-	this->Tar_Duty = 0.05f;
+	this->Tar_Duty = 0.00f;
 } //ESC
 
 void ESC::SendTarValues(uint32_t timeStamp)
