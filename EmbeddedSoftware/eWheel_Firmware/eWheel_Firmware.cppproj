@@ -275,6 +275,12 @@
     <Compile Include="main.cpp">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Chassis\Chassis.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Chassis\Chassis.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="System\System.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -301,6 +307,7 @@
     <Folder Include="AT45DB" />
     <Folder Include="CC41A" />
     <Folder Include="ESC" />
+    <Folder Include="Chassis" />
     <Folder Include="System\" />
   </ItemGroup>
   <ItemGroup>
