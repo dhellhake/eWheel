@@ -20,6 +20,8 @@ class Executable
 {
 	public:
 	volatile bool TraceEnabled = false;
+	
+	volatile uint32_t LastExecuted = 0x00;
 
 	virtual bool CanExecute(uint32_t timeStamp) { return false; };
 

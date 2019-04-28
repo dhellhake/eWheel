@@ -41,6 +41,7 @@ RUN_RESULT ESC::Run(uint32_t timeStamp)
 	}
 	this->CANRcvBufferIndex = 0;
 	
+	this->LastExecuted = timeStamp;	
 	return RUN_RESULT::SUCCESS;
 }
 

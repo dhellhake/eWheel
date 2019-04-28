@@ -25,6 +25,7 @@ RUN_RESULT CC41A::Run(uint32_t timeStamp)
 	//Reset Command Buffer
 	this->ReceiveBufferIndex = 0;
 	
+	this->LastExecuted = timeStamp;
 	return RUN_RESULT::SUCCESS;
 }
 

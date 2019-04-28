@@ -19,6 +19,7 @@ RUN_RESULT AT45DB::Run(uint32_t timeStamp)
 		this->PageIndex++;
 	}
 	
+	this->LastExecuted = timeStamp;
 	return RUN_RESULT::SUCCESS;
 }
 
