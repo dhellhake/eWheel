@@ -25,7 +25,7 @@ void SERCOM1_Handler()
 	{
 		uint8_t rxData = SERCOM1->USART.DATA.reg;
 		
-		eWheel.DebugLink.ReceiveByte(rxData);
+		eWheel.Bluetooth.ReceiveByte(rxData);
 		
 		return;
 	}

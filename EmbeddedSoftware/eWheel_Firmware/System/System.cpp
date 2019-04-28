@@ -18,7 +18,7 @@ System::System()
 	/* Initialize FlashMemory */
 
 	/* Initialize the lsm9ds1 sensor */
-	eWheel.Orientation.TraceLink = &eWheel.DebugLink;
+	eWheel.Gyroscope.TraceLink = &eWheel.Bluetooth;
 
 	/* Initialize the Analog Sensor */
 

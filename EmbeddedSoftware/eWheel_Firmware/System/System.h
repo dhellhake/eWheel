@@ -26,11 +26,11 @@ class System
 	/* System-Components	                                                */
 	/************************************************************************/	
 	public:		
-		AT45DB TraceLink;
+		AT45DB Trace;
 		
-		CC41A DebugLink;
+		CC41A Bluetooth;
 
-		LSM9D Orientation;
+		LSM9D Gyroscope;
 		
 		ESC vESC;
 		

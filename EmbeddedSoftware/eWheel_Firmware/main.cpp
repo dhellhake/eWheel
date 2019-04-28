@@ -14,9 +14,9 @@ int main(void)
 {	
 	Executable* taskPool[TASKPOOL_SIZE] = {
 		&eWheel.vESC,
-		&eWheel.Orientation,
-		&eWheel.TraceLink,
-		&eWheel.DebugLink
+		&eWheel.Gyroscope,
+		&eWheel.Trace,
+		&eWheel.Bluetooth
 	};
 	
 	uint32_t t1 = GetElapsedMilis();
@@ -26,7 +26,7 @@ int main(void)
 		{			
 			for (uint8_t ti = 0; ti < TASKPOOL_SIZE; ti++)
 				if (taskPool[ti]->Run(t1) == RUN_RESULT::SUCCESS)
-				break;		
+					break;		
 			t1+= 10;			
 		}
     }
