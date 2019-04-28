@@ -35,25 +35,7 @@ class CC41A : public Executable
 	/************************************************************************/
 	/* Executable Interface implementation                                  */
 	/************************************************************************/
-	virtual bool CanExecute(uint32_t timeStamp) 
-	{
-		if (this->ReceiveBufferIndex == 0)
-			return false;
-		
-		switch ((DEBUG_CMD)this->ReceiveBuffer[0])
-		{
-			case DEBUG_CMD::DEBUG_LS9M:
-			case DEBUG_CMD::SetLED:
-				return this->ReceiveBufferIndex >= 2;
-			break;
-		}
-		
-		return false;		
-	};
-	
 	virtual RUN_RESULT Run(uint32_t timeStamp);
-	virtual void Propagate();
-
 
 	/************************************************************************/
 	/* Class implementation                                                 */

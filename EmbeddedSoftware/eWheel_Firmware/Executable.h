@@ -13,6 +13,7 @@ enum class RUN_RESULT
 {
 	SUCCESS,
 	ERROR,
+	INACTIVE,
 	NOT_IMPLEMENTED
 };
 
@@ -23,11 +24,7 @@ class Executable
 	
 	volatile uint32_t LastExecuted = 0x00;
 
-	virtual bool CanExecute(uint32_t timeStamp) { return false; };
-
 	virtual RUN_RESULT Run(uint32_t timeStamp) { return RUN_RESULT::NOT_IMPLEMENTED; };
-		
-	virtual void Propagate() {};
 		
 	virtual void EnableTrace() {};
 	

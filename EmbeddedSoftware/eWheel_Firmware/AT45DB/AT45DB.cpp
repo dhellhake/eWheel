@@ -13,18 +13,16 @@
 /************************************************************************/
 RUN_RESULT AT45DB::Run(uint32_t timeStamp)
 {
-	if (TraceBuffer_available(this->Buffer))
+	if (TraceBuffer_available(this->Buffer) && IsReady())
 	{
 		TracePage_Write(this->PageIndex, TraceBuffer_GetPage(this->Buffer), true);
 		this->PageIndex++;
 	}
+	else
+		return RUN_RESULT::INACTIVE;
 	
 	this->LastExecuted = timeStamp;
 	return RUN_RESULT::SUCCESS;
-}
-
-void AT45DB::Propagate()
-{
 }
 
 /************************************************************************/

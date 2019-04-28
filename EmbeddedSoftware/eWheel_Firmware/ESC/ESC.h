@@ -56,18 +56,8 @@ class ESC : public Executable
 {
 	/************************************************************************/
 	/* Executable Interface implementation                                  */
-	/************************************************************************/
-	virtual bool CanExecute(uint32_t timeStamp)
-	{
-		if (this->CANRcvBufferIndex == 0)
-			return false;
-			
-		return true;
-	};
-	
+	/************************************************************************/	
 	virtual RUN_RESULT Run(uint32_t timeStamp);
-	virtual void Propagate();
-
 
 	/************************************************************************/
 	/* Class implementation                                                 */
@@ -116,6 +106,11 @@ class ESC : public Executable
 		
 		ESC();
 		void ReceiveVESCPackage(uint8_t id, uint8_t *data);
+	private:
+		uint32_t LastTarValueUpdate;
+	
+		void ProcessVESCPackages();
+		void SendTarValues(uint32_t timeStamp);
 }; //ESC
 
 #endif //__ESC_H__

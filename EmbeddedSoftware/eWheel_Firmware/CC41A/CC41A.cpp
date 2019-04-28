@@ -12,25 +12,26 @@
 /* Executable Interface implementation                                  */
 /************************************************************************/
 RUN_RESULT CC41A::Run(uint32_t timeStamp)
-{		
-	switch ((DEBUG_CMD)this->ReceiveBuffer[0])
+{	
+	if (this->ReceiveBufferIndex >= 2)
 	{
-		case DEBUG_CMD::DEBUG_LS9M:
-			eWheel.Orientation.TraceEnabled = this->ReceiveBuffer[1] > 0;
-		break;
-		case DEBUG_CMD::SetLED:
-			eWheel.SetLED(this->ReceiveBuffer[1] > 0);
-		break;
-	}		
-	//Reset Command Buffer
-	this->ReceiveBufferIndex = 0;
+		switch ((DEBUG_CMD)this->ReceiveBuffer[0])
+		{
+			case DEBUG_CMD::DEBUG_LS9M:
+				eWheel.Orientation.TraceEnabled = this->ReceiveBuffer[1] > 0;
+			break;
+			case DEBUG_CMD::SetLED:
+				eWheel.SetLED(this->ReceiveBuffer[1] > 0);
+			break;
+		}
+		//Reset Command Buffer
+		this->ReceiveBufferIndex -= 2;
+	}
+	else
+		return RUN_RESULT::INACTIVE;	
 	
 	this->LastExecuted = timeStamp;
 	return RUN_RESULT::SUCCESS;
-}
-
-void CC41A::Propagate()
-{
 }
 
 /************************************************************************/

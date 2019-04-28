@@ -14,46 +14,31 @@
 /************************************************************************/
 RUN_RESULT LSM9D::Run(uint32_t timeStamp)
 {
-	uint8_t status[1];
-	this->ReadBytes(STATUS_REG_1, status, 1);
-		
-	if ((status[0] && 0x1) != 0x00)
+	if (((PORT->Group[0].IN.reg >> 13) & 0x1) != 0x0)
 	{
-		uint8_t tmp[6];
+		uint8_t status[1];
+		this->ReadBytes(STATUS_REG_1, status, 1);
 		
-		if (this->ReadBytes(OUT_X_L_XL, tmp, 6) != 0x00)
+		if ((status[0] && 0x1) != 0x00)
 		{
-			float	ax_val = ((int16_t)((tmp[1] << 8) | tmp[0])) * SENSITIVITY_ACCELEROMETER_4;
-			float	ay_val = ((int16_t)((tmp[3] << 8) | tmp[2])) * SENSITIVITY_ACCELEROMETER_4;
-			float	az_val = ((int16_t)((tmp[5] << 8) | tmp[4])) * SENSITIVITY_ACCELEROMETER_4;
+			uint8_t tmp[6];
 			
-			this->Pitch = (atan2(ax_val, (float)sqrt((float)(ay_val * ay_val) + (float)(az_val * az_val))) * (float)180.0) / M_PI;
-			this->Roll = (atan2(-ay_val, az_val) * 180.0) / M_PI;
-
-			this->LastExecuted = timeStamp;
-			return RUN_RESULT::SUCCESS;
+			if (this->ReadBytes(OUT_X_L_XL, tmp, 6) != 0x00)
+			{
+				float	ax_val = ((int16_t)((tmp[1] << 8) | tmp[0])) * SENSITIVITY_ACCELEROMETER_4;
+				float	ay_val = ((int16_t)((tmp[3] << 8) | tmp[2])) * SENSITIVITY_ACCELEROMETER_4;
+				float	az_val = ((int16_t)((tmp[5] << 8) | tmp[4])) * SENSITIVITY_ACCELEROMETER_4;
+				
+				this->Pitch = (atan2(ax_val, (float)sqrt((float)(ay_val * ay_val) + (float)(az_val * az_val))) * (float)180.0) / M_PI;
+				this->Roll = (atan2(-ay_val, az_val) * 180.0) / M_PI;
+			}
 		}
 	}
-	return RUN_RESULT::ERROR;
-}
-
-void LSM9D::Propagate()
-{	
-	if (this->TraceEnabled && this->TraceLink != NULL)
-	{
-		uint8_t data[8];
-		float *f = (float*) data;
-		f[0] = this->Pitch;
-		f[1] = this->Roll;
-				
-		DataPackage pkg;
-		pkg._timeStamp = GetElapsedMilis();
-		pkg._type = PackageType::Orientation;
-		pkg._length = 8;
-		pkg._data = data;
+	else
+		return RUN_RESULT::INACTIVE;
 		
-		this->TraceLink->SendDataPackage(&pkg);
-	}
+	this->LastExecuted = timeStamp;
+	return RUN_RESULT::SUCCESS;
 }
 
 /************************************************************************/

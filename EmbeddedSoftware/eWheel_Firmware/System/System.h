@@ -15,8 +15,6 @@
 #include "..\LSM9D/LSM9D.h"
 #include "..\ESC\ESC.h"
 
-#define TASKPOOL_SIZE 6
-
 class System
 {
 	public:

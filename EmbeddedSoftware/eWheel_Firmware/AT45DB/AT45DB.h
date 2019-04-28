@@ -60,10 +60,7 @@ class AT45DB : public Executable
 	/************************************************************************/
 	/* Executable Interface implementation                                  */
 	/************************************************************************/
-	virtual bool CanExecute(uint32_t timeStamp) { return TraceBuffer_available(this->Buffer) && IsReady(); };
 	virtual RUN_RESULT Run(uint32_t timeStamp);
-	virtual void Propagate();
-
 
 	/************************************************************************/
 	/* Class implementation                                                 */
