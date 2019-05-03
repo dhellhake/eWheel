@@ -15,7 +15,6 @@ RUN_RESULT Chassis::Run(uint32_t timeStamp)
 	
 	
 	this->Status = TASK_STATUS::COMPLETE;
-	this->LastExecuted = timeStamp;
 	return RUN_RESULT::SUCCESS;
 }
 

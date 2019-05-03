@@ -28,7 +28,6 @@ RUN_RESULT ESC::Run(uint32_t timeStamp)
 	else
 		this->Status = TASK_STATUS::SUSPEND;
 	
-	this->LastExecuted = timeStamp;
 	return RUN_RESULT::SUCCESS;
 }
 

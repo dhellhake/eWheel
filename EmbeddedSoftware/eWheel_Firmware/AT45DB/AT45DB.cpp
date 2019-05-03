@@ -17,7 +17,6 @@ RUN_RESULT AT45DB::Run(uint32_t timeStamp)
 	this->PageIndex++;
 	
 	this->Status = TASK_STATUS::SUSPEND;
-	this->LastExecuted = timeStamp;
 	return RUN_RESULT::SUCCESS;
 }
 

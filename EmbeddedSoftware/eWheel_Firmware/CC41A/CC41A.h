@@ -36,14 +36,17 @@ class CC41A : public Executable
 	/************************************************************************/
 	virtual bool IsReady(uint32_t timeStamp)
 	{
-		return this->ReceiveBufferIndex >= 2;
+		if (timeStamp - this->LastReported >= 100)
+			return true;
 	}
 	virtual RUN_RESULT Run(uint32_t timeStamp);
 
 	/************************************************************************/
 	/* Class implementation                                                 */
 	/************************************************************************/
-	private:	
+	private:
+		uint32_t LastReported;
+		
 		uint8_t ReceiveBufferIndex = 0;
 		uint8_t ReceiveBuffer[RECEIVE_BUFFER_SIZE];	
 	public:

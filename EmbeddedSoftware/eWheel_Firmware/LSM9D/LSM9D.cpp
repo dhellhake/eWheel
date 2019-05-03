@@ -32,8 +32,7 @@ RUN_RESULT LSM9D::Run(uint32_t timeStamp)
 		}
 	}
 	
-	this->Status = TASK_STATUS::COMPLETE;	
-	this->LastExecuted = timeStamp;
+	this->Status = TASK_STATUS::COMPLETE;
 	return RUN_RESULT::SUCCESS;
 }
 

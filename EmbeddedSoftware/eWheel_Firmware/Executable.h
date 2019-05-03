@@ -28,8 +28,6 @@ class Executable
 	public:
 	volatile TASK_STATUS Status = TASK_STATUS::WAIT;
 	
-	volatile uint32_t LastExecuted = 0x00;
-	
 	virtual bool IsReady(uint32_t timeStamp) { return false; }
 	
 	virtual RUN_RESULT Run(uint32_t timeStamp) { return RUN_RESULT::NOT_IMPLEMENTED; };
