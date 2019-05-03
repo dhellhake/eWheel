@@ -15,9 +15,6 @@ RUN_RESULT CC41A::Run(uint32_t timeStamp)
 {
 	switch ((DEBUG_CMD)this->ReceiveBuffer[0])
 	{
-		case DEBUG_CMD::DEBUG_LS9M:
-			eWheel.Gyroscope.TraceEnabled = this->ReceiveBuffer[1] > 0;
-		break;
 		case DEBUG_CMD::SetLED:
 			eWheel.SetLED(this->ReceiveBuffer[1] > 0);
 		break;

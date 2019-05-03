@@ -28,8 +28,6 @@ class Executable
 	public:
 	volatile TASK_STATUS Status = TASK_STATUS::WAIT;
 	
-	volatile bool TraceEnabled = false;
-	
 	volatile uint32_t LastExecuted = 0x00;
 	
 	virtual bool IsReady(uint32_t timeStamp) { return false; }

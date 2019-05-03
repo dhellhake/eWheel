@@ -17,7 +17,6 @@ enum class PackageType
 
 enum class DEBUG_CMD
 {
-	DEBUG_LS9M = 1,
 	SetLED = 65
 };
 
