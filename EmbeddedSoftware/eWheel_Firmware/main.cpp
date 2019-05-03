@@ -15,7 +15,7 @@ int main(void)
 	Executable* taskPool[TASKPOOL_SIZE] = {
 		&eWheel.Board,
 		&eWheel.vESC,
-		&eWheel.Gyroscope,
+		&eWheel.Board.Gyro,
 		&eWheel.Trace,
 		&eWheel.Bluetooth
 	};

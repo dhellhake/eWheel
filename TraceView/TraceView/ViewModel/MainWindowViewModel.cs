@@ -18,7 +18,10 @@ namespace TraceView
                 switch(service)
                 {
                     case BLEService.Orientation:
-                        models.Add(new OrientationPlotViewModel(this.eWheel, service));
+                        models.Add(new ChassisPlotViewModel(this.eWheel, service));
+                        break;
+                    case BLEService.VESC:
+                        models.Add(new VESCPlotViewModel(this.eWheel, service));
                         break;
                 }
             }

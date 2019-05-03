@@ -22,30 +22,7 @@ namespace TraceView
 
         private void PlotViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(IsActive))
-            {
-                if (this.IsActive)
-                    this.Device.Subscribe(this.Service);
-                else
-                    this.Device.UnSubscribe(this.Service);
-            }
         }
-
-        #region IsActive
-        private bool _IsActive;
-        public bool IsActive
-        {
-            get { return this._IsActive; }
-            set
-            {
-                if (this._IsActive != value)
-                {
-                    this._IsActive = value;
-                    OnPropertyChanged(nameof(IsActive));
-                }
-            }
-        }
-        #endregion
 
         #region PlotModel
         private PlotModel _PlotModel;

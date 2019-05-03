@@ -18,14 +18,12 @@ System::System()
 	/* Initialize FlashMemory */
 
 	/* Initialize the lsm9ds1 sensor */
-	eWheel.Gyroscope.TraceLink = &eWheel.Bluetooth;
 
 	/* Initialize the Analog Sensor */
 
 	/* Initialize infrared distance sensor GP2Y */
 	
-	/* Initialize Orientation Task */
-	Board.Gyroscope = &this->Gyroscope;
+	/* Initialize Chassis Task */
 }
 
 void System::SetLED(bool state)

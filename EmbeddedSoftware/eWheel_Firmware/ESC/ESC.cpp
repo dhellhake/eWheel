@@ -19,7 +19,7 @@ RUN_RESULT ESC::Run(uint32_t timeStamp)
 	
 	if (timeStamp - this->LastTarValueUpdate >= 100)
 	{		
-		this->SendTarValues(timeStamp);
+		//this->SendTarValues(timeStamp);
 	}
 	
 	

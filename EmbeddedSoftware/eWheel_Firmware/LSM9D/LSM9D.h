@@ -8,7 +8,6 @@
 #define __LSM9D_H__
 
 #include "..\Executable.h"
-#include "..\CC41A\CC41A.h"
 
 // Register addresses
 #define STATUS_REG_1					0x27
@@ -27,8 +26,6 @@ class LSM9D : public Executable
 	/************************************************************************/
 	/* Executable Interface implementation                                  */
 	/************************************************************************/
-	public:
-		CC41A *TraceLink = 0x0;
 	public:	
 		virtual bool IsReady(uint32_t timeStamp) 
 		{

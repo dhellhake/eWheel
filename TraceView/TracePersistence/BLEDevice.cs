@@ -14,7 +14,8 @@ namespace TracePersistence
     public enum BLEService
     {
         None = 0,
-        Orientation = 1
+        Orientation = 1,
+        VESC = 2
     }
 
     public enum BLEDeviceStatus
@@ -26,7 +27,8 @@ namespace TracePersistence
     public enum ReceiveState
     {
         Idle = 0,
-        ReceiveOrientation = 1
+        Orientation = 1,
+        VESC = 2
     }
 
     public class BLEDevice
@@ -39,7 +41,8 @@ namespace TracePersistence
         private ReceiveState ReceiveState { get; set; }
         private List<byte> ReceiveBuffer { get; set; }
 
-        public event EventHandler<OrientationEventArgs> OrientationPackageReceived;
+        public event EventHandler<ChassisEventArgs> OrientationPackageReceived;
+        public event EventHandler<VESCEventArgs> VESCPackageReceived;
 
         public BLEDevice(string name)
         {
@@ -70,17 +73,6 @@ namespace TracePersistence
             deviceWatcher.Start();
             this.Status = BLEDeviceStatus.Enumerating;
         }
-
-
-        public void Subscribe(BLEService service)
-        {
-            this.WriteBytes(new byte[] { (byte)service, 1 });
-        }
-        public void UnSubscribe(BLEService service)
-        {
-            this.WriteBytes(new byte[] { (byte)service, 0 });
-        }
-
 
 
         private void DeviceWatcher_Removed(DeviceWatcher sender, DeviceInformationUpdate args)
@@ -143,9 +135,14 @@ namespace TracePersistence
             }
         }
 
-        protected virtual void OnOrientationDataPackageReceived(OrientationPackage package)
+        protected virtual void OnOrientationPackageReceived(ChassisPackage package)
         {
-            this.OrientationPackageReceived?.Invoke(this, new OrientationEventArgs(package));
+            this.OrientationPackageReceived?.Invoke(this, new ChassisEventArgs(package));
+        }
+
+        protected virtual void OnVESCPackageReceived(VESCPackage package)
+        {
+            this.VESCPackageReceived?.Invoke(this, new VESCEventArgs(package));
         }
 
         private void Characteristic_ValueChangedAsync(GattCharacteristic sender, GattValueChangedEventArgs args)
@@ -161,15 +158,27 @@ namespace TracePersistence
                         this.ReceiveBuffer.Clear();
                         this.ReceiveState = (ReceiveState)b;
                         break;
-                    case ReceiveState.ReceiveOrientation:
+                    case ReceiveState.Orientation:
                         this.ReceiveBuffer.Add(b);
 
-                        if (this.ReceiveBuffer.Count == OrientationPackage.PayLoadLength + 4)
+                        if (this.ReceiveBuffer.Count == ChassisPackage.PayLoadLength + 4)
                         {
                             int timeStamp = BitConverter.ToInt32(this.ReceiveBuffer.ToArray(), 0);
                             this.ReceiveBuffer.RemoveRange(0, 4);
 
-                            this.OnOrientationDataPackageReceived(new OrientationPackage(timeStamp, this.ReceiveBuffer.ToArray()));
+                            this.OnOrientationPackageReceived(new ChassisPackage(timeStamp, this.ReceiveBuffer.ToArray()));
+                            this.ReceiveState = ReceiveState.Idle;
+                        }
+                        break;
+                    case ReceiveState.VESC:
+                        this.ReceiveBuffer.Add(b);
+
+                        if (this.ReceiveBuffer.Count == VESCPackage.PayLoadLength + 4)
+                        {
+                            int timeStamp = BitConverter.ToInt32(this.ReceiveBuffer.ToArray(), 0);
+                            this.ReceiveBuffer.RemoveRange(0, 4);
+
+                            this.OnVESCPackageReceived(new VESCPackage(timeStamp, this.ReceiveBuffer.ToArray()));
                             this.ReceiveState = ReceiveState.Idle;
                         }
                         break;

@@ -7,7 +7,9 @@
 #ifndef __AT45DB_H__
 #define __AT45DB_H__
 
+#include "samc21.h"
 #include "..\Executable.h"
+#include "..\Utilities.h"
 
 
 #define OP_STATUS			0xD7
@@ -20,9 +22,6 @@
 #define OP_CHIP_ERASE_3		0x80
 #define OP_CHIP_ERASE_4		0x9A
 
-enum TraceType {
-	Orientation = 1	
-};
 
 typedef struct {
 	TraceType _type;

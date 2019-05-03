@@ -9,11 +9,7 @@
 
 #include "samc21.h"
 #include "..\Executable.h"
-
-enum class PackageType
-{
-	Orientation = 1	
-};
+#include "..\Utilities.h"
 
 enum class DEBUG_CMD
 {
@@ -21,11 +17,11 @@ enum class DEBUG_CMD
 };
 
 typedef struct {
-	PackageType _type;
+	TraceType _type;
 	uint32_t _timeStamp;
 	uint8_t _length;
 	uint8_t* _data;
-} DataPackage;
+} TracePackage;
 
 #define RECEIVE_BUFFER_SIZE 64
 
@@ -38,6 +34,8 @@ class CC41A : public Executable
 	{
 		if (timeStamp - this->LastReported >= 100)
 			return true;
+			
+		return false;
 	}
 	virtual RUN_RESULT Run(uint32_t timeStamp);
 
@@ -49,10 +47,13 @@ class CC41A : public Executable
 		
 		uint8_t ReceiveBufferIndex = 0;
 		uint8_t ReceiveBuffer[RECEIVE_BUFFER_SIZE];	
+		
+		void SendESCTrace(uint32_t timeStamp);
+		void SendChassisTrace(uint32_t timeStamp);
 	public:
 		CC41A();
 		void ReceiveByte(uint8_t data);
-		void SendDataPackage(DataPackage *pkg);
+		void SendDataPackage(TracePackage *pkg);
 }; //CC41A
 
 #endif //__CC41A_H__

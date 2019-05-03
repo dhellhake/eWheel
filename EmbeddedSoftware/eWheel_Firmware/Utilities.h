@@ -13,6 +13,11 @@ extern "C" {
 
 #include "samc21.h"
 
+enum TraceType
+{
+	Board = 1,
+	VESC = 2
+};
 
 /*
 * internal Calculate 64 bit division, ref can be found in

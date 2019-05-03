@@ -8,17 +8,17 @@ using TracePersistence;
 
 namespace TraceView
 {
-    public class OrientationPlotViewModel : PlotViewModel
+    public class ChassisPlotViewModel : PlotViewModel
     {
-        private ObservableCollection<OrientationPackage> DataPackages { get; set; }
+        private ObservableCollection<ChassisPackage> DataPackages { get; set; }
 
-        private OrientationPlotViewModel()
+        private ChassisPlotViewModel()
             : base(null, BLEService.None)
         { }
-        public OrientationPlotViewModel(BLEDevice device, BLEService service)
+        public ChassisPlotViewModel(BLEDevice device, BLEService service)
             : base(device, service)
         {
-            this.DataPackages = new ObservableCollection<OrientationPackage>();
+            this.DataPackages = new ObservableCollection<ChassisPackage>();
 
             device.OrientationPackageReceived += Device_OrientationPackageReceived;
         }
@@ -33,15 +33,15 @@ namespace TraceView
                 if (x >= this.DataPackages.Count)
                     break;
 
-                OrientationPackage package = this.DataPackages[this.DataPackages.Count - x - 1];
+                ChassisPackage package = this.DataPackages[this.DataPackages.Count - x - 1];
 
-                ((LineSeries)newPlot.Series[0]).Points.Add(new DataPoint(package.TimeStamp, package.Roll));
-                ((LineSeries)newPlot.Series[1]).Points.Add(new DataPoint(package.TimeStamp, package.Pitch));
+                ((LineSeries)newPlot.Series[0]).Points.Add(new DataPoint(package.TimeStamp, package.Chassis_Roll));
+                ((LineSeries)newPlot.Series[1]).Points.Add(new DataPoint(package.TimeStamp, package.Chassis_Pitch));
             }
             this.PlotModel = newPlot;
         }
         
-        private void Device_OrientationPackageReceived(object sender, OrientationEventArgs e)
+        private void Device_OrientationPackageReceived(object sender, ChassisEventArgs e)
         {
             this.DataPackages.Add(e.DataPackage);
             Dispatcher.CurrentDispatcher.Invoke(() => this.Plot());

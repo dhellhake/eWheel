@@ -32,11 +32,8 @@ class System
 		AT45DB Trace;
 		
 		CC41A Bluetooth;
-
-		LSM9D Gyroscope;
 		
-		ESC vESC;
-		
+		ESC vESC;		
 		
 	private:
 		System( const System &c );

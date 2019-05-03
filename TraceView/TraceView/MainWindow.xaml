@@ -14,7 +14,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
-                            <Expander Name="expender" IsExpanded="{Binding IsActive}">
+                            <Expander Name="expender">
                                 <Expander.Header>
                                     <StackPanel>
                                         <TextBlock Margin="5" FontSize="12" FontWeight="Bold" Text="{Binding Path=Title}"/>
