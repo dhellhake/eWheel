@@ -29,8 +29,8 @@ RUN_RESULT LSM9D::Run(uint32_t timeStamp)
 			float	ay_val = ((int16_t)((tmp[3] << 8) | tmp[2])) * SENSITIVITY_ACCELEROMETER_4;
 			float	az_val = ((int16_t)((tmp[5] << 8) | tmp[4])) * SENSITIVITY_ACCELEROMETER_4;
 			
-			this->Pitch = (atan2(ax_val, (float)sqrt((float)(ay_val * ay_val) + (float)(az_val * az_val))) * (float)180.0) / M_PI;
-			this->Roll = (atan2(-ay_val, az_val) * 180.0) / M_PI;
+			this->Roll = (atan2(ax_val, (float)sqrt((float)(ay_val * ay_val) + (float)(az_val * az_val))) * (float)180.0) / M_PI;
+			this->Pitch = (atan2(-ay_val, az_val) * 180.0) / M_PI;
 		}
 	}
 	
