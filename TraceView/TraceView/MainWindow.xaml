@@ -20,8 +20,20 @@
                                         <TextBlock Margin="5" FontSize="12" FontWeight="Bold" Text="{Binding Path=Title}"/>
                                     </StackPanel>
                                 </Expander.Header>
+
                                 <Grid Height="200">
-                                    <oxy:PlotView VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Model="{Binding Path=PlotModel}"/>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="5" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Grid.Column="0">
+                                        <CheckBox Content="Updating" IsChecked="{Binding Path=IsActive}" VerticalAlignment="Bottom" />
+                                    </Grid>
+                                    <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+                                    <Grid Grid.Column="2">
+                                        <oxy:PlotView VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Model="{Binding Path=PlotModel}"/>
+                                    </Grid>
                                 </Grid>
                             </Expander>
                         </StackPanel>

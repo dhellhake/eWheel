@@ -39,5 +39,21 @@ namespace TraceView
             }
         }
         #endregion
+        
+        #region IsActive
+        private bool _IsActive;
+        public bool IsActive
+        {
+            get { return this._IsActive; }
+            set
+            {
+                if (this._IsActive != value)
+                {
+                    this._IsActive = value;
+                    OnPropertyChanged(nameof(IsActive));
+                }
+            }
+        }
+        #endregion
     }
 }

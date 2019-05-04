@@ -49,7 +49,9 @@ namespace TraceView
         private void Device_VESCPackageReceived(object sender, VESCEventArgs e)
         {
             this.DataPackages.Add(e.DataPackage);
-            Dispatcher.CurrentDispatcher.Invoke(() => this.Plot());
+
+            if (this.IsActive)
+                Dispatcher.CurrentDispatcher.Invoke(() => this.Plot());
         }
     }
 }

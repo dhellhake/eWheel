@@ -1,8 +1,6 @@
 ﻿using OxyPlot;
 using OxyPlot.Series;
-using System;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using System.Windows.Threading;
 using TracePersistence;
 
@@ -27,7 +25,7 @@ namespace TraceView
         {
             PlotModel newPlot = new PlotModel();
             newPlot.Series.Add(new LineSeries());
-            newPlot.Series.Add(new LineSeries());
+            //newPlot.Series.Add(new LineSeries());
             for (int x = 0; x <= 200; x++)
             {
                 if (x >= this.DataPackages.Count)
@@ -35,8 +33,8 @@ namespace TraceView
 
                 ChassisPackage package = this.DataPackages[this.DataPackages.Count - x - 1];
 
-                ((LineSeries)newPlot.Series[0]).Points.Add(new DataPoint(package.TimeStamp, package.Chassis_Roll));
-                ((LineSeries)newPlot.Series[1]).Points.Add(new DataPoint(package.TimeStamp, package.Chassis_Pitch));
+                //((LineSeries)newPlot.Series[0]).Points.Add(new DataPoint(package.TimeStamp, package.Chassis_Roll));
+                ((LineSeries)newPlot.Series[0]).Points.Add(new DataPoint(package.TimeStamp, package.Chassis_Pitch));
             }
             this.PlotModel = newPlot;
         }
@@ -44,7 +42,9 @@ namespace TraceView
         private void Device_OrientationPackageReceived(object sender, ChassisEventArgs e)
         {
             this.DataPackages.Add(e.DataPackage);
-            Dispatcher.CurrentDispatcher.Invoke(() => this.Plot());
+
+            if (this.IsActive)
+                Dispatcher.CurrentDispatcher.Invoke(() => this.Plot());
         }
     }
 }
