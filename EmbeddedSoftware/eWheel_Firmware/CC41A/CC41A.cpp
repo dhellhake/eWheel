@@ -7,6 +7,7 @@
 #include "CC41A.h"
 #include "..\Chassis\Chassis.h"
 #include "..\ESC\ESC.h"
+#include "..\DriveController\DriveController.h"
 #include "..\LowLevel\USART\USART.h"
 
 CC41A Bluetooth;
@@ -32,6 +33,7 @@ RUN_RESULT CC41A::Run(uint32_t timeStamp)
 	{
 		SendESCTrace(timeStamp);
 		SendChassisTrace(timeStamp);
+		SendDriveTrace(timeStamp);
 		
 		this->LastReported = timeStamp;
 	}
@@ -46,6 +48,23 @@ RUN_RESULT CC41A::Run(uint32_t timeStamp)
 CC41A::CC41A()
 {
 } //CC41A
+
+
+void CC41A::SendDriveTrace(uint32_t timeStamp)
+{
+	TracePackage pkg;
+	
+	uint8_t data[1] = {0};
+	
+	data[0] = (uint8_t)Drive.State;
+	
+	pkg._timeStamp = timeStamp;
+	pkg._type = TraceType::DriveTrace;
+	pkg._data = data;
+	pkg._length = 1;
+	
+	this->SendDataPackage(&pkg);
+}
 
 
 void CC41A::SendESCTrace(uint32_t timeStamp)

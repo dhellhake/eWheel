@@ -51,6 +51,7 @@
     <Compile Include="BLEDevice.cs" />
     <Compile Include="DataPackage\DataPackage.cs" />
     <Compile Include="DataPackage\ChassisPackage.cs" />
+    <Compile Include="DataPackage\DrivePackage.cs" />
     <Compile Include="DataPackage\VESCPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

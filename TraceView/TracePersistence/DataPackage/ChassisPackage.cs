@@ -16,10 +16,10 @@ namespace TracePersistence
         public ChassisPackage(int timeStamp, byte[] payLoad)
             : base(timeStamp)
         {
-            this.Chassis_Roll = BitConverter.ToSingle(payLoad, 0);
-            this.Chassis_Pitch = BitConverter.ToSingle(payLoad, 4);
-            this.Road_Roll = BitConverter.ToSingle(payLoad, 8);
-            this.Road_Pitch = BitConverter.ToSingle(payLoad, 12);
+            this.Chassis_Pitch = BitConverter.ToSingle(payLoad, 0);
+            this.Chassis_Roll = BitConverter.ToSingle(payLoad, 4);
+            this.Road_Pitch = BitConverter.ToSingle(payLoad, 8);
+            this.Road_Roll = BitConverter.ToSingle(payLoad, 12);
         }
     }
 

@@ -23,6 +23,9 @@ namespace TraceView
                     case BLEService.VESC:
                         models.Add(new VESCPlotViewModel(this.eWheel, service));
                         break;
+                    case BLEService.Drive:
+                        models.Add(new DrivePlotViewModel(this.eWheel, service));
+                        break;
                 }
             }
             this.PlotViewModels = models;

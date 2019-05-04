@@ -50,6 +50,7 @@ class CC41A : public Executable
 		
 		void SendESCTrace(uint32_t timeStamp);
 		void SendChassisTrace(uint32_t timeStamp);
+		void SendDriveTrace(uint32_t timeStamp);
 	public:
 		CC41A();
 		void ReceiveByte(uint8_t data);

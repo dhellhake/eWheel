@@ -16,7 +16,8 @@ extern "C" {
 enum TraceType
 {
 	BoardTrace = 1,
-	VESCTrace = 2
+	VESCTrace = 2,
+	DriveTrace = 3
 };
 
 /*

@@ -15,7 +15,8 @@ namespace TracePersistence
     {
         None = 0,
         Orientation = 1,
-        VESC = 2
+        VESC = 2,
+        Drive = 3
     }
 
     public enum BLEDeviceStatus
@@ -28,7 +29,8 @@ namespace TracePersistence
     {
         Idle = 0,
         Orientation = 1,
-        VESC = 2
+        VESC = 2,
+        Drive = 3
     }
 
     public class BLEDevice
@@ -43,6 +45,7 @@ namespace TracePersistence
 
         public event EventHandler<ChassisEventArgs> OrientationPackageReceived;
         public event EventHandler<VESCEventArgs> VESCPackageReceived;
+        public event EventHandler<DrivePackageEventArgs> DrivePackageReceived;
 
         public BLEDevice(string name)
         {
@@ -144,6 +147,10 @@ namespace TracePersistence
         {
             this.VESCPackageReceived?.Invoke(this, new VESCEventArgs(package));
         }
+        protected virtual void OnDrivePackageReceived(DrivePackage package)
+        {
+            this.DrivePackageReceived?.Invoke(this, new DrivePackageEventArgs(package));
+        }
 
         private void Characteristic_ValueChangedAsync(GattCharacteristic sender, GattValueChangedEventArgs args)
         {
@@ -179,6 +186,18 @@ namespace TracePersistence
                             this.ReceiveBuffer.RemoveRange(0, 4);
 
                             this.OnVESCPackageReceived(new VESCPackage(timeStamp, this.ReceiveBuffer.ToArray()));
+                            this.ReceiveState = ReceiveState.Idle;
+                        }
+                        break;
+                    case ReceiveState.Drive:
+                        this.ReceiveBuffer.Add(b);
+
+                        if (this.ReceiveBuffer.Count == DrivePackage.PayLoadLength + 4)
+                        {
+                            int timeStamp = BitConverter.ToInt32(this.ReceiveBuffer.ToArray(), 0);
+                            this.ReceiveBuffer.RemoveRange(0, 4);
+
+                            this.OnDrivePackageReceived(new DrivePackage(timeStamp, this.ReceiveBuffer.ToArray()));
                             this.ReceiveState = ReceiveState.Idle;
                         }
                         break;
