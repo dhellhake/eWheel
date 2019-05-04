@@ -45,5 +45,6 @@ class LSM9D : public Executable
 		uint8_t ReadBytes(uint8_t address, uint8_t *dest, uint8_t count);	
 		uint8_t WriteRegister(uint8_t address, uint8_t data);
 }; //LSM9D
+extern LSM9D Gyro;
 
 #endif //__LSM9D_H__

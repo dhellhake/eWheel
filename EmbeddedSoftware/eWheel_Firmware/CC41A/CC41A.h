@@ -56,4 +56,6 @@ class CC41A : public Executable
 		void SendDataPackage(TracePackage *pkg);
 }; //CC41A
 
+extern CC41A Bluetooth;
+
 #endif //__CC41A_H__

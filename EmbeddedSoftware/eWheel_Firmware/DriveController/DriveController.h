@@ -1,40 +1,37 @@
 /* 
-* Chassis.h
+* DriveController.h
 *
-* Created: 28.04.2019 20:30:50
+* Created: 04.05.2019 09:39:37
 * Author: Dominik Hellhake
 */
-#ifndef __CHASSIS_H__
-#define __CHASSIS_H__
+#ifndef __DRIVECONTROLLER_H__
+#define __DRIVECONTROLLER_H__
 
-#include "samc21.h"
 #include "..\Executable.h"
-#include "..\LSM9D\LSM9D.h"
+#include "..\Chassis\Chassis.h"
+#include "..\ESC\ESC.h"
 
-class Chassis : public Executable
+
+class DriveController : public Executable
 {
 	/************************************************************************/
 	/* Executable Interface implementation                                  */
 	/************************************************************************/
+	public:
 	virtual bool IsReady(uint32_t timeStamp)
 	{
-		return Gyro.TaskStatus == TASK_STATUS::COMPLETE;
+		return	Board.TaskStatus == TASK_STATUS::COMPLETE;
 	}
 	virtual RUN_RESULT Run(uint32_t timeStamp);
 	
 	/************************************************************************/
 	/* Class implementation                                                 */
 	/************************************************************************/
-	public:	
-		float Chassis_Pitch = 0;
-		float Chassis_Roll = 0;
-		float Road_Pitch = 0;
-		float Road_Roll = 0;
-	
-		Chassis();
-		void SetLED(bool state);
-}; //Chassis
+	public:
+		DriveController();
 
-extern Chassis Board;
+}; //DriveController
 
-#endif //__CHASSIS_H__
+extern DriveController Drive;
+
+#endif //__DRIVECONTROLLER_H__

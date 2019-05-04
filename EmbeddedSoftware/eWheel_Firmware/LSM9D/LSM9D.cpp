@@ -9,6 +9,8 @@
 #include "..\LowLevel\Device\SysTick\SysTick.h"
 #include "..\LowLevel\SPI\SPI.h"
 
+LSM9D Gyro;
+
 /************************************************************************/
 /* Executable Interface implementation                                  */
 /************************************************************************/
@@ -32,7 +34,7 @@ RUN_RESULT LSM9D::Run(uint32_t timeStamp)
 		}
 	}
 	
-	this->Status = TASK_STATUS::COMPLETE;
+	this->TaskStatus = TASK_STATUS::COMPLETE;
 	return RUN_RESULT::SUCCESS;
 }
 

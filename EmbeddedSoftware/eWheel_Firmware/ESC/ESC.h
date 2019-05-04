@@ -75,10 +75,10 @@ class ESC : public Executable
 		return false;
 	}	
 	virtual RUN_RESULT Run(uint32_t timeStamp);
-	virtual void Reset() 
+	virtual void ResetTask() 
 	{
 		this->VESTStatusReceived = STATUS_None_RECEIVED; 
-		this->Status = TASK_STATUS::WAIT; 
+		this->TaskStatus = TASK_STATUS::WAIT; 
 	}
 
 	/************************************************************************/
@@ -136,5 +136,7 @@ class ESC : public Executable
 		void ProcessVESCPackages();
 		void SendTarValues(uint32_t timeStamp);
 }; //ESC
+extern ESC VESC;
+
 
 #endif //__ESC_H__

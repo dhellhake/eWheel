@@ -5,7 +5,7 @@
 * Author: Dominik Hellhake
 */
 #include "USART.h"
-#include "..\..\System\System.h"
+#include "..\..\CC41A\CC41A.h"
 
 void SERCOM5_SendByte(uint8_t byte)
 {
@@ -25,7 +25,7 @@ void SERCOM1_Handler()
 	{
 		uint8_t rxData = SERCOM1->USART.DATA.reg;
 		
-		eWheel.Bluetooth.ReceiveByte(rxData);
+		Bluetooth.ReceiveByte(rxData);
 		
 		return;
 	}

@@ -1,21 +1,21 @@
 /* 
-* Chassis.cpp
+* DriveController.cpp
 *
-* Created: 28.04.2019 20:30:49
+* Created: 04.05.2019 09:39:37
 * Author: Dominik Hellhake
 */
-#include "Chassis.h"
+#include "DriveController.h"
 
-Chassis Board;
+DriveController Drive;
 
 /************************************************************************/
 /* Executable Interface implementation                                  */
 /************************************************************************/
-RUN_RESULT Chassis::Run(uint32_t timeStamp)
+RUN_RESULT DriveController::Run(uint32_t timeStamp)
 {
-	this->Chassis_Pitch = Gyro.Pitch - this->Road_Pitch;
-	this->Chassis_Roll = Gyro.Roll - this->Road_Pitch;	
 	
+	Board.ResetTask();
+		
 	this->TaskStatus = TASK_STATUS::COMPLETE;
 	return RUN_RESULT::SUCCESS;
 }
@@ -23,14 +23,6 @@ RUN_RESULT Chassis::Run(uint32_t timeStamp)
 /************************************************************************/
 /* Class implementation                                                 */
 /************************************************************************/
-Chassis::Chassis()
+DriveController::DriveController()
 {
-} //Chassis
-
-void Chassis::SetLED(bool state)
-{
-	if (state)
-		PORT->Group[0].OUTSET.reg = PORT_PA28;
-	else
-		PORT->Group[0].OUTCLR.reg = PORT_PA28;
-}
+} //DriveController

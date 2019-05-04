@@ -8,6 +8,8 @@
 #include "AT45DB.h"
 #include "..\LowLevel/SPI/SPI.h"
 
+AT45DB Trace;
+
 /************************************************************************/
 /* Executable Interface implementation                                  */
 /************************************************************************/
@@ -16,7 +18,7 @@ RUN_RESULT AT45DB::Run(uint32_t timeStamp)
 	TracePage_Write(this->PageIndex, TraceBuffer_GetPage(this->Buffer), true);
 	this->PageIndex++;
 	
-	this->Status = TASK_STATUS::SUSPEND;
+	this->TaskStatus = TASK_STATUS::SUSPEND;
 	return RUN_RESULT::SUCCESS;
 }
 

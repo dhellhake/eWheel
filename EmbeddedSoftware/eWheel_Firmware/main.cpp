@@ -6,18 +6,25 @@
  */
 #include "samc21.h"
 #include "LowLevel/Device/SysTick/SysTick.h"
-#include "System/System.h"
 
-#define TASKPOOL_SIZE	5
+#include "AT45DB/AT45DB.h"
+#include "CC41A/CC41A.h"
+#include "Chassis/Chassis.h"
+#include "DriveController/DriveController.h"
+#include "ESC/ESC.h"
+#include "LSM9D/LSM9D.h"
+
+#define TASKPOOL_SIZE	6
 
 int main(void)
 {		
 	Executable* taskPool[TASKPOOL_SIZE] = {
-		&eWheel.Board,
-		&eWheel.vESC,
-		&eWheel.Board.Gyro,
-		&eWheel.Trace,
-		&eWheel.Bluetooth
+		&Drive,
+		&Board,
+		&VESC,
+		&Gyro,
+		&Trace,
+		&Bluetooth
 	};
 	
 	uint32_t t1 = 0;
@@ -30,8 +37,8 @@ int main(void)
 				taskPool[ti]->Run(t1);
 		
 		// If last task is complete, reset computation
-		if (taskPool[0]->Status == TASK_STATUS::COMPLETE)
+		if (taskPool[0]->TaskStatus == TASK_STATUS::COMPLETE)
 			for (uint8_t ti = 0; ti < TASKPOOL_SIZE; ti++)
-				taskPool[ti]->Reset();
+				taskPool[ti]->ResetTask();
     }
 }

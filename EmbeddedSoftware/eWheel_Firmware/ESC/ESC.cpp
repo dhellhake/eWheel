@@ -7,6 +7,8 @@
 #include "ESC.h"
 #include "..\LowLevel\Device\CAN\CANCont.h"
 
+ESC VESC;
+
 /************************************************************************/
 /* Executable Interface implementation                                  */
 /************************************************************************/
@@ -24,9 +26,9 @@ RUN_RESULT ESC::Run(uint32_t timeStamp)
 	
 	
 	if (this->VESTStatusReceived == STATUS_COMPLETE)
-		this->Status = TASK_STATUS::COMPLETE;
+		this->TaskStatus = TASK_STATUS::COMPLETE;
 	else
-		this->Status = TASK_STATUS::SUSPEND;
+		this->TaskStatus = TASK_STATUS::SUSPEND;
 	
 	return RUN_RESULT::SUCCESS;
 }

@@ -82,4 +82,6 @@ class AT45DB : public Executable
 		uint8_t TracePage_Write(uint16_t pageIndex, TracePage *page, bool primBuff);	
 }; //AT45DB
 
+extern AT45DB Trace;
+
 #endif //__AT45DB_H__

@@ -5,8 +5,11 @@
 * Author: Dominik Hellhake
 */
 #include "CC41A.h"
-#include "..\System\System.h"
+#include "..\Chassis\Chassis.h"
+#include "..\ESC\ESC.h"
 #include "..\LowLevel\USART\USART.h"
+
+CC41A Bluetooth;
 
 /************************************************************************/
 /* Executable Interface implementation                                  */
@@ -18,7 +21,7 @@ RUN_RESULT CC41A::Run(uint32_t timeStamp)
 		switch ((DEBUG_CMD)this->ReceiveBuffer[0])
 		{
 			case DEBUG_CMD::SetLED:
-			eWheel.SetLED(this->ReceiveBuffer[1] > 0);
+				Board.SetLED(this->ReceiveBuffer[1] > 0);
 			break;
 		}
 		//Reset Command Buffer
@@ -33,7 +36,7 @@ RUN_RESULT CC41A::Run(uint32_t timeStamp)
 		this->LastReported = timeStamp;
 	}
 	
-	this->Status = TASK_STATUS::SUSPEND;
+	this->TaskStatus = TASK_STATUS::SUSPEND;
 	return RUN_RESULT::SUCCESS;
 }
 
@@ -52,16 +55,16 @@ void CC41A::SendESCTrace(uint32_t timeStamp)
 	uint8_t data[12] = {0};
 	
 	float* fPtr = (float*)data;
-	*fPtr = eWheel.vESC.Avl_RPM;
+	*fPtr = VESC.Avl_RPM;
 	
 	fPtr = (float*)(data + 4);
-	*fPtr = eWheel.vESC.Avl_Duty;
+	*fPtr = VESC.Avl_Duty;
 	
 	fPtr = (float*)(data + 8);
-	*fPtr = eWheel.vESC.Avl_TempFET;	
+	*fPtr = VESC.Avl_TempFET;	
 	
 	pkg._timeStamp = timeStamp;
-	pkg._type = TraceType::VESC;
+	pkg._type = TraceType::VESCTrace;
 	pkg._data = data;
 	pkg._length = 12;
 	
@@ -75,19 +78,19 @@ void CC41A::SendChassisTrace(uint32_t timeStamp)
 	uint8_t data[16] = {0};
 		
 	float* fPtr = (float*)data;
-	*fPtr = eWheel.Board.Chassis_Pitch;
+	*fPtr = Board.Chassis_Pitch;
 		
 	fPtr = (float*)(data + 4);
-	*fPtr = eWheel.Board.Chassis_Roll;
+	*fPtr = Board.Chassis_Roll;
 	
 	fPtr = (float*)(data + 8);
-	*fPtr = eWheel.Board.Road_Pitch;
+	*fPtr = Board.Road_Pitch;
 	
 	fPtr = (float*)(data + 12);
-	*fPtr = eWheel.Board.Road_Roll;
+	*fPtr = Board.Road_Roll;
 		
 	pkg._timeStamp = timeStamp;
-	pkg._type = TraceType::Board;
+	pkg._type = TraceType::BoardTrace;
 	pkg._data = data;
 	pkg._length = 16;
 		

@@ -5,8 +5,7 @@
 * Author: Dominik Hellhake
 */
 #include "CANCont.h"
-#include "..\SysTick\SysTick.h"
-#include "..\..\..\System\System.h"
+#include "..\..\..\ESC\ESC.h"
 
 COMPILER_ALIGNED(4)
 struct can_rx_element_fifo_0 can0_rx_fifo_0[CONF_CAN0_RX_FIFO_0_NUM];
@@ -103,7 +102,7 @@ void CAN0_Handler(void)
 		// VESC Package
 		if ((received->R0.bit.ID & 0xFF) == 124)
 		{			
-			eWheel.vESC.ReceiveVESCPackage(received->R0.bit.ID >> 8, received->data);
+			VESC.ReceiveVESCPackage(received->R0.bit.ID >> 8, received->data);
 		}
 		
 		//Ack received Message

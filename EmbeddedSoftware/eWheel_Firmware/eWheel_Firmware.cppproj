@@ -200,6 +200,12 @@
     <Compile Include="CC41A\CC41A.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="DriveController\DriveController.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="DriveController\DriveController.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="ESC\ESC.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -281,12 +287,6 @@
     <Compile Include="Chassis\Chassis.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="System\System.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="System\System.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="Utilities.h">
       <SubType>compile</SubType>
     </Compile>
@@ -308,7 +308,7 @@
     <Folder Include="CC41A" />
     <Folder Include="ESC" />
     <Folder Include="Chassis" />
-    <Folder Include="System\" />
+    <Folder Include="DriveController" />
   </ItemGroup>
   <ItemGroup>
     <None Include="LowLevel\Device\samc21g18a_flash.ld">
