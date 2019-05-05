@@ -124,7 +124,10 @@ class ESC : public Executable
 		float Avl_CurrentIn;
 		float Avl_PIDPosNow;
 		
+		// Duty Cycle [0.0 to 1.0]
 		float Tar_Duty;
+		// HandBrake in Amp
+		float Tar_HandBrake;
 		
 		ESC();
 		void ReceiveVESCPackage(uint8_t id, uint8_t *data);
