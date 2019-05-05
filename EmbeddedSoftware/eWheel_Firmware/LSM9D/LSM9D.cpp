@@ -6,7 +6,6 @@
 */
 #include <math.h>
 #include "LSM9D.h"
-#include "..\LowLevel\Device\SysTick\SysTick.h"
 #include "..\LowLevel\SPI\SPI.h"
 
 LSM9D Gyro;
@@ -15,11 +14,11 @@ LSM9D Gyro;
 /* Executable Interface implementation                                  */
 /************************************************************************/
 RUN_RESULT LSM9D::Run(uint32_t timeStamp)
-{
+{	
 	uint8_t status[1];
 	this->ReadBytes(STATUS_REG_1, status, 1);
 	
-	if ((status[0] && 0x1) != 0x00)
+	if ((status[0] & 0x1) != 0x00)
 	{
 		uint8_t tmp[6];
 		
@@ -32,9 +31,10 @@ RUN_RESULT LSM9D::Run(uint32_t timeStamp)
 			this->Roll = (atan2(ax_val, (float)sqrt((float)(ay_val * ay_val) + (float)(az_val * az_val))) * (float)180.0) / M_PI;
 			this->Pitch = (atan2(-ay_val, az_val) * 180.0) / M_PI;
 		}
+		
+		this->TaskStatus = TASK_STATUS::COMPLETE;
 	}
 	
-	this->TaskStatus = TASK_STATUS::COMPLETE;
 	return RUN_RESULT::SUCCESS;
 }
 
@@ -42,7 +42,9 @@ RUN_RESULT LSM9D::Run(uint32_t timeStamp)
 /* Class implementation                                                 */
 /************************************************************************/
 LSM9D::LSM9D()
-{	
+{
+	for (uint32_t x = 0; x < 1000000; x++) {}
+			
 	/* CTRL_REG5_XL (0x1F) */
 	//[DEC_1][DEC_0][Zen_XL][Yen_XL][Zen_XL][0][0][0]
 	this->WriteRegister(CTRL_REG5_XL, (1<<5) | (1<<4) | (1<<3));
@@ -59,6 +61,7 @@ LSM9D::LSM9D()
 	// [INT1_IG_G][INT1_IG_XL][INT1_FSS5][INT1_OVR][INT1_FTH][INT1_ Boot][INT1_DRDY_G][INT1_DRDY_XL]
 	this->WriteRegister(INT1_CTRL, 0x01);
 }
+
 
 uint8_t LSM9D::ReadBytes(uint8_t address, uint8_t *dest, uint8_t count)
 {	

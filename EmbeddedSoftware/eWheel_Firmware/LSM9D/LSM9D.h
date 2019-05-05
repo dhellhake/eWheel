@@ -28,8 +28,8 @@ class LSM9D : public Executable
 	/************************************************************************/
 	public:	
 		virtual bool IsReady(uint32_t timeStamp) 
-		{
-			  return (((PORT->Group[0].IN.reg >> 13) & 0x1) != 0x0);
+		{			
+			return (((PORT->Group[0].IN.reg >> 13) & 0x1) != 0x0);
 		}
 		virtual RUN_RESULT Run(uint32_t timeStamp);
 	
@@ -40,7 +40,7 @@ class LSM9D : public Executable
 		float Pitch = 0;
 		float Roll = 0;		
 	public:
-		LSM9D();	
+		LSM9D();
 	private:				
 		uint8_t ReadBytes(uint8_t address, uint8_t *dest, uint8_t count);	
 		uint8_t WriteRegister(uint8_t address, uint8_t data);
