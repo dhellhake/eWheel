@@ -16,8 +16,12 @@
 
 #define TASKPOOL_SIZE	6
 
+void HardFault_Handler(void)
+{
+}
+
 int main(void)
-{		
+{			
 	Executable* taskPool[TASKPOOL_SIZE] = {
 		&Drive,
 		&Board,
