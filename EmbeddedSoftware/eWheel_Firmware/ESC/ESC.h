@@ -130,6 +130,21 @@ class ESC : public Executable
 		float Tar_HandBrake;
 		
 		ESC();
+		
+		void ResetTarValues();
+		
+		inline void SetTar_Duty(float value)
+		{
+			this->Tar_HandBrake = 0.0f;
+			
+			if (value > 0.20f)
+				this->Tar_Duty = 0.20f;
+			else if (value < 0.0f)
+				this->Tar_Duty = 0.0f;
+			else
+				this->Tar_Duty = value;
+		}
+		
 		void ReceiveVESCPackage(uint8_t id, uint8_t *data);
 	private:
 		uint8_t VESTStatusReceived;

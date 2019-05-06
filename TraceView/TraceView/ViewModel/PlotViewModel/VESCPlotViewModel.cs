@@ -30,8 +30,6 @@ namespace TraceView
         {
             PlotModel newPlot = new PlotModel();
             newPlot.Series.Add(new LineSeries());
-            newPlot.Series.Add(new LineSeries());
-            newPlot.Series.Add(new LineSeries());
             for (int x = 0; x <= 200; x++)
             {
                 if (x >= this.DataPackages.Count)
@@ -39,9 +37,10 @@ namespace TraceView
 
                 VESCPackage package = this.DataPackages[this.DataPackages.Count - x - 1];
 
+                //((LineSeries)newPlot.Series[0]).Points.Add(new DataPoint(package.TimeStamp, package.Avl_RPM));
+                //((LineSeries)newPlot.Series[1]).Points.Add(new DataPoint(package.TimeStamp, package.Avl_Duty));
+                //((LineSeries)newPlot.Series[2]).Points.Add(new DataPoint(package.TimeStamp, package.Avl_TempFET));
                 ((LineSeries)newPlot.Series[0]).Points.Add(new DataPoint(package.TimeStamp, package.Avl_RPM));
-                ((LineSeries)newPlot.Series[1]).Points.Add(new DataPoint(package.TimeStamp, package.Avl_Duty));
-                ((LineSeries)newPlot.Series[2]).Points.Add(new DataPoint(package.TimeStamp, package.Avl_TempFET));
             }
             this.PlotModel = newPlot;
         }

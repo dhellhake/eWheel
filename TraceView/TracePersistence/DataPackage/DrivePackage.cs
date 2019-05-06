@@ -4,9 +4,10 @@ namespace TracePersistence
 {
     public class DrivePackage : DataPackage
     {
-        public static readonly int PayLoadLength = 1;
+        public static readonly int PayLoadLength = 8;
 
         public int DriveState { get; private set; }
+        public float AvlRelACPD { get; private set; }
 
         private DrivePackage()
         { }
@@ -14,6 +15,7 @@ namespace TracePersistence
             : base(timeStamp)
         {
             this.DriveState = payLoad[0];
+            this.AvlRelACPD = BitConverter.ToSingle(payLoad, 4);
         }
     }
     

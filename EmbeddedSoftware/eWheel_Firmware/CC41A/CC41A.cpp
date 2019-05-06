@@ -54,14 +54,17 @@ void CC41A::SendDriveTrace(uint32_t timeStamp)
 {
 	TracePackage pkg;
 	
-	uint8_t data[1] = {0};
+	uint8_t data[8] = {0};
 	
 	data[0] = (uint8_t)Drive.State;
+	
+	float* fPtr = (float*)(data + 4);
+	*fPtr = Drive.AvlRelACPD;	
 	
 	pkg._timeStamp = timeStamp;
 	pkg._type = TraceType::DriveTrace;
 	pkg._data = data;
-	pkg._length = 1;
+	pkg._length = 8;
 	
 	this->SendDataPackage(&pkg);
 }
@@ -71,7 +74,7 @@ void CC41A::SendESCTrace(uint32_t timeStamp)
 {
 	TracePackage pkg;
 	
-	uint8_t data[12] = {0};
+	uint8_t data[16] = {0};
 	
 	float* fPtr = (float*)data;
 	*fPtr = VESC.Avl_RPM;
@@ -80,12 +83,15 @@ void CC41A::SendESCTrace(uint32_t timeStamp)
 	*fPtr = VESC.Avl_Duty;
 	
 	fPtr = (float*)(data + 8);
-	*fPtr = VESC.Avl_TempFET;	
+	*fPtr = VESC.Avl_TempFET;
+	
+	fPtr = (float*)(data + 12);
+	*fPtr = VESC.Tar_Duty;
 	
 	pkg._timeStamp = timeStamp;
 	pkg._type = TraceType::VESCTrace;
 	pkg._data = data;
-	pkg._length = 12;
+	pkg._length = 16;
 	
 	this->SendDataPackage(&pkg);
 }

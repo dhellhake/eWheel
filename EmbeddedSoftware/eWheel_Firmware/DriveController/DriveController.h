@@ -35,25 +35,40 @@ class DriveController : public Executable
 	/************************************************************************/
 	public:
 		DriveState State;
+		float AvlRelACPD = 0.0f;
 	
 		DriveController();
 	
 	private:
+		uint32_t LastTarValueUpdate;
 		uint32_t State_Dbnc;
+		
 		inline bool IsStarting()
 		{
 			return  VESC.Avl_RPM == 0 &&				//Still standing
 					Board.Chassis_Roll <= 35.0f &&		//Not left over
 					Board.Chassis_Roll >= -30.0f &&		//Not right over
-					Board.Chassis_Pitch >= 22.0f;		//Tail down
+					Board.Chassis_Pitch >= 20.0f;		//Tail down
 		}
 		
 		inline bool IsDroppedOver()
 		{
 			return Board.Chassis_Roll > 35.0f ||		// Dropped left over
 					Board.Chassis_Roll < -30.0f ||		// Dropped right over
-					Board.Chassis_Pitch > 22.0f ||		// Tail touches ground
-					Board.Chassis_Pitch < -15.0f;		// Nose touches ground
+					Board.Chassis_Pitch > 20.0f ||		// Tail touches ground
+					Board.Chassis_Pitch < -17.0f;		// Nose touches ground
+		}
+	
+		inline float GetAvlACPD()
+		{
+			float ang = Board.Chassis_Pitch - 4.0f;
+			
+			if (ang < 5 && ang > -5)
+				return 0.0f;
+			else if (ang > 0)
+				return ((ang / (20.0f/100.0f)) * -1) / 100.0f;
+			else
+				return ((ang / (15.0f/100.0f)) * -1) / 100.0f;
 		}
 
 }; //DriveController

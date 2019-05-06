@@ -21,8 +21,7 @@ RUN_RESULT ESC::Run(uint32_t timeStamp)
 	
 	if (timeStamp - this->LastTarValueUpdate >= 100)
 	{
-		SendTarValues(timeStamp);
-		
+		SendTarValues(timeStamp);		
 	}
 	
 	
@@ -42,6 +41,12 @@ ESC::ESC()
 	this->Tar_Duty = 0.00f;
 } //ESC
 
+void ESC::ResetTarValues()
+{
+	this->Tar_HandBrake = 0.00f;
+	this->Tar_Duty = 0.00f;
+}
+
 void ESC::SendTarValues(uint32_t timeStamp)
 {
 	this->LastTarValueUpdate = timeStamp;
@@ -51,7 +56,7 @@ void ESC::SendTarValues(uint32_t timeStamp)
 	if (this->Tar_HandBrake > 0.0f)
 	{		
 		uint8_t data[4] = {0};
-		buffer_set_int32(data, ((int32_t)(1.0f * 1000.0f)));
+		buffer_set_int32(data, ((int32_t)(this->Tar_HandBrake * 1000.0f)));
 		
 		CAN_SendExtMessage(124 | ((uint8_t)VESCPackageType::CAN_PACKET_SET_CURRENT_HANDBRAKE << 8), data, 4, 0);		
 	} else if (this->Tar_Duty > 0.0f)
