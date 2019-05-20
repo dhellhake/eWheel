@@ -100,11 +100,8 @@ RUN_RESULT DriveController::Run(uint32_t timeStamp)
 				this->State = DriveState::DroppedOver;
 			}
 		break;
-	}	
-	
-	Board.ResetTask();
+		}
 		
-	this->TaskStatus = TASK_STATUS::COMPLETE;
 	return RUN_RESULT::SUCCESS;
 }
 

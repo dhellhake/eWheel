@@ -34,8 +34,6 @@ RUN_RESULT LSM9D::Run(uint32_t timeStamp)
 			this->Roll -= ROLL_OFFSET;
 			this->Pitch -= PITCH_OFFSET;
 		}
-		
-		this->TaskStatus = TASK_STATUS::COMPLETE;
 	}
 	
 	return RUN_RESULT::SUCCESS;

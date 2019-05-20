@@ -38,7 +38,6 @@ RUN_RESULT CC41A::Run(uint32_t timeStamp)
 		this->LastReported = timeStamp;
 	}
 	
-	this->TaskStatus = TASK_STATUS::SUSPEND;
 	return RUN_RESULT::SUCCESS;
 }
 

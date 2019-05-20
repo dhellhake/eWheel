@@ -15,10 +15,12 @@ AT45DB Trace;
 /************************************************************************/
 RUN_RESULT AT45DB::Run(uint32_t timeStamp)
 {
-	TracePage_Write(this->PageIndex, TraceBuffer_GetPage(this->Buffer), true);
-	this->PageIndex++;
+	if (TraceBuffer_available(this->Buffer) && IsReady())
+	{
+		TracePage_Write(this->PageIndex, TraceBuffer_GetPage(this->Buffer), true);
+		this->PageIndex++;
+	}
 	
-	this->TaskStatus = TASK_STATUS::SUSPEND;
 	return RUN_RESULT::SUCCESS;
 }
 

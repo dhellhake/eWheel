@@ -31,18 +31,22 @@ int main(void)
 		&Bluetooth
 	};
 	
+	uint32_t t0 = 0;
 	uint32_t t1 = 0;
+	
+	uint8_t taskIndex = 0;
     while (1) 
     {	
 		t1 = GetElapsedMilis();
-		
-		for (uint8_t ti = 0; ti < TASKPOOL_SIZE; ti++)
-			if (taskPool[ti]->IsReady(t1))
-				taskPool[ti]->Run(t1);
-		
-		// If last task is complete, reset computation
-		if (taskPool[0]->TaskStatus == TASK_STATUS::COMPLETE)
-			for (uint8_t ti = 0; ti < TASKPOOL_SIZE; ti++)
-				taskPool[ti]->ResetTask();
+		if (t1 - t0 >= 10)
+		{
+			taskPool[taskIndex]->Run(t1);
+
+			taskIndex++;
+			if (taskIndex >= TASKPOOL_SIZE)
+				taskIndex = 0;
+			
+			t0 = t1;
+		}		
     }
 }

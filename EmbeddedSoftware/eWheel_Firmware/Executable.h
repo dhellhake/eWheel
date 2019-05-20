@@ -16,27 +16,14 @@ enum class RUN_RESULT
 	NOT_IMPLEMENTED
 };
 
-enum class TASK_STATUS
-{
-	WAIT,
-	SUSPEND,
-	COMPLETE	
-};
-
 class Executable
 {
-	public:
-	volatile TASK_STATUS TaskStatus = TASK_STATUS::WAIT;
-	
-	virtual bool IsReady(uint32_t timeStamp) { return false; }
-	
-	virtual RUN_RESULT Run(uint32_t timeStamp) { return RUN_RESULT::NOT_IMPLEMENTED; };
+	public:	
+		virtual RUN_RESULT Run(uint32_t timeStamp) { return RUN_RESULT::NOT_IMPLEMENTED; };
 		
-	virtual void ResetTask() { this->TaskStatus = TASK_STATUS::WAIT; }
+		virtual void EnableTrace() {};
 		
-	virtual void EnableTrace() {};
-	
-	virtual void DisableTrace() {};
+		virtual void DisableTrace() {};
 }; //Executable
 
 #endif /* EXECUTABLE_H_ */

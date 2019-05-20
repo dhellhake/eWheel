@@ -64,22 +64,8 @@ class ESC : public Executable
 {
 	/************************************************************************/
 	/* Executable Interface implementation                                  */
-	/************************************************************************/	
-	virtual bool IsReady(uint32_t timeStamp)
-	{
-		if (this->CANRcvBufferIndex > 0)
-			return true;
-		else if (timeStamp - this->LastTarValueUpdate >= 100)
-			return true;
-			
-		return false;
-	}	
+	/************************************************************************/
 	virtual RUN_RESULT Run(uint32_t timeStamp);
-	virtual void ResetTask() 
-	{
-		this->VESTStatusReceived = STATUS_None_RECEIVED; 
-		this->TaskStatus = TASK_STATUS::WAIT; 
-	}
 
 	/************************************************************************/
 	/* Class implementation                                                 */
@@ -173,9 +159,7 @@ class ESC : public Executable
 		}
 		
 		void ReceiveVESCPackage(uint8_t id, uint8_t *data);
-	private:
-		uint8_t VESTStatusReceived;
-	
+	private:	
 		uint32_t LastTarValueUpdate;
 	
 		void ProcessVESCPackages();

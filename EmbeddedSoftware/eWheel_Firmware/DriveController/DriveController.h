@@ -25,11 +25,7 @@ class DriveController : public Executable
 	/* Executable Interface implementation                                  */
 	/************************************************************************/
 	public:
-	virtual bool IsReady(uint32_t timeStamp)
-	{
-		return	Board.TaskStatus == TASK_STATUS::COMPLETE;
-	}
-	virtual RUN_RESULT Run(uint32_t timeStamp);
+		virtual RUN_RESULT Run(uint32_t timeStamp);
 	
 	/************************************************************************/
 	/* Class implementation                                                 */

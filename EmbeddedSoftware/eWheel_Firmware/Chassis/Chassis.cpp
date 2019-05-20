@@ -16,7 +16,6 @@ RUN_RESULT Chassis::Run(uint32_t timeStamp)
 	this->Chassis_Pitch = Gyro.Pitch - this->Road_Pitch;
 	this->Chassis_Roll = Gyro.Roll - this->Road_Pitch;	
 	
-	this->TaskStatus = TASK_STATUS::COMPLETE;
 	return RUN_RESULT::SUCCESS;
 }
 

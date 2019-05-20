@@ -16,10 +16,6 @@ class Chassis : public Executable
 	/************************************************************************/
 	/* Executable Interface implementation                                  */
 	/************************************************************************/
-	virtual bool IsReady(uint32_t timeStamp)
-	{
-		return Gyro.TaskStatus == TASK_STATUS::COMPLETE;
-	}
 	virtual RUN_RESULT Run(uint32_t timeStamp);
 	
 	/************************************************************************/
