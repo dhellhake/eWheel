@@ -20,6 +20,8 @@
 // Sensor Sensitivity Constants
 #define SENSITIVITY_ACCELEROMETER_4		1.22
 
+#define PITCH_OFFSET					2.41778326f
+#define ROLL_OFFSET						-2.10467649f
 
 class LSM9D : public Executable
 {
