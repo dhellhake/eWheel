@@ -126,16 +126,43 @@ class ESC : public Executable
 		
 		// Duty Cycle [0.0 to 1.0]
 		float Tar_Duty;
-		// HandBrake in Amp
+		// HandBrake in Ampere
 		float Tar_HandBrake;
+		// Brake in Ampere
+		float Tar_Brake;
 		
 		ESC();
 		
 		void ResetTarValues();
 		
+		inline void SetHandBrake(float value)
+		{
+			this->ResetTarValues();
+			
+			if (value < 0.0f)
+				this->Tar_HandBrake = 0.0f;
+			else if (value > 10.0f)
+				this->Tar_HandBrake = 10.0f;
+			else
+				this->Tar_HandBrake = value;			
+		}
+		
+		
+		inline void SetBrake(float value)
+		{
+			this->ResetTarValues();
+			
+			if (value < 0.0f)
+				this->Tar_Brake = 0.0f;
+			else if (value > 10.0f)
+				this->Tar_Brake = 10.0f;
+			else
+				this->Tar_Brake = value;
+		}
+		
 		inline void SetTar_Duty(float value)
 		{
-			this->Tar_HandBrake = 0.0f;
+			this->ResetTarValues();
 			
 			if (value > 0.20f)
 				this->Tar_Duty = 0.20f;
