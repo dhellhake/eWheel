@@ -15,7 +15,8 @@ enum class DriveState
 {
 	DroppedOver = 0,
 	Starting = 1,
-	Driving = 2	
+	Balancing = 2,
+	Driving = 3	
 };
 
 class DriveController : public Executable
@@ -41,6 +42,7 @@ class DriveController : public Executable
 	
 	private:
 		uint32_t LastTarValueUpdate;
+		uint32_t DropOver_Dbnc;
 		uint32_t State_Dbnc;
 		
 		inline bool IsStarting()

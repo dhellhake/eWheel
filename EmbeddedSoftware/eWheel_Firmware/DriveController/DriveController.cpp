@@ -19,9 +19,9 @@ RUN_RESULT DriveController::Run(uint32_t timeStamp)
 	{
 		case DriveState::DroppedOver:
 			if (!this->IsStarting())
-				this->State_Dbnc = timeStamp;
+				this->DropOver_Dbnc = timeStamp;
 		
-			if (timeStamp - this->State_Dbnc >= 1000)
+			if (timeStamp - this->DropOver_Dbnc >= 700)
 			{
 				this->State = DriveState::Starting;					
 			}		
@@ -29,47 +29,64 @@ RUN_RESULT DriveController::Run(uint32_t timeStamp)
 		case DriveState::Starting:
 			if (this->IsStarting())
 			{
-				VESC.SetTar_Duty(0.0f);
-				this->State_Dbnc = timeStamp;				
+				VESC.SetHandBrake(6.0f);
+				this->DropOver_Dbnc = timeStamp;
+				this->State_Dbnc = timeStamp;	
 			} else if (!this->IsDroppedOver())
 			{
-				this->State_Dbnc = timeStamp;
-				if (this->AvlRelACPD < 0.0f)
-					VESC.SetTar_Duty(0.05);
-				else				
-					this->State = DriveState::Driving;				
+				this->DropOver_Dbnc = timeStamp;
+				
+				this->State = DriveState::Balancing;
+				this->State_Dbnc = timeStamp;				
 			}				
 		
-			if (timeStamp - this->State_Dbnc >= 500)
+			if (timeStamp - this->DropOver_Dbnc >= 200)
 			{
 				VESC.ResetTarValues();
 				this->State = DriveState::DroppedOver;
 			}		
 		break;
+		case DriveState::Balancing:
+			if (!this->IsDroppedOver())
+			{
+				this->DropOver_Dbnc = timeStamp;
+				
+				VESC.SetHandBrake(6.0f);
+				
+				if (timeStamp - this->State_Dbnc >= 100)
+				{
+					this->State = DriveState::Driving;
+					this->State_Dbnc = timeStamp;
+				}
+			}
+		
+			if (timeStamp - this->DropOver_Dbnc >= 500)
+			{
+				VESC.ResetTarValues();
+				this->State = DriveState::DroppedOver;
+			}
+		
+		break;
 		case DriveState::Driving:		
 			if (!this->IsDroppedOver())
 			{				
-				this->State_Dbnc = timeStamp;
+				this->DropOver_Dbnc = timeStamp;
 								
 				if (this->AvlRelACPD < -0.15f || this->AvlRelACPD > 0.15f)
 				{
 					if (timeStamp - LastTarValueUpdate > 100)
-					{
-						VESC.Tar_HandBrake = 0.0f;
-						
+					{						
 						float tar_duty;
 						
 						if (this->AvlRelACPD < 0)
-							tar_duty = ((this->AvlRelACPD * 0.4f) / 10);
+							tar_duty = ((this->AvlRelACPD * 0.2f) / 10);
 						else
-							tar_duty = ((this->AvlRelACPD * 0.4f) / 10);
+							tar_duty = ((this->AvlRelACPD * 0.2f) / 10);
 						
 						VESC.SetTar_Duty(VESC.Tar_Duty + tar_duty);
 						
 						if (VESC.Tar_Duty == 0.0f && VESC.Avl_RPM <= 200)
-							VESC.Tar_HandBrake = 3.0f;
-						
-						
+							VESC.SetHandBrake(6.0f);
 						
 						LastTarValueUpdate = timeStamp;
 					}
@@ -77,7 +94,7 @@ RUN_RESULT DriveController::Run(uint32_t timeStamp)
 			}
 			
 			
-			if (timeStamp - this->State_Dbnc >= 500)
+			if (timeStamp - this->DropOver_Dbnc >= 300)
 			{
 				VESC.ResetTarValues();
 				this->State = DriveState::DroppedOver;
