@@ -11,9 +11,13 @@
 #include "..\Chassis\Chassis.h"
 #include "..\ESC\ESC.h"
 
+#define POS_PID_THR_DEG 	5
+#define POS_PID_Kp			0.02f / (float)POS_PID_THR_DEG
+
+
 enum class DriveState
 {
-	DroppedOver = 0,
+	Stopped = 0,
 	Starting = 1,
 	Balancing = 2,
 	Driving = 3	
@@ -37,36 +41,28 @@ class DriveController : public Executable
 		DriveController();
 	
 	private:
-		uint32_t LastTarValueUpdate;
-		uint32_t DropOver_Dbnc;
+		float pitch_trc[1000] = { 0.0f };
+		float diff_duties[1000] = { 0.0f };
+		uint16_t Trc_Ind = 0;
+	
+			
+		
+		float LastCtrlError;
+		
 		uint32_t State_Dbnc;
 		
-		inline bool IsStarting()
-		{
-			return  VESC.Avl_RPM == 0 &&				//Still standing
-					Board.Chassis_Roll <= 35.0f &&		//Not left over
-					Board.Chassis_Roll >= -30.0f &&		//Not right over
-					Board.Chassis_Pitch >= 20.0f;		//Tail down
-		}
+		uint32_t LastControlCycle = 0;
 		
-		inline bool IsDroppedOver()
-		{
-			return Board.Chassis_Roll > 35.0f ||		// Dropped left over
-					Board.Chassis_Roll < -30.0f ||		// Dropped right over
-					Board.Chassis_Pitch > 20.0f ||		// Tail touches ground
-					Board.Chassis_Pitch < -17.0f;		// Nose touches ground
-		}
-	
+		
+		
 		inline float GetAvlACPD()
-		{
-			float ang = Board.Chassis_Pitch - 4.0f;
-			
-			if (ang < 5 && ang > -5)
+		{			
+			if (Board.Chassis_Pitch < 5 && Board.Chassis_Pitch > -5)
 				return 0.0f;
-			else if (ang > 0)
-				return ((ang / (20.0f/100.0f)) * -1) / 100.0f;
+			else if (Board.Chassis_Pitch > 0)
+				return ((Board.Chassis_Pitch / (20.0f/100.0f)) * -1) / 100.0f;
 			else
-				return ((ang / (15.0f/100.0f)) * -1) / 100.0f;
+				return ((Board.Chassis_Pitch / (15.0f/100.0f)) * -1) / 100.0f;
 		}
 
 }; //DriveController

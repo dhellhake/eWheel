@@ -5,6 +5,7 @@
 * Author: Dominik Hellhake
 */
 #include "Chassis.h"
+#include "..\LSM9D\LSM9D.h"
 
 Chassis Board;
 
@@ -13,11 +14,37 @@ Chassis Board;
 /************************************************************************/
 RUN_RESULT Chassis::Run(uint32_t timeStamp)
 {
-	this->Chassis_Pitch = Gyro.Pitch - this->Road_Pitch;
+	if (Gyro.TaskStatus != TASK_STATUS::COMPLETE)
+		return RUN_RESULT::IDLE;
+		
+	this->Chassis_Pitch = Gyro.Pitch - this->Road_Pitch;	
 	this->Chassis_Roll = Gyro.Roll - this->Road_Pitch;	
 	
+	switch (this->State)
+	{
+		case ChassisState::Starting:
+			if (!this->IsStartPosition())
+				this->State = ChassisState::Normal;		
+		break;
+		case ChassisState::Normal:			
+			if (this->IsRolledOver() || this->IsPitchedOver())
+				this->DropOver_Dbnc += timeStamp - this->LAST_RUNNED;
+			else
+				this->DropOver_Dbnc = 0;
+						
+			if (this->DropOver_Dbnc > 200)
+				this->State = ChassisState::DroppedOver;
+		break;
+		case ChassisState::DroppedOver:
+			if (this->IsStartPosition())
+				this->State = ChassisState::Starting;
+		break;
+	}
+	
+	this->TaskStatus = TASK_STATUS::COMPLETE;
 	return RUN_RESULT::SUCCESS;
 }
+
 
 /************************************************************************/
 /* Class implementation                                                 */

@@ -25,7 +25,9 @@ namespace TraceView
         {
             PlotModel newPlot = new PlotModel();
             newPlot.Series.Add(new LineSeries());
-            //newPlot.Series.Add(new LineSeries());
+            ((LineSeries)newPlot.Series[0]).Title = "Roll";
+            newPlot.Series.Add(new LineSeries());
+            ((LineSeries)newPlot.Series[1]).Title = "Pitch";
             for (int x = 0; x <= 200; x++)
             {
                 if (x >= this.DataPackages.Count)
@@ -33,8 +35,8 @@ namespace TraceView
 
                 ChassisPackage package = this.DataPackages[this.DataPackages.Count - x - 1];
 
-                //((LineSeries)newPlot.Series[0]).Points.Add(new DataPoint(package.TimeStamp, package.Chassis_Roll));
-                ((LineSeries)newPlot.Series[0]).Points.Add(new DataPoint(package.TimeStamp, package.Chassis_Pitch));
+                ((LineSeries)newPlot.Series[0]).Points.Add(new DataPoint(package.TimeStamp, package.Chassis_Roll));
+                ((LineSeries)newPlot.Series[1]).Points.Add(new DataPoint(package.TimeStamp, package.Chassis_Pitch));
             }
             this.PlotModel = newPlot;
         }

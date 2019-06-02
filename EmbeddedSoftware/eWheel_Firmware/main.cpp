@@ -31,22 +31,22 @@ int main(void)
 		&Bluetooth
 	};
 	
-	uint32_t t0 = 0;
-	uint32_t t1 = 0;
+	uint32_t t_now = 0;
 	
 	uint8_t taskIndex = 0;
     while (1) 
     {	
-		t1 = GetElapsedMilis();
-		if (t1 - t0 >= 10)
-		{
-			taskPool[taskIndex]->Run(t1);
+		t_now = GetElapsedMilis();
+		
+		if (taskPool[taskIndex]->Run(t_now) == RUN_RESULT::SUCCESS)
+			taskPool[taskIndex]->LAST_RUNNED = t_now;
 
-			taskIndex++;
-			if (taskIndex >= TASKPOOL_SIZE)
-				taskIndex = 0;
+		taskIndex++;
+		if (taskIndex >= TASKPOOL_SIZE)
+			taskIndex = 0;
 			
-			t0 = t1;
-		}		
+		if (Drive.TaskStatus == TASK_STATUS::COMPLETE)
+			for (uint8_t ti = 0; ti < TASKPOOL_SIZE; ti++)
+				taskPool[ti]->Reset();
     }
 }

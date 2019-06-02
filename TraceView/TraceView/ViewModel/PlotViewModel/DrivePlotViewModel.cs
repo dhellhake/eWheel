@@ -33,7 +33,7 @@ namespace TraceView
 
                 DrivePackage package = this.DataPackages[this.DataPackages.Count - x - 1];
 
-                ((LineSeries)newPlot.Series[0]).Points.Add(new DataPoint(package.TimeStamp, package.AvlRelACPD));
+                ((LineSeries)newPlot.Series[0]).Points.Add(new DataPoint(package.TimeStamp, package.DriveState));
             }
             this.PlotModel = newPlot;
         }

@@ -14,17 +14,21 @@ ESC VESC;
 /************************************************************************/
 RUN_RESULT ESC::Run(uint32_t timeStamp)
 {	
+	RUN_RESULT result = RUN_RESULT::IDLE;
+	
 	if (this->CANRcvBufferIndex > 0)
 	{
-		this->ProcessVESCPackages();
+		this->ProcessVESCPackages(timeStamp);
+		result = RUN_RESULT::SUCCESS;
 	}
 	
-	if (timeStamp - this->LastTarValueUpdate >= 100)
+	if (timeStamp - this->LastTarValueUpdate >= 5)
 	{
-		SendTarValues(timeStamp);		
+		SendTarValues(timeStamp);
+		result = RUN_RESULT::SUCCESS;
 	}
 	
-	return RUN_RESULT::SUCCESS;
+	return result;
 }
 
 /************************************************************************/
@@ -32,43 +36,57 @@ RUN_RESULT ESC::Run(uint32_t timeStamp)
 /************************************************************************/
 ESC::ESC()
 {
-	this->ResetTarValues();
 } //ESC
 
-void ESC::ResetTarValues()
+void ESC::Stop()
 {
-	this->Tar_Brake = 0.00f;
-	this->Tar_HandBrake = 0.00f;
-	this->Tar_Duty = 0.00f;
+	if (this->Tar_HandBrake > 0.0f)
+		this->SendTarHandBrake(0.0f);
+	if (this->Tar_Brake > 0.0f)
+		this->SendTarBrake(0.0f);
+	if (this->Tar_Duty > 0.0f)
+		this->SendTarDuty(0.0f);
+	
+	this->ResetTarValues();
 }
 
 void ESC::SendTarValues(uint32_t timeStamp)
 {
 	this->LastTarValueUpdate = timeStamp;
-	
-	uint8_t data[4] = {0};
-	
+		
 	if (this->Tar_HandBrake > 0.0f)
-	{		
-		uint8_t data[4] = {0};
-		buffer_set_int32(data, ((int32_t)(this->Tar_HandBrake * 1000.0f)));
-		
-		CAN_SendExtMessage(124 | ((uint8_t)VESCPackageType::CAN_PACKET_SET_CURRENT_HANDBRAKE << 8), data, 4, 0);		
-	} else if (this->Tar_Brake > 0.0f)
-	{
-		uint8_t data[4] = {0};
-		buffer_set_int32(data, ((int32_t)(this->Tar_Brake * 1000.0f)));
-		
-		CAN_SendExtMessage(124 | ((uint8_t)VESCPackageType::CAN_PACKET_SET_CURRENT_BRAKE << 8), data, 4, 0);
-	} else if (this->Tar_Duty > 0.0f)
-	{
-		buffer_set_int32(data, ((int32_t)(this->Tar_Duty * 1000.0f * 100.0f)));
-		
-		CAN_SendExtMessage(124 | ((uint8_t)VESCPackageType::CAN_PACKET_SET_DUTY << 8), data, 4, 0);
-	}
+		this->SendTarHandBrake(this->Tar_HandBrake);
+	else if (this->Tar_Brake > 0.0f)
+		this->SendTarBrake(this->Tar_Brake);
+	else if (this->Tar_Duty != 0.0f)
+		this->SendTarDuty(this->Tar_Duty);
 }
 
-void ESC::ProcessVESCPackages()
+void ESC::SendTarHandBrake(float handbrake_val)
+{
+	uint8_t data[4] = {0};
+	buffer_set_int32(data, ((int32_t)(handbrake_val * 1000.0f)));
+	
+	CAN_SendExtMessage(124 | ((uint8_t)VESCPackageType::CAN_PACKET_SET_CURRENT_HANDBRAKE << 8), data, 4, 0);
+}
+
+void ESC::SendTarBrake(float brake_val)
+{
+	uint8_t data[4] = {0};
+	buffer_set_int32(data, ((int32_t)(brake_val * 1000.0f)));
+	
+	CAN_SendExtMessage(124 | ((uint8_t)VESCPackageType::CAN_PACKET_SET_CURRENT_BRAKE << 8), data, 4, 0);
+}
+
+void ESC::SendTarDuty(float duty_val)
+{		
+	uint8_t data[4] = {0};
+	buffer_set_int32(data, ((int32_t)(duty_val * 1000.0f * 100.0f)));
+	
+	CAN_SendExtMessage(124 | ((uint8_t)VESCPackageType::CAN_PACKET_SET_DUTY << 8), data, 4, 0);
+}
+
+void ESC::ProcessVESCPackages(uint32_t timeStamp)
 {
 	for (uint8_t index = 0; index < this->CANRcvBufferIndex; index++)
 	{

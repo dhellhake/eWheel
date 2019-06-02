@@ -18,7 +18,9 @@
 #define INT1_CTRL						0x0C
 
 // Sensor Sensitivity Constants
+#define SENSITIVITY_ACCELEROMETER_2		0.61
 #define SENSITIVITY_ACCELEROMETER_4		1.22
+#define SENSITIVITY_ACCELEROMETER_16	7.32
 
 #define PITCH_OFFSET					2.41778326f
 #define ROLL_OFFSET						-2.10467649f
@@ -36,10 +38,11 @@ class LSM9D : public Executable
 	/************************************************************************/
 	public:
 		float Pitch = 0;
-		float Roll = 0;		
+		float Roll = 0;	
 	public:
 		LSM9D();
-	private:				
+	private:
+	
 		uint8_t ReadBytes(uint8_t address, uint8_t *dest, uint8_t count);	
 		uint8_t WriteRegister(uint8_t address, uint8_t data);
 }; //LSM9D

@@ -119,7 +119,14 @@ class ESC : public Executable
 		
 		ESC();
 		
-		void ResetTarValues();
+		void Stop();
+		
+		inline void ResetTarValues()
+		{
+			this->Tar_Brake = 0.00f;
+			this->Tar_HandBrake = 0.00f;
+			this->Tar_Duty = 0.00f;
+		}
 		
 		inline void SetHandBrake(float value)
 		{
@@ -152,18 +159,22 @@ class ESC : public Executable
 			
 			if (value > 0.20f)
 				this->Tar_Duty = 0.20f;
-			else if (value < 0.0f)
-				this->Tar_Duty = 0.0f;
+			else if (value < -0.2f)
+				this->Tar_Duty = -0.2f;
 			else
 				this->Tar_Duty = value;
 		}
 		
 		void ReceiveVESCPackage(uint8_t id, uint8_t *data);
-	private:	
+	private:
 		uint32_t LastTarValueUpdate;
 	
-		void ProcessVESCPackages();
+		void ProcessVESCPackages(uint32_t timeStamp);
 		void SendTarValues(uint32_t timeStamp);
+		
+		void SendTarHandBrake(float handbrake_val);
+		void SendTarBrake(float brake_val);
+		void SendTarDuty(float duty_val);
 }; //ESC
 extern ESC VESC;
 

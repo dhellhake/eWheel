@@ -12,8 +12,15 @@
 enum class RUN_RESULT
 {
 	SUCCESS,
+	IDLE,
 	ERROR,
 	NOT_IMPLEMENTED
+};
+
+enum class TASK_STATUS
+{
+	RUNNING,
+	COMPLETE	
 };
 
 class Executable
@@ -24,6 +31,12 @@ class Executable
 		virtual void EnableTrace() {};
 		
 		virtual void DisableTrace() {};
+		
+		virtual void Reset() { this->TaskStatus = TASK_STATUS::RUNNING; }
+		
+		TASK_STATUS TaskStatus = TASK_STATUS::RUNNING;
+		
+		uint32_t LAST_RUNNED = 0;
 }; //Executable
 
 #endif /* EXECUTABLE_H_ */

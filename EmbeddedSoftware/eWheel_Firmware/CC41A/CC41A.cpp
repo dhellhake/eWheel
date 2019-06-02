@@ -73,7 +73,7 @@ void CC41A::SendESCTrace(uint32_t timeStamp)
 {
 	TracePackage pkg;
 	
-	uint8_t data[16] = {0};
+	uint8_t data[20] = {0};
 	
 	float* fPtr = (float*)data;
 	*fPtr = VESC.Avl_RPM;
@@ -87,10 +87,13 @@ void CC41A::SendESCTrace(uint32_t timeStamp)
 	fPtr = (float*)(data + 12);
 	*fPtr = VESC.Tar_Duty;
 	
+	fPtr = (float*)(data + 16);
+	*fPtr = VESC.Avl_PIDPosNow;
+	
 	pkg._timeStamp = timeStamp;
 	pkg._type = TraceType::VESCTrace;
 	pkg._data = data;
-	pkg._length = 16;
+	pkg._length = 20;
 	
 	this->SendDataPackage(&pkg);
 }

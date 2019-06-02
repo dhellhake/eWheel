@@ -9,7 +9,13 @@
 
 #include "samc21.h"
 #include "..\Executable.h"
-#include "..\LSM9D\LSM9D.h"
+
+enum class ChassisState
+{
+	DroppedOver = 0,
+	Starting = 1,
+	Normal = 2
+};
 
 class Chassis : public Executable
 {
@@ -26,9 +32,26 @@ class Chassis : public Executable
 		float Chassis_Roll = 0;
 		float Road_Pitch = 0;
 		float Road_Roll = 0;
-	
+		
+		ChassisState State = ChassisState::DroppedOver;
+		uint32_t DropOver_Dbnc = 0;
+		
 		Chassis();
 		void SetLED(bool state);
+	
+	private:	
+		inline bool IsRolledOver()
+		{
+			return this->Chassis_Roll <= -30.0f || this->Chassis_Roll >= 30.0f;
+		}
+		inline bool IsPitchedOver()
+		{
+			return this->Chassis_Pitch <= -18.0f || this->Chassis_Pitch >= 18.0f;
+	}
+	inline bool IsStartPosition()
+	{
+		return !this->IsRolledOver() && this->Chassis_Pitch > 18.0f;
+	}
 }; //Chassis
 
 extern Chassis Board;
