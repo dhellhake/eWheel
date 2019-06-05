@@ -74,12 +74,14 @@ RUN_RESULT DriveController::Run(uint32_t timeStamp)
 				float deriv = error - this->LastCtrlError;
 				this->LastCtrlError = error;
 				
-				float diff_duty = (error * 0.05f) + (deriv * 0.1f);
-												
-				if (diff_duty > 0.2f)
-					diff_duty = 0.2f;
-				else if (diff_duty < -0.2f)
-					diff_duty = -0.2f;
+				float diff_duty = (error * 0.12f) + (deriv * 0.2f);
+				//float diff_duty = (pow(error, 2) * 0.02f);
+				
+											
+				if (diff_duty > 0.25f)
+					diff_duty = 0.25f;
+				else if (diff_duty < -0.25f)
+					diff_duty = -0.25f;
 				
 				
 				this->pitch_trc[this->Trc_Ind] = Board.Chassis_Pitch;

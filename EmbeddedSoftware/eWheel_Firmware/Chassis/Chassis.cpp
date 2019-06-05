@@ -16,8 +16,10 @@ RUN_RESULT Chassis::Run(uint32_t timeStamp)
 {
 	if (Gyro.TaskStatus != TASK_STATUS::COMPLETE)
 		return RUN_RESULT::IDLE;
-		
-	this->Chassis_Pitch = Gyro.Pitch - this->Road_Pitch;	
+	
+	float pitch = Gyro.Pitch - this->Road_Pitch;
+	
+	this->Chassis_Pitch = this->Chassis_Pitch - (0.3 * (this->Chassis_Pitch - pitch));	
 	this->Chassis_Roll = Gyro.Roll - this->Road_Pitch;	
 	
 	switch (this->State)

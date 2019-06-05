@@ -22,8 +22,8 @@
 #define SENSITIVITY_ACCELEROMETER_4		1.22
 #define SENSITIVITY_ACCELEROMETER_16	7.32
 
-#define PITCH_OFFSET					2.41778326f
-#define ROLL_OFFSET						-2.10467649f
+#define PITCH_OFFSET					5.41778326f
+#define ROLL_OFFSET						-0.10467649f
 
 class LSM9D : public Executable
 {
@@ -42,6 +42,8 @@ class LSM9D : public Executable
 	public:
 		LSM9D();
 	private:
+		uint32_t diff_duties[100] = { 0 };
+		uint16_t Trc_Ind = 0;
 	
 		uint8_t ReadBytes(uint8_t address, uint8_t *dest, uint8_t count);	
 		uint8_t WriteRegister(uint8_t address, uint8_t data);

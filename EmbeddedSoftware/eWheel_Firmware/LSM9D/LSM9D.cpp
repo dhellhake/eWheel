@@ -35,6 +35,11 @@ RUN_RESULT LSM9D::Run(uint32_t timeStamp)
 			this->Roll -= ROLL_OFFSET;
 			this->Pitch -= PITCH_OFFSET;
 			
+			this->diff_duties[this->Trc_Ind++] = timeStamp;
+			
+			if (this->Trc_Ind >= 100)
+				this->Trc_Ind = 0;
+			
 			this->TaskStatus = TASK_STATUS::COMPLETE;
 			return RUN_RESULT::SUCCESS;
 		}
@@ -52,11 +57,11 @@ LSM9D::LSM9D()
 			
 	/* CTRL_REG5_XL (0x1F) */
 	//[DEC_1][DEC_0][Zen_XL][Yen_XL][Zen_XL][0][0][0]
-	this->WriteRegister(CTRL_REG5_XL, (1<<5) | (1<<4) | (1<<3));
+	this->WriteRegister(CTRL_REG5_XL, (0x2 << 6) | (1<<5) | (1<<4) | (1<<3));
 	
 	/* CTRL_REG6_XL (0x20) */
 	//[ODR_XL2][ODR_XL1][ODR_XL0][FS1_XL][FS0_XL][BW_SCAL_ODR][BW_XL1][BW_XL0]
-	this->WriteRegister(CTRL_REG6_XL, (0x4 << 5) | (0x0 << 3));
+	this->WriteRegister(CTRL_REG6_XL, (0x6 << 5) | (0x0 << 3) | (0x1 << 2) | (0x3 << 0));
 	
 	/* CTRL_REG7_XL (0x21) */
 	// [HR][DCF1][DCF0][0][0][FDS][0][HPIS1]
