@@ -16,7 +16,7 @@
 /TraceView/TraceView/bin/*
 
 /TraceView/packages/*
-
+/EmbeddedSoftware/eWheel_Node/Debug/*
 
 *.atsln
 
@@ -27,4 +27,3 @@
 *.suo
 
 *.cache
-
