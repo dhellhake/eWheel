@@ -11,4 +11,8 @@
 #define F_CPU 16000000UL
 #endif
 
+#include <avr/io.h>
+
+uint8_t IsFrontNode;
+
 #endif /* SYSTEM_H_ */

@@ -142,6 +142,12 @@
     <Compile Include="ADC\ADC.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="GP2Y\GP2Y.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="GP2Y\GP2Y.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
@@ -170,6 +176,7 @@
   <ItemGroup>
     <Folder Include="ADC" />
     <Folder Include="MCP2515" />
+    <Folder Include="GP2Y" />
     <Folder Include="SPI" />
     <Folder Include="USART" />
   </ItemGroup>
