@@ -74,7 +74,7 @@ RUN_RESULT DriveController::Run(uint32_t timeStamp)
 				float deriv = error - this->LastCtrlError;
 				this->LastCtrlError = error;
 				
-				float diff_duty = (error * 0.12f) + (deriv * 0.2f);
+				float diff_duty = (error * 0.15f) + (deriv * 0.2f);
 				//float diff_duty = (pow(error, 2) * 0.02f);
 				
 											
@@ -82,17 +82,6 @@ RUN_RESULT DriveController::Run(uint32_t timeStamp)
 					diff_duty = 0.25f;
 				else if (diff_duty < -0.25f)
 					diff_duty = -0.25f;
-				
-				
-				this->pitch_trc[this->Trc_Ind] = Board.Chassis_Pitch;
-				this->diff_duties[this->Trc_Ind] = deriv;
-				this->Trc_Ind++;
-				
-				if (this->Trc_Ind >= 2000)
-					this->Trc_Ind = 0;
-					
-				
-				
 												
 				VESC.SetTar_Duty(diff_duty);
 			}

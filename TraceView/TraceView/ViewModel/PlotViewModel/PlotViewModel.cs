@@ -6,9 +6,12 @@ using TracePersistence;
 namespace TraceView
 {
     public class PlotViewModel : Bindable
-    {        public BLEDevice Device { get; private set; }        public BLEService Service { get; private set; }
+    {
+        public BLEDevice Device { get; private set; }
+        public BLEService Service { get; private set; }
         public string Title { get; private set; }
-
+
+
 
         private PlotViewModel() { }
         protected PlotViewModel(BLEDevice device, BLEService service)

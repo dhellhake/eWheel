@@ -108,5 +108,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TracePersistence\TracePersistence.csproj">
+      <Project>{2c9937f7-8c17-4c3d-9890-763ffa4aef54}</Project>
+      <Name>TracePersistence</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

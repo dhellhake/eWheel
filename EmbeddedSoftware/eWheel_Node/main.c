@@ -27,9 +27,9 @@ int main(void)
 	PORTC |= (1 << PORTC5);
 	_delay_ms(1);
 	if(PINC & (1 << 5))
-		IsFrontNode = 0x01;
-	else
 		IsFrontNode = 0x00;
+	else
+		IsFrontNode = 0x01;
 	
 	sei();
 	start_adc();
@@ -53,7 +53,7 @@ int main(void)
 		
 		fPtr = (float*)(message.data + 4);
 		*fPtr = adc_volt_1;
-		
+				
 		uint8_t sreg = SREG;
 		cli();
 		mcp2515_send_message(&message);

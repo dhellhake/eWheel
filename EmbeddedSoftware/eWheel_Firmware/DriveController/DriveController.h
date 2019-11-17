@@ -41,12 +41,6 @@ class DriveController : public Executable
 		DriveController();
 	
 	private:
-		float pitch_trc[1000] = { 0.0f };
-		float diff_duties[1000] = { 0.0f };
-		uint16_t Trc_Ind = 0;
-	
-			
-		
 		float LastCtrlError;
 		
 		uint32_t State_Dbnc;

@@ -32,8 +32,8 @@ RUN_RESULT LSM9D::Run(uint32_t timeStamp)
 			this->Roll = (atan2(ax_val, (float)sqrt((float)(ay_val * ay_val) + (float)(az_val * az_val))) * (float)180.0) / M_PI;
 			this->Pitch = (atan2(-ay_val, az_val) * 180.0) / M_PI;
 			
-			this->Roll -= ROLL_OFFSET;
-			this->Pitch -= PITCH_OFFSET;
+			this->Roll += ROLL_OFFSET;
+			this->Pitch += PITCH_OFFSET;
 			
 			this->diff_duties[this->Trc_Ind++] = timeStamp;
 			

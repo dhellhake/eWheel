@@ -157,10 +157,10 @@ class ESC : public Executable
 		{
 			this->ResetTarValues();
 			
-			if (value > 0.20f)
-				this->Tar_Duty = 0.20f;
-			else if (value < -0.2f)
-				this->Tar_Duty = -0.2f;
+			if (value > 1.0f)
+				this->Tar_Duty = 1.0f;
+			else if (value < -1.0f)
+				this->Tar_Duty = -1.0f;
 			else
 				this->Tar_Duty = value;
 		}
