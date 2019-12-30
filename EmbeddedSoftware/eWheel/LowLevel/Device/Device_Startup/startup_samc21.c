@@ -3,22 +3,23 @@
  *
  * \brief gcc starttup file for SAMC21
  *
- * Copyright (c) 2017 Atmel Corporation,
- *                    a wholly owned subsidiary of Microchip Technology Inc.
+ * Copyright (c) 2018 Microchip Technology Inc.
  *
  * \asf_license_start
  *
  * \page License
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License.
  * You may obtain a copy of the Licence at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
@@ -28,12 +29,12 @@
 
 #include "samc21.h"
 
-#include "GCLK\GCLK.h"
-#include "SysTick\SysTick.h"
-#include "CAN\CANCont.h"
-#include "DMA\DMA.h"
-#include "SERCOM\SERCOM.h"
-#include "PORT\PORT.h"
+#include "..\GCLK\GCLK.h"
+#include "..\SysTick\SysTick.h"
+#include "..\DMA\DMA.h"
+#include "..\CAN\CANCont.h"
+#include "..\SERCOM\SERCOM.h"
+#include "..\PORT\PORT.h"
 
 /* Initialize segments */
 extern uint32_t _sfixed;
@@ -56,9 +57,9 @@ void __libc_init_array(void);
 void Dummy_Handler(void);
 
 /* Cortex-M0+ core handlers */
-void NMI_Handler             ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+void NonMaskableInt_Handler  ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void HardFault_Handler       ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
-void SVC_Handler             ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
+void SVCall_Handler          ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void PendSV_Handler          ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 void SysTick_Handler         ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
 
@@ -129,7 +130,7 @@ const DeviceVectors exception_table = {
         .pvStack                = (void*) (&_estack),
 
         .pfnReset_Handler       = (void*) Reset_Handler,
-        .pfnNMI_Handler         = (void*) NMI_Handler,
+        .pfnNonMaskableInt_Handler = (void*) NonMaskableInt_Handler,
         .pfnHardFault_Handler   = (void*) HardFault_Handler,
         .pvReservedM12          = (void*) (0UL), /* Reserved */
         .pvReservedM11          = (void*) (0UL), /* Reserved */
@@ -138,7 +139,7 @@ const DeviceVectors exception_table = {
         .pvReservedM8           = (void*) (0UL), /* Reserved */
         .pvReservedM7           = (void*) (0UL), /* Reserved */
         .pvReservedM6           = (void*) (0UL), /* Reserved */
-        .pfnSVC_Handler         = (void*) SVC_Handler,
+        .pfnSVCall_Handler      = (void*) SVCall_Handler,
         .pvReservedM4           = (void*) (0UL), /* Reserved */
         .pvReservedM3           = (void*) (0UL), /* Reserved */
         .pfnPendSV_Handler      = (void*) PendSV_Handler,
@@ -235,60 +236,59 @@ const DeviceVectors exception_table = {
  * To initialize the device, and call the main() routine.
  */
 void Reset_Handler(void)
-{		
-	uint32_t *pSrc, *pDest;
+{
+        uint32_t *pSrc, *pDest;
 
-	/* Initialize the relocate segment */
-	pSrc = &_etext;
-	pDest = &_srelocate;
+        /* Initialize the relocate segment */
+        pSrc = &_etext;
+        pDest = &_srelocate;
 
-	if (pSrc != pDest) {
-			for (; pDest < &_erelocate;) {
-					*pDest++ = *pSrc++;
-			}
-	}
+        if (pSrc != pDest) {
+                for (; pDest < &_erelocate;) {
+                        *pDest++ = *pSrc++;
+                }
+        }
 
-	/* Clear the zero segment */
-	for (pDest = &_szero; pDest < &_ezero;) {
-			*pDest++ = 0;
-	}
+        /* Clear the zero segment */
+        for (pDest = &_szero; pDest < &_ezero;) {
+                *pDest++ = 0;
+        }
 
-	/* Set the vector table base address */
-	pSrc = (uint32_t *) & _sfixed;
-	SCB->VTOR = ((uint32_t) pSrc & SCB_VTOR_TBLOFF_Msk);
+        /* Set the vector table base address */
+        pSrc = (uint32_t *) & _sfixed;
+        SCB->VTOR = ((uint32_t) pSrc & SCB_VTOR_TBLOFF_Msk);
 
-
-	/* Initialize the SAM21C */
+		/* Initialize the SAM21C */
 		
-	/* Configure Global Clock */
-	InitGCLK();
-	/* Configure SysTick-Counter */
-	InitSysTick();
-	/* Configure Direct Memory Access Controller */
-	InitDMAC();
-	
-	/* Configure CAN0 */
-	InitCAN0();
-	
-	//Init SPI-SERCOM interface
-	InitSERCOM0();	
-	//Init USART-SERCOM interface to CC41-A
-	InitSERCOM1();
-	//Init SPI-SERCOM interface
-	InitSERCOM2();
-	//Init USART-SERCOM interface to CP2102
-	InitSERCOM5();
+		/* Configure Global Clock */
+		InitGCLK();
+		/* Configure SysTick-Counter */
+		InitSysTick();
+		/* Configure Direct Memory Access Controller */
+		InitDMAC();
 		
-	InitPORT();
+		/* Configure CAN0 */
+		InitCAN0();
+		
+		//Init SPI-SERCOM interface
+		InitSERCOM0();
+		//Init USART-SERCOM interface to CC41-A
+		InitSERCOM1();
+		//Init SPI-SERCOM interface
+		InitSERCOM2();
+		//Init USART-SERCOM interface to CP2102
+		InitSERCOM5();
+		
+		InitPORT();
 
-	/* Initialize the C library */
-	__libc_init_array();
+        /* Initialize the C library */
+        __libc_init_array();
 
-	/* Branch to main function */
-	main();
+        /* Branch to main function */
+        main();
 
-	/* Infinite loop */
-	while (1);
+        /* Infinite loop */
+        while (1);
 }
 
 /**
@@ -296,4 +296,6 @@ void Reset_Handler(void)
  */
 void Dummy_Handler(void)
 {
+        while (1) {
+        }
 }
