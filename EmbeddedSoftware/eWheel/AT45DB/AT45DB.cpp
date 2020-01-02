@@ -17,7 +17,7 @@ RUN_RESULT AT45DB::Run(uint32_t timeStamp)
 {
 	if (TraceBuffer_available(this->Buffer) && IsReady())
 	{
-		TracePage_Write(this->PageIndex, TraceBuffer_GetPage(this->Buffer), true);
+		MemPage_Write(this->PageIndex, TraceBuffer_GetPage(this->Buffer), true);
 		this->PageIndex++;
 	}
 	
@@ -33,7 +33,7 @@ AT45DB::AT45DB()
 	TraceBuffer_init(this->Buffer)
 }
 
-uint8_t AT45DB::AddTracePage(TracePage *page)
+uint8_t AT45DB::AddMemPage(FlashPage *page)
 {	
 	TraceBuffer_AddPage(this->Buffer, page)	
 	return 1;
@@ -57,7 +57,7 @@ bool AT45DB::IsReady()
 	return (result >> 7);
 }
 
-void AT45DB::EraseTrace()
+void AT45DB::Erase()
 {
 	//CS Low
 	PORT->Group[0].OUTCLR.reg = PORT_PA08;
@@ -77,7 +77,7 @@ void AT45DB::EraseTrace()
 ///<param name="pageIndex">Index of the page to write to (0 to 8192)</param>
 ///<param name="dest">data-buffer holding at least 528 bytes to write the page content to</param>
 ///<returns>1 on success</returns>
-uint8_t AT45DB::TracePage_Read(uint16_t pageIndex, TracePage *page)
+uint8_t AT45DB::MemPage_Read(uint16_t pageIndex, FlashPage *page)
 {
 	uint32_t op_addr = 0x00000000;
 	op_addr |= (OP_PAGE_READ_MEM << 24);
@@ -116,7 +116,7 @@ uint8_t AT45DB::TracePage_Read(uint16_t pageIndex, TracePage *page)
 ///<param name="data">data-buffer containing 528 bytes to write to page</param>
 ///<param name="data">true if Buffer 1 should be used. False for Buffer 2</param>
 ///<returns>1 on success</returns>
-uint8_t AT45DB::TracePage_Write(uint16_t pageIndex, TracePage *page, bool primBuff)
+uint8_t AT45DB::MemPage_Write(uint16_t pageIndex, FlashPage *page, bool primBuff)
 {
 	uint32_t op_addr = 0x00000000;
 	

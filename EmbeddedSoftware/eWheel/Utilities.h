@@ -13,7 +13,7 @@ extern "C" {
 
 #include "samc21.h"
 
-enum TraceType
+enum PageType
 {
 	BoardTrace = 1,
 	VESCTrace = 2,

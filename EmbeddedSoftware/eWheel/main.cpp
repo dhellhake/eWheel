@@ -27,7 +27,10 @@ int main(void)
 		&Bluetooth
 	};
 	
+	FlashPage page;
+	
 	uint32_t t_now = 0;
+	uint32_t t_now_2 = sizeof(page);
 	
 	uint8_t taskIndex = 0;
 	while (1)
@@ -35,14 +38,18 @@ int main(void)
 		t_now = GetElapsedMilis();
 		
 		if (taskPool[taskIndex]->Run(t_now) == RUN_RESULT::SUCCESS)
-		taskPool[taskIndex]->LAST_RUNNED = t_now;
+			taskPool[taskIndex]->LAST_RUNNED = t_now;
+
+		t_now_2 = GetElapsedMilis();		
+		while (t_now_2 - t_now < 5)
+			t_now_2 = GetElapsedMilis();
 
 		taskIndex++;
 		if (taskIndex >= TASKPOOL_SIZE)
-		taskIndex = 0;
+			taskIndex = 0;
 		
 		if (Drive.TaskStatus == TASK_STATUS::COMPLETE)
-		for (uint8_t ti = 0; ti < TASKPOOL_SIZE; ti++)
-		taskPool[ti]->Reset();
+			for (uint8_t ti = 0; ti < TASKPOOL_SIZE; ti++)
+				taskPool[ti]->Reset();
 	}
 }

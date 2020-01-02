@@ -61,7 +61,7 @@ void CC41A::SendDriveTrace(uint32_t timeStamp)
 	*fPtr = Drive.AvlRelACPD;	
 	
 	pkg._timeStamp = timeStamp;
-	pkg._type = TraceType::DriveTrace;
+	pkg._type = PageType::DriveTrace;
 	pkg._data = data;
 	pkg._length = 8;
 	
@@ -91,7 +91,7 @@ void CC41A::SendESCTrace(uint32_t timeStamp)
 	*fPtr = VESC.Avl_PIDPosNow;
 	
 	pkg._timeStamp = timeStamp;
-	pkg._type = TraceType::VESCTrace;
+	pkg._type = PageType::VESCTrace;
 	pkg._data = data;
 	pkg._length = 20;
 	
@@ -117,7 +117,7 @@ void CC41A::SendChassisTrace(uint32_t timeStamp)
 	*fPtr = Board.Road_Roll;
 		
 	pkg._timeStamp = timeStamp;
-	pkg._type = TraceType::BoardTrace;
+	pkg._type = PageType::BoardTrace;
 	pkg._data = data;
 	pkg._length = 16;
 		

@@ -24,10 +24,10 @@
 
 
 typedef struct {
-	TraceType _type;
-	uint16_t _position;
-	uint8_t _data[524];
-} TracePage;
+	PageType _type;
+	uint8_t _reserved;
+	uint8_t _data[526];
+} FlashPage;
 
 
 
@@ -37,8 +37,8 @@ typedef struct {
 typedef struct {
 	uint8_t _read;
 	uint8_t _write;
-	TracePage* _page[TRACEBUFFER_SIZE];
-} TraceBuffer;
+	FlashPage* _page[TRACEBUFFER_SIZE];
+} FlashBuffer;
 
 #define TraceBuffer_init(buffer)         { buffer._read = 0; buffer._write = 0; }
 #define TraceBuffer_available(buffer)    ( buffer._read != buffer._write )
@@ -66,16 +66,16 @@ class AT45DB : public Executable
 	/************************************************************************/
 	public:		
 		AT45DB();
-		uint8_t AddTracePage(TracePage *page);
-		uint8_t TracePage_Read(uint16_t pageIndex, TracePage *page);
-		void EraseTrace();
+		uint8_t AddMemPage(FlashPage *page);
+		uint8_t MemPage_Read(uint16_t pageIndex, FlashPage *page);
+		void Erase();
 		bool IsReady();
 		
 	private:
 		uint16_t PageIndex = 0;
-		TraceBuffer Buffer;
+		FlashBuffer Buffer;
 		
-		uint8_t TracePage_Write(uint16_t pageIndex, TracePage *page, bool primBuff);	
+		uint8_t MemPage_Write(uint16_t pageIndex, FlashPage *page, bool primBuff);	
 }; //AT45DB
 
 extern AT45DB Trace;

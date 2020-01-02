@@ -17,7 +17,7 @@ enum class DEBUG_CMD
 };
 
 typedef struct {
-	TraceType _type;
+	PageType _type;
 	uint32_t _timeStamp;
 	uint8_t _length;
 	uint8_t* _data;
