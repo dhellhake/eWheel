@@ -46,6 +46,7 @@ class Chassis : public Executable
 	
 	private:		
 		FlashPage Page;
+		uint32_t PageSequence_Ind = 0;
 		uint8_t PageBlock_Ind = 0;
 		
 		inline bool IsRolledOver()

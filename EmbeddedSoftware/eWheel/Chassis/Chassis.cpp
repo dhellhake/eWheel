@@ -65,7 +65,9 @@ void Chassis::Trace()
 	this->PageBlock_Ind++;
 	if (this->PageBlock_Ind == CHASSIS_FLASH_PAGE_BLOCK_CNT)
 	{
+		this->Page._Sequence = this->PageSequence_Ind;
 		Flash.MemPage_Write(&this->Page, true);
+		this->PageSequence_Ind++;
 		this->PageBlock_Ind = 0;
 	}
 }

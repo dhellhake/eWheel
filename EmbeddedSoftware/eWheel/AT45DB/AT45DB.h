@@ -31,7 +31,7 @@
 typedef struct {
 	uint8_t _data[FLASHPAGE_SIZE];
 	PageType _type;
-	uint8_t _reserved;
+	uint32_t _Sequence;
 } FlashPage;
 
 class AT45DB

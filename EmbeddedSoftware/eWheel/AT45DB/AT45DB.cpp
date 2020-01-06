@@ -92,13 +92,10 @@ uint8_t AT45DB::MemPage_Read(uint16_t pageIndex, FlashPage *page)
 uint8_t AT45DB::MemPage_Write(FlashPage *page, bool primBuff)
 {
 	if (this->PageWrite_Ind >= FLASHPAGE_CNT)
-		return 0;
-	else
-	{
+		this->PageWrite_Ind = 0;
 		
-		this->PageWrite_Ind++;
-		return this->MemPage_Write(this->PageWrite_Ind - 1, page, primBuff);		
-	}
+	this->PageWrite_Ind++;
+	return this->MemPage_Write(this->PageWrite_Ind - 1, page, primBuff);
 }
 
 ///<summary>
