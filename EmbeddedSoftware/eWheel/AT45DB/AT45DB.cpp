@@ -5,6 +5,7 @@
 * Author: Dominik Hellhake
 */
 #include <string.h>
+#include <stdlib.h>
 #include "AT45DB.h"
 #include "..\LowLevel/SPI/SPI.h"
 
@@ -15,7 +16,7 @@ AT45DB Flash;
 /************************************************************************/
 AT45DB::AT45DB()
 {
-	this->PageWrite_Ind = 0;
+	this->PageWrite_Ind = rand() % FLASHPAGE_CNT;
 }
 
 ///<summary>
