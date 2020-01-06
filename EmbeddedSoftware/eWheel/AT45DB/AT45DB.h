@@ -12,6 +12,11 @@
 #include "..\Utilities.h"
 
 
+#define FLASHBUFFER_SIZE 4
+
+#define FLASHPAGE_CNT		8192
+#define FLASHPAGE_SIZE		512
+
 #define OP_STATUS			0xD7
 #define OP_PAGE_READ_MEM	0xD2
 #define OP_PAGE_PROG_BUFF_1 0x82
@@ -24,60 +29,28 @@
 
 
 typedef struct {
+	uint8_t _data[FLASHPAGE_SIZE];
 	PageType _type;
 	uint8_t _reserved;
-	uint8_t _data[526];
 } FlashPage;
 
-
-
-
-#define TRACEBUFFER_SIZE 4
-
-typedef struct {
-	uint8_t _read;
-	uint8_t _write;
-	FlashPage* _page[TRACEBUFFER_SIZE];
-} FlashBuffer;
-
-#define TraceBuffer_init(buffer)         { buffer._read = 0; buffer._write = 0; }
-#define TraceBuffer_available(buffer)    ( buffer._read != buffer._write )
-#define TraceBuffer_GetPage(buffer) (																			\
-		(TraceBuffer_available(buffer)) ?																		\
-		buffer._page[buffer._read = (buffer._read + 1) & (TRACEBUFFER_SIZE-1)] : 0							\
-)
-#define TraceBuffer_AddPage(buffer, data) {																		\
-		uint8_t tmphead = ( buffer._write + 1 ) & (TRACEBUFFER_SIZE-1);			/* calculate buffer index */    \
-		if(tmphead != buffer._read) {											/* if buffer is not full */     \
-			buffer._page[tmphead] = data;										/* store data in buffer */      \
-			buffer._write = tmphead;											/* store new index */           \
-		}																										\
-}
-
-class AT45DB : public Executable
+class AT45DB
 {
-	/************************************************************************/
-	/* Executable Interface implementation                                  */
-	/************************************************************************/
-	virtual RUN_RESULT Run(uint32_t timeStamp);
-
 	/************************************************************************/
 	/* Class implementation                                                 */
 	/************************************************************************/
 	public:		
 		AT45DB();
-		uint8_t AddMemPage(FlashPage *page);
-		uint8_t MemPage_Read(uint16_t pageIndex, FlashPage *page);
 		void Erase();
 		bool IsReady();
-		
+		uint8_t MemPage_Read(uint16_t pageIndex, FlashPage *page);
+		uint8_t MemPage_Write(FlashPage *page, bool primBuff);
 	private:
-		uint16_t PageIndex = 0;
-		FlashBuffer Buffer;
+		uint16_t PageWrite_Ind;		
 		
 		uint8_t MemPage_Write(uint16_t pageIndex, FlashPage *page, bool primBuff);	
 }; //AT45DB
 
-extern AT45DB Trace;
+extern AT45DB Flash;
 
 #endif //__AT45DB_H__

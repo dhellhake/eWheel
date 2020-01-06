@@ -8,35 +8,14 @@
 #include "AT45DB.h"
 #include "..\LowLevel/SPI/SPI.h"
 
-AT45DB Trace;
-
-/************************************************************************/
-/* Executable Interface implementation                                  */
-/************************************************************************/
-RUN_RESULT AT45DB::Run(uint32_t timeStamp)
-{
-	if (TraceBuffer_available(this->Buffer) && IsReady())
-	{
-		MemPage_Write(this->PageIndex, TraceBuffer_GetPage(this->Buffer), true);
-		this->PageIndex++;
-	}
-	
-	return RUN_RESULT::SUCCESS;
-}
+AT45DB Flash;
 
 /************************************************************************/
 /* Class implementation                                                 */
 /************************************************************************/
 AT45DB::AT45DB()
-{	
-	//Init TraceBuffer
-	TraceBuffer_init(this->Buffer)
-}
-
-uint8_t AT45DB::AddMemPage(FlashPage *page)
-{	
-	TraceBuffer_AddPage(this->Buffer, page)	
-	return 1;
+{
+	this->PageWrite_Ind = 0;
 }
 
 ///<summary>
@@ -109,6 +88,19 @@ uint8_t AT45DB::MemPage_Read(uint16_t pageIndex, FlashPage *page)
 }
 
 
+
+uint8_t AT45DB::MemPage_Write(FlashPage *page, bool primBuff)
+{
+	if (this->PageWrite_Ind >= FLASHPAGE_CNT)
+		return 0;
+	else
+	{
+		
+		this->PageWrite_Ind++;
+		return this->MemPage_Write(this->PageWrite_Ind - 1, page, primBuff);		
+	}
+}
+
 ///<summary>
 ///Uses the Main Memory Page Program through Buffer Command (0x82) to write 528 bytes to a certain page
 ///</summary>
@@ -117,7 +109,7 @@ uint8_t AT45DB::MemPage_Read(uint16_t pageIndex, FlashPage *page)
 ///<param name="data">true if Buffer 1 should be used. False for Buffer 2</param>
 ///<returns>1 on success</returns>
 uint8_t AT45DB::MemPage_Write(uint16_t pageIndex, FlashPage *page, bool primBuff)
-{
+{	
 	uint32_t op_addr = 0x00000000;
 	
 	if (primBuff)
