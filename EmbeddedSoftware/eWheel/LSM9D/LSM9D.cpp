@@ -15,7 +15,6 @@ LSM9D Gyro;
 /************************************************************************/
 RUN_RESULT LSM9D::Run(uint32_t timeStamp)
 {	
-	
 	uint8_t status[1];
 	this->ReadBytes(STATUS_REG_1, status, 1);
 	
@@ -34,11 +33,6 @@ RUN_RESULT LSM9D::Run(uint32_t timeStamp)
 			
 			this->Roll += ROLL_OFFSET;
 			this->Pitch += PITCH_OFFSET;
-			
-			this->diff_duties[this->Trc_Ind++] = timeStamp;
-			
-			if (this->Trc_Ind >= 100)
-				this->Trc_Ind = 0;
 			
 			this->TaskStatus = TASK_STATUS::COMPLETE;
 			return RUN_RESULT::SUCCESS;

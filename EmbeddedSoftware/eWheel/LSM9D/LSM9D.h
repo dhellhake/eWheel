@@ -41,10 +41,7 @@ class LSM9D : public Executable
 		float Roll = 0;	
 	public:
 		LSM9D();
-	private:
-		uint32_t diff_duties[100] = { 0 };
-		uint16_t Trc_Ind = 0;
-	
+	private:	
 		uint8_t ReadBytes(uint8_t address, uint8_t *dest, uint8_t count);	
 		uint8_t WriteRegister(uint8_t address, uint8_t data);
 }; //LSM9D
