@@ -9,6 +9,10 @@
 
 #include "samc21.h"
 #include "..\Executable.h"
+#include "..\AT45DB\AT45DB.h"
+
+#define CHASSIS_FLASH_PAGE_BLOCK_CNT	40
+#define CHASSIS_FLASH_PAGE_BLOCK_SIZE	12
 
 enum class ChassisState
 {
@@ -23,6 +27,7 @@ class Chassis : public Executable
 	/* Executable Interface implementation                                  */
 	/************************************************************************/
 	virtual RUN_RESULT Run(uint32_t timeStamp);
+	virtual void Trace();
 	
 	/************************************************************************/
 	/* Class implementation                                                 */
@@ -39,7 +44,10 @@ class Chassis : public Executable
 		Chassis();
 		void SetLED(bool state);
 	
-	private:	
+	private:		
+		FlashPage Page;
+		uint8_t PageBlock_Ind = 0;
+		
 		inline bool IsRolledOver()
 		{
 			return this->Chassis_Roll <= -30.0f || this->Chassis_Roll >= 30.0f;
@@ -47,11 +55,11 @@ class Chassis : public Executable
 		inline bool IsPitchedOver()
 		{
 			return this->Chassis_Pitch <= -18.0f || this->Chassis_Pitch >= 18.0f;
-	}
-	inline bool IsStartPosition()
-	{
-		return !this->IsRolledOver() && this->Chassis_Pitch > 18.0f;
-	}
+		}
+		inline bool IsStartPosition()
+		{
+			return !this->IsRolledOver() && this->Chassis_Pitch > 18.0f;
+		}
 }; //Chassis
 
 extern Chassis Board;

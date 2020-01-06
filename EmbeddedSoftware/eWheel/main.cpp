@@ -14,7 +14,7 @@
 #include "ESC/ESC.h"
 #include "LSM9D/LSM9D.h"
 
-#define TASKPOOL_SIZE	6
+#define TASKPOOL_SIZE	5
 
 int main(void)
 {
@@ -23,14 +23,13 @@ int main(void)
 		&Board,
 		&VESC,
 		&Gyro,
-		&Trace,
 		&Bluetooth
 	};
 	
-	FlashPage page;
+	Board.EnableTrace();
 	
 	uint32_t t_now = 0;
-	uint32_t t_now_2 = sizeof(page);
+	uint32_t t_now_2 = 0;
 	
 	uint8_t taskIndex = 0;
 	while (1)
@@ -40,10 +39,10 @@ int main(void)
 		if (taskPool[taskIndex]->Run(t_now) == RUN_RESULT::SUCCESS)
 			taskPool[taskIndex]->LAST_RUNNED = t_now;
 
-		t_now_2 = GetElapsedMilis();		
-		while (t_now_2 - t_now < 5)
+		t_now_2 = GetElapsedMilis();			
+		while (t_now_2 - t_now < 10)
 			t_now_2 = GetElapsedMilis();
-
+		
 		taskIndex++;
 		if (taskIndex >= TASKPOOL_SIZE)
 			taskIndex = 0;

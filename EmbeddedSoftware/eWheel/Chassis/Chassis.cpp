@@ -6,6 +6,7 @@
 */
 #include "Chassis.h"
 #include "..\LSM9D\LSM9D.h"
+#include "..\LowLevel\Device\SysTick\SysTick.h"
 
 Chassis Board;
 
@@ -17,10 +18,8 @@ RUN_RESULT Chassis::Run(uint32_t timeStamp)
 	if (Gyro.TaskStatus != TASK_STATUS::COMPLETE)
 		return RUN_RESULT::IDLE;
 	
-	float pitch = Gyro.Pitch - this->Road_Pitch;
-	
-	this->Chassis_Pitch = this->Chassis_Pitch - (0.3 * (this->Chassis_Pitch - pitch));	
-	this->Chassis_Roll = Gyro.Roll - this->Road_Pitch;	
+	this->Chassis_Pitch = Gyro.Pitch - this->Chassis_Pitch;	
+	this->Chassis_Roll = Gyro.Roll - this->Road_Roll;	
 	
 	switch (this->State)
 	{
@@ -43,8 +42,32 @@ RUN_RESULT Chassis::Run(uint32_t timeStamp)
 		break;
 	}
 	
+	if (this->TraceEnabled)
+		Trace();
+	
 	this->TaskStatus = TASK_STATUS::COMPLETE;
 	return RUN_RESULT::SUCCESS;
+}
+
+void Chassis::Trace()
+{
+	uint32_t* iPtr = (uint32_t*)this->Page._data + ((this->PageBlock_Ind * CHASSIS_FLASH_PAGE_BLOCK_SIZE) / 4);
+	*iPtr = GetElapsedMilis();
+	
+	float* fPtr = (float*)this->Page._data + ((this->PageBlock_Ind * CHASSIS_FLASH_PAGE_BLOCK_SIZE) / 4);
+	
+	fPtr += 1;
+	*fPtr = Gyro.Pitch;
+	
+	fPtr += 1;
+	*fPtr = Gyro.Roll;
+	
+	this->PageBlock_Ind++;
+	if (this->PageBlock_Ind == CHASSIS_FLASH_PAGE_BLOCK_CNT)
+	{
+		Flash.MemPage_Write(&this->Page, true);
+		this->PageBlock_Ind = 0;
+	}
 }
 
 
@@ -53,6 +76,7 @@ RUN_RESULT Chassis::Run(uint32_t timeStamp)
 /************************************************************************/
 Chassis::Chassis()
 {
+	this->Page._type = BoardTrace;
 } //Chassis
 
 void Chassis::SetLED(bool state)
