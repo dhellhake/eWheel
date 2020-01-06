@@ -28,15 +28,19 @@ class Executable
 	public:	
 		virtual RUN_RESULT Run(uint32_t timeStamp) { return RUN_RESULT::NOT_IMPLEMENTED; };
 		
-		virtual void EnableTrace() {};
+		virtual void EnableTrace() { this->TraceEnabled = true; };
 		
-		virtual void DisableTrace() {};
+		virtual void DisableTrace() { this->TraceEnabled = false; };
+		
+		virtual void Trace() {};
 		
 		virtual void Reset() { this->TaskStatus = TASK_STATUS::RUNNING; }
 		
 		TASK_STATUS TaskStatus = TASK_STATUS::RUNNING;
 		
 		uint32_t LAST_RUNNED = 0;
+		
+		bool TraceEnabled = false;
 }; //Executable
 
 #endif /* EXECUTABLE_H_ */
