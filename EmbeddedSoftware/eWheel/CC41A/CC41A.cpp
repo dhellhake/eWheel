@@ -17,19 +17,25 @@ CC41A Bluetooth;
 /************************************************************************/
 RUN_RESULT CC41A::Run(uint32_t timeStamp)
 {	
-	if (this->ReceiveBufferIndex >= 2)
+	if (this->ReceiveBufferIndex >= 1)
 	{
 		switch ((DEBUG_CMD)this->ReceiveBuffer[0])
 		{
 			case DEBUG_CMD::SetLED:
-				Board.SetLED(this->ReceiveBuffer[1] > 0);
+				if (this->ReceiveBufferIndex >= 2)
+				{
+					Board.SetLED(this->ReceiveBuffer[1] > 0);
+					this->ReceiveBufferIndex -= 2;
+				}
+			break;
+			case DEBUG_CMD::GetDriveConfig:
+				this->SendDriveConfig(timeStamp);
+				this->ReceiveBufferIndex -= 1;
 			break;
 		}
-		//Reset Command Buffer
-		this->ReceiveBufferIndex -= 2;
 	}	
 	
-	if (timeStamp - this->LastReported >= 100)
+	if (0)
 	{
 		SendESCTrace(timeStamp);
 		SendChassisTrace(timeStamp);
@@ -48,10 +54,29 @@ CC41A::CC41A()
 {
 } //CC41A
 
+void CC41A::SendDriveConfig(uint32_t timeStamp)
+{
+	DataPackage pkg;
+	
+	uint8_t data[8] = {0};
+	
+	float* fPtr = (float*)data;
+	*fPtr = Drive.Balancing_Kp;
+	
+	fPtr = (float*)(data + 4);
+	*fPtr = Drive.Balancing_Kd;
+	
+	pkg._timeStamp = timeStamp;
+	pkg._type = PackageType::DriveConfig;
+	pkg._data = data;
+	pkg._length = 8;
+	
+	this->SendDataPackage(&pkg);
+}
 
 void CC41A::SendDriveTrace(uint32_t timeStamp)
 {
-	TracePackage pkg;
+	DataPackage pkg;
 	
 	uint8_t data[8] = {0};
 	
@@ -61,7 +86,7 @@ void CC41A::SendDriveTrace(uint32_t timeStamp)
 	*fPtr = Drive.AvlRelACPD;	
 	
 	pkg._timeStamp = timeStamp;
-	pkg._type = PageType::DriveTrace;
+	pkg._type = PackageType::DriveTrace;
 	pkg._data = data;
 	pkg._length = 8;
 	
@@ -71,7 +96,7 @@ void CC41A::SendDriveTrace(uint32_t timeStamp)
 
 void CC41A::SendESCTrace(uint32_t timeStamp)
 {
-	TracePackage pkg;
+	DataPackage pkg;
 	
 	uint8_t data[20] = {0};
 	
@@ -91,7 +116,7 @@ void CC41A::SendESCTrace(uint32_t timeStamp)
 	*fPtr = VESC.Avl_PIDPosNow;
 	
 	pkg._timeStamp = timeStamp;
-	pkg._type = PageType::VESCTrace;
+	pkg._type = PackageType::VESCTrace;
 	pkg._data = data;
 	pkg._length = 20;
 	
@@ -100,13 +125,13 @@ void CC41A::SendESCTrace(uint32_t timeStamp)
 
 void CC41A::SendChassisTrace(uint32_t timeStamp)
 {
-	TracePackage pkg;
+	DataPackage pkg;
 		
 	uint8_t data[16] = {0};
 		
 	float* fPtr = (float*)data;
 	*fPtr = Board.Chassis_Pitch;
-		
+			
 	fPtr = (float*)(data + 4);
 	*fPtr = Board.Chassis_Roll;
 	
@@ -117,14 +142,14 @@ void CC41A::SendChassisTrace(uint32_t timeStamp)
 	*fPtr = Board.Road_Roll;
 		
 	pkg._timeStamp = timeStamp;
-	pkg._type = PageType::BoardTrace;
+	pkg._type = PackageType::BoardTrace;
 	pkg._data = data;
 	pkg._length = 16;
 		
 	this->SendDataPackage(&pkg);
 }
 
-void CC41A::SendDataPackage(TracePackage *pkg)
+void CC41A::SendDataPackage(DataPackage *pkg)
 {	
 	//PackageType
 	SERCOM1_SendByte((uint8_t)pkg->_type);

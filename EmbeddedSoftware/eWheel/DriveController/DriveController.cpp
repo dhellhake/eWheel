@@ -74,9 +74,7 @@ RUN_RESULT DriveController::Run(uint32_t timeStamp)
 				float deriv = error - this->LastCtrlError;
 				this->LastCtrlError = error;
 				
-				float diff_duty = (error * 0.15f) + (deriv * 0.2f);
-				//float diff_duty = (pow(error, 2) * 0.02f);
-				
+				float diff_duty = (error * Balancing_Kp) + (deriv * Balancing_Kd);				
 											
 				if (diff_duty > 0.25f)
 					diff_duty = 0.25f;

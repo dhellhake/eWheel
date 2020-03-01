@@ -13,11 +13,13 @@ extern "C" {
 
 #include "samc21.h"
 
-enum PageType
+enum PackageType
 {
 	BoardTrace = 1,
 	VESCTrace = 2,
-	DriveTrace = 3
+	DriveTrace = 3,
+	
+	DriveConfig = 4
 };
 
 /*

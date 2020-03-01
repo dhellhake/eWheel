@@ -13,17 +13,18 @@
 
 enum class DEBUG_CMD
 {
+	GetDriveConfig = 64,
 	SetLED = 65
 };
 
 typedef struct {
-	PageType _type;
+	PackageType _type;
 	uint32_t _timeStamp;
 	uint8_t _length;
 	uint8_t* _data;
-} TracePackage;
+} DataPackage;
 
-#define RECEIVE_BUFFER_SIZE 64
+#define RECEIVE_BUFFER_SIZE 1024
 
 class CC41A : public Executable
 {
@@ -38,8 +39,10 @@ class CC41A : public Executable
 	private:
 		uint32_t LastReported;
 		
-		uint8_t ReceiveBufferIndex = 0;
-		uint8_t ReceiveBuffer[RECEIVE_BUFFER_SIZE];	
+		uint32_t ReceiveBufferIndex = 0;
+		uint8_t ReceiveBuffer[RECEIVE_BUFFER_SIZE];
+		
+		void SendDriveConfig(uint32_t timeStamp);
 		
 		void SendESCTrace(uint32_t timeStamp);
 		void SendChassisTrace(uint32_t timeStamp);
@@ -47,7 +50,7 @@ class CC41A : public Executable
 	public:
 		CC41A();
 		void ReceiveByte(uint8_t data);
-		void SendDataPackage(TracePackage *pkg);
+		void SendDataPackage(DataPackage *pkg);
 }; //CC41A
 
 extern CC41A Bluetooth;

@@ -37,6 +37,9 @@ class DriveController : public Executable
 	public:
 		DriveState State;
 		float AvlRelACPD = 0.0f;
+		float Balancing_Kp = 0.1f;
+		float Balancing_Kd = 0.15f;
+		
 	
 		DriveController();
 	

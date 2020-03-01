@@ -22,8 +22,8 @@
 #define SENSITIVITY_ACCELEROMETER_4		1.22
 #define SENSITIVITY_ACCELEROMETER_16	7.32
 
-#define PITCH_OFFSET					-1.84f
-#define ROLL_OFFSET						2.2f
+#define PITCH_OFFSET					-5.1f
+#define ROLL_OFFSET						+0.6f
 
 class LSM9D : public Executable
 {

@@ -41,6 +41,8 @@ namespace TraceView
             this.PlotModel = newPlot;
         }
         
+
+
         private void Device_OrientationPackageReceived(object sender, ChassisEventArgs e)
         {
             this.DataPackages.Add(e.DataPackage);
