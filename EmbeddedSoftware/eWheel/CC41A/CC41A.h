@@ -13,7 +13,9 @@
 
 enum class DEBUG_CMD
 {
+	SetDriveConfig = 63,
 	GetDriveConfig = 64,
+	
 	SetLED = 65
 };
 
@@ -42,7 +44,8 @@ class CC41A : public Executable
 		uint32_t ReceiveBufferIndex = 0;
 		uint8_t ReceiveBuffer[RECEIVE_BUFFER_SIZE];
 		
-		void SendDriveConfig(uint32_t timeStamp);
+		void ReadDriveConfig(uint32_t timeStamp);
+		void WriteDriveConfig(uint8_t *data);
 		
 		void SendESCTrace(uint32_t timeStamp);
 		void SendChassisTrace(uint32_t timeStamp);

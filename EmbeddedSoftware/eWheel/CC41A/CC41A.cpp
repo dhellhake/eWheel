@@ -29,8 +29,15 @@ RUN_RESULT CC41A::Run(uint32_t timeStamp)
 				}
 			break;
 			case DEBUG_CMD::GetDriveConfig:
-				this->SendDriveConfig(timeStamp);
+				this->ReadDriveConfig(timeStamp);
 				this->ReceiveBufferIndex -= 1;
+			break;
+			case DEBUG_CMD::SetDriveConfig:
+				if (this->ReceiveBufferIndex >= 12)
+				{
+					this->WriteDriveConfig(&this->ReceiveBuffer[4]);
+					this->ReceiveBufferIndex -= 12;
+				}
 			break;
 		}
 	}	
@@ -54,7 +61,7 @@ CC41A::CC41A()
 {
 } //CC41A
 
-void CC41A::SendDriveConfig(uint32_t timeStamp)
+void CC41A::ReadDriveConfig(uint32_t timeStamp)
 {
 	DataPackage pkg;
 	
@@ -72,6 +79,14 @@ void CC41A::SendDriveConfig(uint32_t timeStamp)
 	pkg._length = 8;
 	
 	this->SendDataPackage(&pkg);
+}
+void CC41A::WriteDriveConfig(uint8_t *data)
+{	
+	float* fPtr = (float*)data;	
+	Drive.Balancing_Kp = *fPtr;
+	
+	fPtr = (float*)(data + 4);
+	Drive.Balancing_Kd = *fPtr;
 }
 
 void CC41A::SendDriveTrace(uint32_t timeStamp)
