@@ -78,7 +78,7 @@ void ESC::ReceiveByte(uint8_t data)
 	this->ReceiveBuffer[this->ReceiveBufferIndex++] = data;
 	
 	if (this->ReceiveBufferIndex >= 2)
-		if (this->ReceiveBuffer[1] < this->ReceiveBufferIndex)
+		if ((this->ReceiveBuffer[1] + 4) < this->ReceiveBufferIndex)
 		{
 			memcpy(this->ReceiveBuffer_2, &this->ReceiveBuffer[2], this->ReceiveBuffer[1] - 1);			
 			this->ReceiveBufferIndex = 0;
