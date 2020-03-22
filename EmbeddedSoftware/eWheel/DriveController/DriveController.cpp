@@ -36,7 +36,6 @@ RUN_RESULT DriveController::Run(uint32_t timeStamp)
 	switch(this->State)
 	{
 		case DriveState::Stopped:
-			VESC.SetBrake(4.0f);
 			if (Board.State == ChassisState::Starting)
 			{
 				this->State_Dbnc += timeStamp - this->LAST_RUNNED;
@@ -114,7 +113,9 @@ RUN_RESULT DriveController::Run(uint32_t timeStamp)
 				VESC.SetTar_Duty(VESC.Tar_Duty + tar_duty);
 				
 				if (VESC.Tar_Duty == 0.0f && VESC.Avl_RPM <= 200)
-				VESC.SetHandBrake(6.0f);
+				{	
+					//VESC.SetHandBrake(6.0f);
+				}
 			}				
 		break;
 		}

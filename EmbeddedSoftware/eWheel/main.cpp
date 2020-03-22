@@ -26,11 +26,8 @@ int main(void)
 		&Bluetooth
 	};
 	
-	Board.EnableTrace();
-	
 	uint32_t t_now = 0;
-	uint32_t t_now_2 = 0;
-	
+	uint32_t t_now_2 = 0;	
 	uint8_t taskIndex = 0;
 	while (1)
 	{

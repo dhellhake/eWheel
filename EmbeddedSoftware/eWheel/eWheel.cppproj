@@ -218,13 +218,10 @@
     <Compile Include="ESC\ESC.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="ESC\ESCUtilities.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Executable.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="LowLevel\Device\CAN\CANCont.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="LowLevel\Device\CAN\CANCont.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="LowLevel\Device\Device_Startup\startup_samc21.c">
@@ -297,7 +294,6 @@
     <Folder Include="LowLevel\Device\Device_Startup\" />
     <Folder Include="LowLevel\Device\GCLK" />
     <Folder Include="LowLevel\Device\DMA" />
-    <Folder Include="LowLevel\Device\CAN" />
     <Folder Include="LowLevel\Device\PORT" />
     <Folder Include="LowLevel\Device\SERCOM" />
     <Folder Include="LowLevel\Device\SysTick" />

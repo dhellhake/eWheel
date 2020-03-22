@@ -11,5 +11,6 @@
 
 void SERCOM5_SendByte(uint8_t byte);
 void SERCOM1_SendByte(uint8_t byte);
+void SERCOM3_SendByte(uint8_t byte);
 
 #endif //__USART_H__

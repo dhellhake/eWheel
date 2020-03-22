@@ -7,14 +7,7 @@
 #include "PORT.h"
 
 void InitPORT()
-{
-	/* Init PORT interface to CAN transreceiver */
-	// Configure STBY-Pin as Output
-	PORT->Group[0].DIRSET.reg = PORT_PA27;
-	PORT->Group[0].OUTCLR.reg = PORT_PA27;	
-	SetPinPeripheralFunction(PINMUX_PB22G_CAN0_TX);
-	SetPinPeripheralFunction(PINMUX_PB23G_CAN0_RX);
-	
+{	
 	/* Init PORT interface to LS9M */
 	//Configure CS-Pin as Output
 	PORT->Group[0].DIRSET.reg = PORT_PA12;
@@ -39,6 +32,10 @@ void InitPORT()
 	/* Init PORT interface to CC41-A */
 	SetPinPeripheralFunction(PINMUX_PA17C_SERCOM1_PAD1);
 	SetPinPeripheralFunction(PINMUX_PA16C_SERCOM1_PAD0);
+	
+	/* Init PORT interface to VESC */
+	SetPinPeripheralFunction(PINMUX_PA22C_SERCOM3_PAD0);
+	SetPinPeripheralFunction(PINMUX_PA23C_SERCOM3_PAD1);
 	
 	/* Init PORT interface to CP2102 */
 	SetPinPeripheralFunction(PINMUX_PB02D_SERCOM5_PAD0);

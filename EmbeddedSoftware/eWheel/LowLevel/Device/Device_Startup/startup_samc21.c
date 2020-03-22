@@ -32,7 +32,6 @@
 #include "..\GCLK\GCLK.h"
 #include "..\SysTick\SysTick.h"
 #include "..\DMA\DMA.h"
-#include "..\CAN\CANCont.h"
 #include "..\SERCOM\SERCOM.h"
 #include "..\PORT\PORT.h"
 
@@ -267,15 +266,14 @@ void Reset_Handler(void)
 		/* Configure Direct Memory Access Controller */
 		InitDMAC();
 		
-		/* Configure CAN0 */
-		InitCAN0();
-		
 		//Init SPI-SERCOM interface
 		InitSERCOM0();
 		//Init USART-SERCOM interface to CC41-A
 		InitSERCOM1();
 		//Init SPI-SERCOM interface
 		InitSERCOM2();
+		//Init USART-SERCOM interface to VESC
+		InitSERCOM3();
 		//Init USART-SERCOM interface to CP2102
 		InitSERCOM5();
 		

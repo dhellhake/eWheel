@@ -110,6 +110,50 @@ void InitSERCOM2()
 	while(SERCOM2->SPI.SYNCBUSY.bit.ENABLE);
 }
 
+
+void InitSERCOM3()
+{
+	//USART:
+	//VESC.RX => PA23 / SERCOM3.PAD0
+	//VESC.TX => PA22 / SERCOM3.PAD1
+	//230400
+	uint32_t baud_val = calculate_baud_value(230400 , GetGCLK_Hz(SERCOM5_GCLK_ID_CORE), 16);
+	//Enable Clock for SERCOM3
+	//Set bits in the clock mask for an APBx bus.
+	MCLK->APBCMASK.bit.SERCOM3_ = 1;
+
+	//Generate Clock al ref for BAUD
+	/* Disable the peripheral channel */
+	GCLK->PCHCTRL[SERCOM3_GCLK_ID_CORE].reg &= ~GCLK_PCHCTRL_CHEN;
+	while (GCLK->PCHCTRL[SERCOM3_GCLK_ID_CORE].reg & GCLK_PCHCTRL_CHEN);
+
+	/* Configure the peripheral channel */
+	GCLK->PCHCTRL[SERCOM3_GCLK_ID_CORE].reg = GCLK_PCHCTRL_GEN(0); //Use Generic Clock Generator 0
+
+	// Enable GCLK for peripheral
+	GCLK->PCHCTRL[SERCOM3_GCLK_ID_CORE].reg |= GCLK_PCHCTRL_CHEN;
+
+	//Configure SERCOM5 for USART
+	SERCOM3->USART.CTRLA.reg =  (1 << SERCOM_USART_CTRLA_DORD_Pos) |	// LSB first
+								(1 << SERCOM_USART_CTRLA_RXPO_Pos) |	// Receive on PAD1 (PA23)
+								(1 << SERCOM_USART_CTRLA_MODE_Pos);		// Use Internal Clock
+	
+	SERCOM3->USART.CTRLB.reg =  (1 << SERCOM_USART_CTRLB_RXEN_Pos) |	//1 = Receiver enabled
+								(1 << SERCOM_USART_CTRLB_TXEN_Pos);		//1 = Transmit enable
+	
+	while(SERCOM3->USART.SYNCBUSY.bit.CTRLB);
+	
+	SERCOM3->USART.BAUD.reg = baud_val;
+	
+	NVIC_SetPriority(SERCOM3_IRQn, 1);
+	NVIC->ISER[0] = (uint32_t)(1 << ((uint32_t)SERCOM3_IRQn & 0x0000001f));
+
+	SERCOM3->USART.INTENSET.reg = SERCOM_USART_INTFLAG_RXC;
+	SERCOM3->USART.CTRLA.reg |= SERCOM_USART_CTRLA_ENABLE;
+	/* synchronization busy */
+	while(SERCOM3->USART.SYNCBUSY.reg & SERCOM_USART_SYNCBUSY_ENABLE);
+}
+
 void InitSERCOM5()
 {
 	//USART:

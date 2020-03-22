@@ -4,8 +4,11 @@
 * Created: 14.04.2019 15:02:13
 * Author: Dominik Hellhake
 */
+#include <string.h>
 #include "ESC.h"
-#include "..\LowLevel\Device\CAN\CANCont.h"
+#include "..\LowLevel\USART\USART.h"
+#include "..\LowLevel/Device/SysTick/SysTick.h"
+#include "..\Utilities.h"
 
 ESC VESC;
 
@@ -15,17 +18,18 @@ ESC VESC;
 RUN_RESULT ESC::Run(uint32_t timeStamp)
 {	
 	RUN_RESULT result = RUN_RESULT::IDLE;
-	
-	if (this->CANRcvBufferIndex > 0)
-	{
-		this->ProcessVESCPackages(timeStamp);
+		
+	if (timeStamp - this->VESCValues_Tstmp >= 200)
+	{	
+		GetVESCValues();
+		this->VESCValues_Tstmp = timeStamp;	
 		result = RUN_RESULT::SUCCESS;
 	}
 	
-	if (timeStamp - this->LastTarValueUpdate >= 5)
-	{
-		SendTarValues(timeStamp);
-		result = RUN_RESULT::SUCCESS;
+	if (this->ReceiveBuffer_2[0] != 0x00)
+	{		
+		this->ReceiveVESCPacket(this->ReceiveBuffer_2, this->ReceiveBuffer_2[1] - 1);
+		this->ReceiveBuffer_2[0] = 0;
 	}
 	
 	return result;
@@ -40,93 +44,86 @@ ESC::ESC()
 
 void ESC::Stop()
 {
-	if (this->Tar_HandBrake > 0.0f)
-		this->SendTarHandBrake(0.0f);
-	if (this->Tar_Brake > 0.0f)
-		this->SendTarBrake(0.0f);
 	if (this->Tar_Duty > 0.0f)
-		this->SendTarDuty(0.0f);
+		this->SetDuty(0.0f);
 	
 	this->ResetTarValues();
 }
 
-void ESC::SendTarValues(uint32_t timeStamp)
-{
-	this->LastTarValueUpdate = timeStamp;
-		
-	if (this->Tar_HandBrake > 0.0f)
-		this->SendTarHandBrake(this->Tar_HandBrake);
-	else if (this->Tar_Brake > 0.0f)
-		this->SendTarBrake(this->Tar_Brake);
-	else if (this->Tar_Duty != 0.0f)
-		this->SendTarDuty(this->Tar_Duty);
-}
-
-void ESC::SendTarHandBrake(float handbrake_val)
-{
-	uint8_t data[4] = {0};
-	buffer_set_int32(data, ((int32_t)(handbrake_val * 1000.0f)));
-	
-	CAN_SendExtMessage(124 | ((uint8_t)VESCPackageType::CAN_PACKET_SET_CURRENT_HANDBRAKE << 8), data, 4, 0);
-}
-
-void ESC::SendTarBrake(float brake_val)
-{
-	uint8_t data[4] = {0};
-	buffer_set_int32(data, ((int32_t)(brake_val * 1000.0f)));
-	
-	CAN_SendExtMessage(124 | ((uint8_t)VESCPackageType::CAN_PACKET_SET_CURRENT_BRAKE << 8), data, 4, 0);
-}
-
-void ESC::SendTarDuty(float duty_val)
-{		
-	uint8_t data[4] = {0};
+void ESC::SetDuty(float duty_val)
+{			
+	uint8_t data[4] = { 0 };
 	buffer_set_int32(data, ((int32_t)(duty_val * 1000.0f * 100.0f)));
 	
-	CAN_SendExtMessage(124 | ((uint8_t)VESCPackageType::CAN_PACKET_SET_DUTY << 8), data, 4, 0);
+	SendVESCPacket(VESCPackageType::COMM_SET_DUTY, data, 4);
 }
 
-void ESC::ProcessVESCPackages(uint32_t timeStamp)
+
+void ESC::SetCurrent(float current_val)
 {
-	for (uint8_t index = 0; index < this->CANRcvBufferIndex; index++)
-	{
-		switch (this->CANRcvBuffer[index]._type)
-		{
-			case VESCPackageType::CAN_PACKET_STATUS:
-				this->Avl_RPM =			(float)buffer_get_int32(this->CANRcvBuffer[index]._data, 0);
-				this->Avl_Current =		(float)buffer_get_int16(this->CANRcvBuffer[index]._data, 4) / 10.0f;
-				this->Avl_Duty =		(float)buffer_get_int16(this->CANRcvBuffer[index]._data, 6) / 1000.0f;
-			break;
-			case VESCPackageType::CAN_PACKET_STATUS_2:
-				this->Avl_Ah =			(float)buffer_get_int32(this->CANRcvBuffer[index]._data, 0) / 1e4;
-				this->Avl_AhCharged =	(float)buffer_get_int32(this->CANRcvBuffer[index]._data, 4) / 1e4;
-			break;
-			case VESCPackageType::CAN_PACKET_STATUS_3:
-				this->Avl_Wh =			(float)buffer_get_int32(this->CANRcvBuffer[index]._data, 0) / 1e4;
-				this->Avl_WhCharged =	(float)buffer_get_int32(this->CANRcvBuffer[index]._data, 4) / 1e4;
-			break;
-			case VESCPackageType::CAN_PACKET_STATUS_4:
-				this->Avl_TempFET =		(float)buffer_get_int16(this->CANRcvBuffer[index]._data, 0) / 10.0f;
-				this->Avl_TempMotor =	(float)buffer_get_int16(this->CANRcvBuffer[index]._data, 2) / 10.0f;
-				this->Avl_CurrentIn =	(float)buffer_get_int16(this->CANRcvBuffer[index]._data, 4) / 10.0f;
-				this->Avl_PIDPosNow =	(float)buffer_get_int16(this->CANRcvBuffer[index]._data, 6) / 50.0f;
-			break;
-			default:
-			break;
-		}
-	}
-	this->CANRcvBufferIndex = 0;	
+	uint8_t data[4] = { 0 };
+	buffer_set_int32(data, ((int32_t)(current_val * 1000.0f)));
+	
+	SendVESCPacket(VESCPackageType::COMM_SET_HANDBRAKE, data, 4);
 }
 
-
-void ESC::ReceiveVESCPackage(uint8_t id, uint8_t *data)
+void ESC::GetVESCValues()
 {	
-	this->CANRcvBuffer[this->CANRcvBufferIndex]._type = (VESCPackageType)id;
-	for (uint8_t x = 0; x < VESC_PACKAGE_SIZE; x++)
-		this->CANRcvBuffer[this->CANRcvBufferIndex]._data[x] = data[x];
-	
-	this->CANRcvBufferIndex++;
-	
-	if (this->CANRcvBufferIndex >= CAN_RECEIVE_BUFFER_SIZE)
-		this->CANRcvBufferIndex = 0;
+	SendVESCPacket(VESCPackageType::COMM_GET_VALUES, NULL, 0);
 }
+
+
+void ESC::ReceiveByte(uint8_t data)
+{
+	this->ReceiveBuffer[this->ReceiveBufferIndex++] = data;
+	
+	if (this->ReceiveBufferIndex >= 2)
+		if (this->ReceiveBuffer[1] < this->ReceiveBufferIndex)
+		{
+			memcpy(this->ReceiveBuffer_2, &this->ReceiveBuffer[2], this->ReceiveBuffer[1] - 1);			
+			this->ReceiveBufferIndex = 0;
+		}
+}
+
+void ESC::ReceiveVESCPacket(uint8_t* payload, uint16_t length)
+{
+	switch(((VESCPackageType)payload[0]))
+	{
+		case VESCPackageType::COMM_GET_VALUES:
+			this->Avl_TempFET =		buffer_get_float16(&payload[1], 1e1);
+			this->Avl_Current =		buffer_get_float32(&payload[1 + 4], 1e2);
+			this->Avl_CurrentIn =	buffer_get_float32(&payload[1 + 8], 1e2);
+			this->Avl_Duty =		buffer_get_float16(&payload[1 + 20], 1e3);
+			this->Avl_RPM =			buffer_get_float32(&payload[1 + 22], 1e0);
+			this->Avl_Vin =			buffer_get_float16(&payload[1 + 26], 1e1);
+			this->Avl_Ah =			buffer_get_float32(&payload[1 + 28], 1e4);
+			this->Avl_AhCharged =	buffer_get_float32(&payload[1 + 32], 1e4);
+			this->Avl_Wh =			buffer_get_float32(&payload[1 + 36], 1e4);
+			this->Avl_WhCharged =	buffer_get_float32(&payload[1 + 40], 1e4);
+			this->Avl_Tach	=		buffer_get_int32(&payload[1 + 44]);
+			this->FaultCode =		(VESCFaultCode)payload[1 + 52];
+		break;
+		default:
+		break;
+	}	
+}
+
+void ESC::SendVESCPacket(VESCPackageType type, uint8_t* payload, uint16_t length)
+{	
+	uint8_t packet[256] = { 0 };
+	
+	packet[0] = 2;				//Short packet indicator
+	packet[1] = length + 1;		//Payload-length
+	packet[2] = (uint8_t)type;	//PacketType
+	packet[length + 5] = 3;		//Packet-End indicator
+	
+	memcpy(&packet[3], payload, length);
+	
+	uint16_t crc16 = CRC16(&packet[2], length + 1);
+	packet[length + 3] = (uint8_t)(crc16 >> 8);
+	packet[length + 4] = (uint8_t)(crc16 & 0xFF);
+	
+	for (int x = 0; x < length + 6; x++)
+		SERCOM3_SendByte(packet[x]);	
+}
+

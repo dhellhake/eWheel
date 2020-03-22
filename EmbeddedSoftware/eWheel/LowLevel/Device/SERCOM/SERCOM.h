@@ -17,6 +17,7 @@ extern "C" {
 void InitSERCOM0();
 void InitSERCOM1();
 void InitSERCOM2();
+void InitSERCOM3();
 void InitSERCOM5();
 
 inline uint16_t calculate_baud_value(const uint32_t baudrate, const uint32_t peripheral_clock, uint8_t sample_num)

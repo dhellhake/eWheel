@@ -126,10 +126,7 @@ void CC41A::SendESCTrace(uint32_t timeStamp)
 	
 	fPtr = (float*)(data + 12);
 	*fPtr = VESC.Tar_Duty;
-	
-	fPtr = (float*)(data + 16);
-	*fPtr = VESC.Avl_PIDPosNow;
-	
+		
 	pkg._timeStamp = timeStamp;
 	pkg._type = PackageType::VESCTrace;
 	pkg._data = data;
