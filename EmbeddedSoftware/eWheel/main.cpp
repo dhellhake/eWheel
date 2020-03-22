@@ -16,8 +16,9 @@
 
 #define TASKPOOL_SIZE	5
 
+
 int main(void)
-{
+{		
 	Executable* taskPool[TASKPOOL_SIZE] = {
 		&Drive,
 		&Board,
@@ -37,7 +38,7 @@ int main(void)
 			taskPool[taskIndex]->LAST_RUNNED = t_now;
 
 		t_now_2 = GetElapsedMilis();			
-		while (t_now_2 - t_now < 10)
+		while (t_now_2 - t_now < 5)
 			t_now_2 = GetElapsedMilis();
 		
 		taskIndex++;

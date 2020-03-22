@@ -15,31 +15,18 @@ LSM9D Gyro;
 /************************************************************************/
 RUN_RESULT LSM9D::Run(uint32_t timeStamp)
 {	
-	uint8_t status[1];
-	this->ReadBytes(STATUS_REG_1, status, 1);
+	float	ax_val = ((int16_t)((this->OUT_X_L_XL_Raw[1] << 8) | this->OUT_X_L_XL_Raw[0])) * SENSITIVITY_ACCELEROMETER_2;
+	float	ay_val = ((int16_t)((this->OUT_X_L_XL_Raw[3] << 8) | this->OUT_X_L_XL_Raw[2])) * SENSITIVITY_ACCELEROMETER_2;
+	float	az_val = ((int16_t)((this->OUT_X_L_XL_Raw[5] << 8) | this->OUT_X_L_XL_Raw[4])) * SENSITIVITY_ACCELEROMETER_2;
 	
-	if ((status[0] & 0x1) != 0x00)
-	{
-		uint8_t tmp[6];
+	this->Roll = (atan2(ax_val, (float)sqrt((float)(ay_val * ay_val) + (float)(az_val * az_val))) * (float)180.0) / M_PI;
+	this->Pitch = (atan2(-ay_val, az_val) * 180.0) / M_PI;
+	
+	this->Roll += ROLL_OFFSET;
+	this->Pitch += PITCH_OFFSET;
 		
-		if (this->ReadBytes(OUT_X_L_XL, tmp, 6) != 0x00)
-		{
-			float	ax_val = ((int16_t)((tmp[1] << 8) | tmp[0])) * SENSITIVITY_ACCELEROMETER_2;
-			float	ay_val = ((int16_t)((tmp[3] << 8) | tmp[2])) * SENSITIVITY_ACCELEROMETER_2;
-			float	az_val = ((int16_t)((tmp[5] << 8) | tmp[4])) * SENSITIVITY_ACCELEROMETER_2;
-			
-			this->Roll = (atan2(ax_val, (float)sqrt((float)(ay_val * ay_val) + (float)(az_val * az_val))) * (float)180.0) / M_PI;
-			this->Pitch = (atan2(-ay_val, az_val) * 180.0) / M_PI;
-			
-			this->Roll += ROLL_OFFSET;
-			this->Pitch += PITCH_OFFSET;
-			
-			this->TaskStatus = TASK_STATUS::COMPLETE;
-			return RUN_RESULT::SUCCESS;
-		}
-	}
-	
-	return RUN_RESULT::IDLE;
+	this->TaskStatus = TASK_STATUS::COMPLETE;
+	return RUN_RESULT::SUCCESS;
 }
 
 /************************************************************************/
@@ -51,19 +38,27 @@ LSM9D::LSM9D()
 			
 	/* CTRL_REG5_XL (0x1F) */
 	//[DEC_1][DEC_0][Zen_XL][Yen_XL][Zen_XL][0][0][0]
-	this->WriteRegister(CTRL_REG5_XL, (0x2 << 6) | (1<<5) | (1<<4) | (1<<3));
+	this->WriteRegister(CTRL_REG5_XL, (0x0 << 6) | (1<<5) | (1<<4) | (1<<3));
 	
 	/* CTRL_REG6_XL (0x20) */
 	//[ODR_XL2][ODR_XL1][ODR_XL0][FS1_XL][FS0_XL][BW_SCAL_ODR][BW_XL1][BW_XL0]
-	this->WriteRegister(CTRL_REG6_XL, (0x6 << 5) | (0x0 << 3) | (0x1 << 2) | (0x3 << 0));
+	this->WriteRegister(CTRL_REG6_XL, (0x5 << 5) | (0x0 << 3) | (0x0 << 2) | (0x3 << 0));
 	
 	/* CTRL_REG7_XL (0x21) */
 	// [HR][DCF1][DCF0][0][0][FDS][0][HPIS1]
-	this->WriteRegister(CTRL_REG7_XL, (0x1 << 7) | (0x3 << 5));
+	this->WriteRegister(CTRL_REG7_XL, (0x1 << 7) | (0x2 << 5));
 	
 	/* INT1_CTRL (0x0C) */
 	// [INT1_IG_G][INT1_IG_XL][INT1_FSS5][INT1_OVR][INT1_FTH][INT1_ Boot][INT1_DRDY_G][INT1_DRDY_XL]
 	this->WriteRegister(INT1_CTRL, 0x01);
+	
+	
+	EIC->INTENSET.reg |= (1 << 13);
+}
+
+void LSM9D::ReadValues()
+{
+	this->ReadBytes(OUT_X_L_XL, this->OUT_X_L_XL_Raw, 6);	
 }
 
 

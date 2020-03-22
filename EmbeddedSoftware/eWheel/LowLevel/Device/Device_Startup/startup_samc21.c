@@ -31,7 +31,7 @@
 
 #include "..\GCLK\GCLK.h"
 #include "..\SysTick\SysTick.h"
-#include "..\DMA\DMA.h"
+#include "..\EIC\EIC.h"
 #include "..\SERCOM\SERCOM.h"
 #include "..\PORT\PORT.h"
 
@@ -263,8 +263,8 @@ void Reset_Handler(void)
 		InitGCLK();
 		/* Configure SysTick-Counter */
 		InitSysTick();
-		/* Configure Direct Memory Access Controller */
-		InitDMAC();
+		/* Configure External Interrupt Controller */
+		InitEIC();
 		
 		//Init SPI-SERCOM interface
 		InitSERCOM0();
@@ -289,11 +289,13 @@ void Reset_Handler(void)
         while (1);
 }
 
+
 /**
  * \brief Default interrupt handler for unused IRQs.
  */
 void Dummy_Handler(void)
 {
-        while (1) {
-        }
+	while (1) 
+	{
+	}
 }

@@ -227,10 +227,10 @@
     <Compile Include="LowLevel\Device\Device_Startup\startup_samc21.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LowLevel\Device\DMA\DMA.cpp">
+    <Compile Include="LowLevel\Device\EIC\EIC.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LowLevel\Device\DMA\DMA.h">
+    <Compile Include="LowLevel\Device\EIC\EIC.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="LowLevel\Device\GCLK\GCLK.cpp">
@@ -255,12 +255,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="LowLevel\Device\SysTick\SysTick.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="LowLevel\I2C\I2C.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="LowLevel\I2C\I2C.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="LowLevel\SPI\SPI.cpp">
@@ -293,7 +287,7 @@
     <Folder Include="LowLevel\Device" />
     <Folder Include="LowLevel\Device\Device_Startup\" />
     <Folder Include="LowLevel\Device\GCLK" />
-    <Folder Include="LowLevel\Device\DMA" />
+    <Folder Include="LowLevel\Device\EIC" />
     <Folder Include="LowLevel\Device\PORT" />
     <Folder Include="LowLevel\Device\SERCOM" />
     <Folder Include="LowLevel\Device\SysTick" />
@@ -302,7 +296,6 @@
     <Folder Include="CC41A" />
     <Folder Include="Chassis" />
     <Folder Include="DriveController" />
-    <Folder Include="LowLevel\I2C" />
     <Folder Include="LowLevel\SPI" />
     <Folder Include="LowLevel\USART" />
     <Folder Include="LSM9D" />

@@ -16,6 +16,8 @@ void InitPORT()
 	PORT->Group[0].DIRCLR.reg = PORT_PA13;
 	PORT->Group[0].OUTCLR.reg = PORT_PA13;
 	PORT->Group[0].PINCFG[13].reg = PORT_PINCFG_INEN;
+	SetPinPeripheralFunction(PINMUX_PA13A_EIC_EXTINT13);
+	
 	SetPinPeripheralFunction(PINMUX_PA09D_SERCOM2_PAD1);
 	SetPinPeripheralFunction(PINMUX_PA10D_SERCOM2_PAD2);
 	SetPinPeripheralFunction(PINMUX_PA11D_SERCOM2_PAD3);
