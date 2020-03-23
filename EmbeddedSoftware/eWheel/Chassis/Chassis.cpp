@@ -48,7 +48,7 @@ RUN_RESULT Chassis::Run(uint32_t timeStamp)
 void Chassis::Trace()
 {
 	uint32_t* iPtr = (uint32_t*)this->Page._data + ((this->PageBlock_Ind * CHASSIS_FLASH_PAGE_BLOCK_SIZE) / 4);
-	*iPtr = GetElapsedMilis();
+	//*iPtr = GetElapsedMilis();
 	
 	float* fPtr = (float*)this->Page._data + ((this->PageBlock_Ind * CHASSIS_FLASH_PAGE_BLOCK_SIZE) / 4);
 	
