@@ -24,6 +24,12 @@ inline uint32_t GetElapsedMilis()
 	return (uint32_t)(result / 48000);
 }
 
+inline uint64_t GetElapsedMicros()
+{
+	uint64_t result = (SysTick_Overflow * 0xFFFFFF) + (0xFFFFFF - SysTick->VAL);
+	return (uint32_t)(result / 48);
+}
+
 #ifdef __cplusplus
 }
 #endif
