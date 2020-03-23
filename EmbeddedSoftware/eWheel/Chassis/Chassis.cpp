@@ -14,10 +14,7 @@ Chassis Board;
 /* Executable Interface implementation                                  */
 /************************************************************************/
 RUN_RESULT Chassis::Run(uint32_t timeStamp)
-{
-	if (Gyro.TaskStatus != TASK_STATUS::COMPLETE)
-		return RUN_RESULT::IDLE;
-	
+{	
 	this->Chassis_Pitch = Gyro.Pitch - this->Road_Pitch;	
 	this->Chassis_Roll = Gyro.Roll - this->Road_Roll;	
 		
@@ -45,7 +42,6 @@ RUN_RESULT Chassis::Run(uint32_t timeStamp)
 	if (this->TraceEnabled)
 		Trace();
 	
-	this->TaskStatus = TASK_STATUS::COMPLETE;
 	return RUN_RESULT::SUCCESS;
 }
 

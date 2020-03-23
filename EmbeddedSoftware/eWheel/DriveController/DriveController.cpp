@@ -13,12 +13,8 @@ DriveController Drive;
 /* Executable Interface implementation                                  */
 /************************************************************************/
 RUN_RESULT DriveController::Run(uint32_t timeStamp)
-{
-	if (Board.TaskStatus != TASK_STATUS::COMPLETE)
-		return RUN_RESULT::IDLE;
-			
-	this->AvlRelACPD = this->GetAvlACPD();
-	
+{			
+	this->AvlRelACPD = this->GetAvlACPD();	
 	
 	if (Board.State == ChassisState::Starting && VESC.Avl_RPM < 200)
 	{
@@ -120,7 +116,6 @@ RUN_RESULT DriveController::Run(uint32_t timeStamp)
 		break;
 		}
 	
-	this->TaskStatus = TASK_STATUS::COMPLETE;
 	return RUN_RESULT::SUCCESS;
 }
 

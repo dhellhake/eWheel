@@ -17,12 +17,6 @@ enum class RUN_RESULT
 	NOT_IMPLEMENTED
 };
 
-enum class TASK_STATUS
-{
-	RUNNING,
-	COMPLETE	
-};
-
 class Executable
 {
 	public:	
@@ -31,12 +25,6 @@ class Executable
 		virtual void EnableTrace() { this->TraceEnabled = true; };
 		
 		virtual void DisableTrace() { this->TraceEnabled = false; };
-		
-		virtual void Trace() {};
-		
-		virtual void Reset() { this->TaskStatus = TASK_STATUS::RUNNING; }
-		
-		TASK_STATUS TaskStatus = TASK_STATUS::RUNNING;
 		
 		uint32_t LAST_RUNNED = 0;
 		
