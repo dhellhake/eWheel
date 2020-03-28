@@ -227,6 +227,12 @@
     <Compile Include="LowLevel\Device\Device_Startup\startup_samc21.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="LowLevel\Device\DSU\DSU.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\Device\DSU\DSU.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="LowLevel\Device\EIC\EIC.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -288,6 +294,7 @@
     <Folder Include="LowLevel\Device\Device_Startup\" />
     <Folder Include="LowLevel\Device\GCLK" />
     <Folder Include="LowLevel\Device\EIC" />
+    <Folder Include="LowLevel\Device\DSU" />
     <Folder Include="LowLevel\Device\PORT" />
     <Folder Include="LowLevel\Device\SERCOM" />
     <Folder Include="LowLevel\Device\SysTick" />

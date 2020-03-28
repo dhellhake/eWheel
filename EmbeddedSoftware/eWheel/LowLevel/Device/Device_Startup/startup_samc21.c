@@ -32,6 +32,7 @@
 #include "..\GCLK\GCLK.h"
 #include "..\SysTick\SysTick.h"
 #include "..\EIC\EIC.h"
+#include "..\DSU\DSU.h"
 #include "..\SERCOM\SERCOM.h"
 #include "..\PORT\PORT.h"
 
@@ -265,6 +266,8 @@ void Reset_Handler(void)
 		InitSysTick();
 		/* Configure External Interrupt Controller */
 		InitEIC();
+		/* Configure Device Service Unit */
+		InitDSU();
 		
 		//Init SPI-SERCOM interface
 		InitSERCOM0();
