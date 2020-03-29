@@ -1,0 +1,3 @@
+Umfang: 99,5mm
+Durchmesser: 31,672mm
+Sensor-Ticks / Umdrehung = 90 Ticks
