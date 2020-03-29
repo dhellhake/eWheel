@@ -18,18 +18,18 @@ RUN_RESULT ESC::Run(uint32_t timeStamp)
 {	
 	RUN_RESULT result = RUN_RESULT::IDLE;
 		
-	if (timeStamp - this->VESCValues_Tstmp >= 200)
+	if (this->ComState == VESC_COM_STATE::Received)
+		this->ReceiveVESCPacket(&this->ReceiveBuffer[2], this->ReceiveBuffer[1] - 1);
+		
+	if (timeStamp - this->VESCValues_Tstmp >= 100 
+		&& this->ComState == VESC_COM_STATE::Waiting)
 	{	
 		GetVESCValues();
 		this->VESCValues_Tstmp = timeStamp;	
 		result = RUN_RESULT::SUCCESS;
 	}
 	
-	if (this->ReceiveBuffer_2[0] != 0x00)
-	{		
-		this->ReceiveVESCPacket(this->ReceiveBuffer_2, this->ReceiveBuffer_2[1] - 1);
-		this->ReceiveBuffer_2[0] = 0;
-	}
+	
 	
 	return result;
 }
@@ -67,25 +67,28 @@ void ESC::SetCurrent(float current_val)
 }
 
 void ESC::GetVESCValues()
-{	
+{
+	this->ComState = VESC_COM_STATE::Requested;
 	SendVESCPacket(VESCPackageType::COMM_GET_VALUES, NULL, 0);
 }
 
 
 void ESC::ReceiveByte(uint8_t data)
-{
+{	
 	this->ReceiveBuffer[this->ReceiveBufferIndex++] = data;
 	
-	if (this->ReceiveBufferIndex >= 2)
-		if ((this->ReceiveBuffer[1] + 4) < this->ReceiveBufferIndex)
-		{
-			memcpy(this->ReceiveBuffer_2, &this->ReceiveBuffer[2], this->ReceiveBuffer[1] - 1);			
-			this->ReceiveBufferIndex = 0;
-		}
+	if (this->ReceiveBufferIndex >= 2 &&						// at least start byte and length
+		this->ReceiveBuffer[0] == 0x2 &&						// start byte
+		this->ReceiveBuffer[this->ReceiveBuffer[1] + 4] == 0x3)	// end byte
+	{
+		this->ReceiveBufferIndex = 0;
+		this->ReceiveBuffer[this->ReceiveBuffer[1] + 4] = 0;	// delete stop byte
+		this->ComState = VESC_COM_STATE::Received;
+	}
 }
 
 void ESC::ReceiveVESCPacket(uint8_t* payload, uint16_t length)
-{
+{	
 	switch(((VESCPackageType)payload[0]))
 	{
 		case VESCPackageType::COMM_GET_VALUES:
@@ -104,7 +107,9 @@ void ESC::ReceiveVESCPacket(uint8_t* payload, uint16_t length)
 		break;
 		default:
 		break;
-	}	
+	}
+	
+	this->ComState = VESC_COM_STATE::Waiting;
 }
 
 void ESC::SendVESCPacket(VESCPackageType type, uint8_t* payload, uint16_t length)

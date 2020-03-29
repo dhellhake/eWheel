@@ -11,7 +11,14 @@
 #include "ESCUtilities.h"
 #include "..\Executable.h"
 
-#define VESC_RCV_BUF_SIZE 256
+#define VESC_RCV_BUF_SIZE 128
+
+enum VESC_COM_STATE
+{
+	Waiting,
+	Requested,
+	Received
+};
 
 class ESC : public Executable
 {
@@ -64,13 +71,16 @@ class ESC : public Executable
 		
 		void ReceiveByte(uint8_t data);
 		
-	private:		
+	private:
+		VESC_COM_STATE ComState = VESC_COM_STATE::Waiting;
 		uint8_t ReceiveBufferIndex = 0;
 		uint8_t ReceiveBuffer[VESC_RCV_BUF_SIZE];
-		uint8_t ReceiveBuffer_2[VESC_RCV_BUF_SIZE];
 	
 		uint32_t VESCValues_Tstmp;
 		
+		uint8_t testIdx = 0;
+		uint32_t testBuf[128];
+		uint32_t rcvBytes = 0;
 		
 		void SetCurrent(float current_val);
 		void SetDuty(float duty_val);

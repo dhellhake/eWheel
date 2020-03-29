@@ -25,7 +25,7 @@ int main(void)
 		&Board,
 		&VESC,
 		&Gyro,
-		&Bluetooth
+		&ComLink
 	};
 	
 	uint32_t runtime[5] { 0 };
@@ -36,7 +36,7 @@ int main(void)
 	while (1)
 	{
 		t_now = GetElapsedMicros();				
-		if (taskPool[taskIndex]->Run(t_now) == RUN_RESULT::SUCCESS)
+		if (taskPool[taskIndex]->Run(GetElapsedMilis()) == RUN_RESULT::SUCCESS)
 			taskPool[taskIndex]->LAST_RUNNED = t_now;		
 		t_now_2 = GetElapsedMicros();		
 				
