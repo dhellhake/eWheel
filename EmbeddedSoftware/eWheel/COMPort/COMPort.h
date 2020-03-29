@@ -28,7 +28,7 @@ typedef struct {
 
 #define RECEIVE_BUFFER_SIZE 1024
 
-class CC41A : public Executable
+class COMPort : public Executable
 {
 	/************************************************************************/
 	/* Executable Interface implementation                                  */
@@ -51,11 +51,11 @@ class CC41A : public Executable
 		void SendChassisTrace(uint32_t timeStamp);
 		void SendDriveTrace(uint32_t timeStamp);
 	public:
-		CC41A();
+		COMPort();
 		void ReceiveByte(uint8_t data);
 		void SendDataPackage(DataPackage *pkg);
 }; //CC41A
 
-extern CC41A Bluetooth;
+extern COMPort Bluetooth;
 
 #endif //__CC41A_H__

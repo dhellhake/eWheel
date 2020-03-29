@@ -6,8 +6,7 @@
 */
 #include <string.h>
 #include "ESC.h"
-#include "..\LowLevel\USART\USART.h"
-#include "..\LowLevel/Device/SysTick/SysTick.h"
+#include "..\LowLevel\Device\SERCOM\SERCOM.h"
 #include "..\Utilities.h"
 
 ESC VESC;

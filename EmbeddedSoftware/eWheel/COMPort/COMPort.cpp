@@ -4,18 +4,18 @@
 * Created: 09.03.2019 18:06:43
 * Author: Dominik Hellhake
 */
-#include "CC41A.h"
+#include "COMPort.h"
 #include "..\Chassis\Chassis.h"
 #include "..\ESC\ESC.h"
 #include "..\DriveController\DriveController.h"
-#include "..\LowLevel\USART\USART.h"
+#include "..\LowLevel\Device\SERCOM\SERCOM.h"
 
-CC41A Bluetooth;
+COMPort Bluetooth;
 
 /************************************************************************/
 /* Executable Interface implementation                                  */
 /************************************************************************/
-RUN_RESULT CC41A::Run(uint32_t timeStamp)
+RUN_RESULT COMPort::Run(uint32_t timeStamp)
 {	
 	if (this->ReceiveBufferIndex >= 1)
 	{
@@ -57,11 +57,11 @@ RUN_RESULT CC41A::Run(uint32_t timeStamp)
 /************************************************************************/
 /* Class implementation                                                 */
 /************************************************************************/
-CC41A::CC41A()
+COMPort::COMPort()
 {
 } //CC41A
 
-void CC41A::ReadDriveConfig(uint32_t timeStamp)
+void COMPort::ReadDriveConfig(uint32_t timeStamp)
 {
 	DataPackage pkg;
 	
@@ -80,7 +80,7 @@ void CC41A::ReadDriveConfig(uint32_t timeStamp)
 	
 	this->SendDataPackage(&pkg);
 }
-void CC41A::WriteDriveConfig(uint8_t *data)
+void COMPort::WriteDriveConfig(uint8_t *data)
 {	
 	float* fPtr = (float*)data;	
 	Drive.Balancing_Kp = *fPtr;
@@ -89,7 +89,7 @@ void CC41A::WriteDriveConfig(uint8_t *data)
 	Drive.Balancing_Kd = *fPtr;
 }
 
-void CC41A::SendDriveTrace(uint32_t timeStamp)
+void COMPort::SendDriveTrace(uint32_t timeStamp)
 {
 	DataPackage pkg;
 	
@@ -109,7 +109,7 @@ void CC41A::SendDriveTrace(uint32_t timeStamp)
 }
 
 
-void CC41A::SendESCTrace(uint32_t timeStamp)
+void COMPort::SendESCTrace(uint32_t timeStamp)
 {
 	DataPackage pkg;
 	
@@ -135,7 +135,7 @@ void CC41A::SendESCTrace(uint32_t timeStamp)
 	this->SendDataPackage(&pkg);
 }
 
-void CC41A::SendChassisTrace(uint32_t timeStamp)
+void COMPort::SendChassisTrace(uint32_t timeStamp)
 {
 	DataPackage pkg;
 		
@@ -161,7 +161,7 @@ void CC41A::SendChassisTrace(uint32_t timeStamp)
 	this->SendDataPackage(&pkg);
 }
 
-void CC41A::SendDataPackage(DataPackage *pkg)
+void COMPort::SendDataPackage(DataPackage *pkg)
 {	
 	//PackageType
 	SERCOM1_SendByte((uint8_t)pkg->_type);
@@ -175,7 +175,7 @@ void CC41A::SendDataPackage(DataPackage *pkg)
 		SERCOM1_SendByte(pkg->_data[x]);
 }
 
-void CC41A::ReceiveByte(uint8_t data)
+void COMPort::ReceiveByte(uint8_t data)
 {
 	this->ReceiveBuffer[this->ReceiveBufferIndex] = data;
 	this->ReceiveBufferIndex++;

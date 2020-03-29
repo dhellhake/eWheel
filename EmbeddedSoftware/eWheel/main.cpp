@@ -8,7 +8,7 @@
  #include "LowLevel/Device/SysTick/SysTick.h"
 
 #include "AT45DB/AT45DB.h"
-#include "CC41A/CC41A.h"
+#include "COMPort/COMPort.h"
 #include "Chassis/Chassis.h"
 #include "DriveController/DriveController.h"
 #include "ESC/ESC.h"

@@ -15,10 +15,17 @@ extern "C" {
 #include "..\..\..\Utilities.h"
 
 void InitSERCOM0();
+
 void InitSERCOM1();
+void SERCOM1_SendByte(uint8_t byte);
+
 void InitSERCOM2();
+
 void InitSERCOM3();
+void SERCOM3_SendByte(uint8_t byte);
+
 void InitSERCOM5();
+void SERCOM5_SendByte(uint8_t byte);
 
 inline uint16_t calculate_baud_value(const uint32_t baudrate, const uint32_t peripheral_clock, uint8_t sample_num)
 {

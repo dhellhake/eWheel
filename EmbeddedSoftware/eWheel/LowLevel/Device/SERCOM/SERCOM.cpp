@@ -6,6 +6,9 @@
  */
 #include "SERCOM.h"
 #include "..\GCLK\GCLK.h"
+#include "..\..\..\COMPort\COMPort.h"
+#include "..\..\..\ESC\ESC.h"
+
 
 void InitSERCOM0()
 {
@@ -77,6 +80,22 @@ void InitSERCOM1()
 	/* synchronization busy */
 	while(SERCOM1->USART.SYNCBUSY.reg & SERCOM_USART_SYNCBUSY_ENABLE);
 }
+void SERCOM1_SendByte(uint8_t byte)
+{
+	while(!SERCOM1->USART.INTFLAG.bit.DRE);
+	SERCOM1->USART.DATA.reg = byte;
+}
+void SERCOM1_Handler()
+{
+	if (SERCOM1->USART.INTFLAG.bit.RXC)
+	{
+		uint8_t rxData = SERCOM1->USART.DATA.reg;
+		
+		Bluetooth.ReceiveByte(rxData);
+		
+		return;
+	}
+}
 
 void InitSERCOM2()
 {	
@@ -109,7 +128,6 @@ void InitSERCOM2()
 	SERCOM2->SPI.CTRLA.bit.ENABLE = 1;
 	while(SERCOM2->SPI.SYNCBUSY.bit.ENABLE);
 }
-
 
 void InitSERCOM3()
 {
@@ -152,6 +170,22 @@ void InitSERCOM3()
 	SERCOM3->USART.CTRLA.reg |= SERCOM_USART_CTRLA_ENABLE;
 	/* synchronization busy */
 	while(SERCOM3->USART.SYNCBUSY.reg & SERCOM_USART_SYNCBUSY_ENABLE);
+}
+void SERCOM3_SendByte(uint8_t byte)
+{
+	while(!SERCOM3->USART.INTFLAG.bit.DRE);
+	SERCOM3->USART.DATA.reg = byte;
+}
+void SERCOM3_Handler()
+{
+	if (SERCOM3->USART.INTFLAG.bit.RXC)
+	{
+		uint8_t rxData = SERCOM3->USART.DATA.reg;
+		
+		VESC.ReceiveByte(rxData);
+		
+		return;
+	}
 }
 
 void InitSERCOM5()
@@ -196,3 +230,16 @@ void InitSERCOM5()
 	/* synchronization busy */
 	while(SERCOM5->USART.SYNCBUSY.reg & SERCOM_USART_SYNCBUSY_ENABLE);
 }
+void SERCOM5_SendByte(uint8_t byte)
+{
+	while(!SERCOM5->USART.INTFLAG.bit.DRE);
+	SERCOM5->USART.DATA.reg = byte;
+}
+
+
+
+
+
+
+
+

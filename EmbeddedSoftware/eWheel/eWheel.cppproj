@@ -194,10 +194,10 @@
     <Compile Include="AT45DB\AT45DB.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="CC41A\CC41A.cpp">
+    <Compile Include="COMPort\COMPort.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="CC41A\CC41A.h">
+    <Compile Include="COMPort\COMPort.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Chassis\Chassis.cpp">
@@ -222,6 +222,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Executable.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\CC41A\CC41A.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="LowLevel\CC41A\CC41A.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="LowLevel\Device\Device_Startup\startup_samc21.c">
@@ -269,12 +275,6 @@
     <Compile Include="LowLevel\SPI\SPI.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LowLevel\USART\USART.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="LowLevel\USART\USART.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="LSM9D\LSM9D.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -300,11 +300,11 @@
     <Folder Include="LowLevel\Device\SysTick" />
     <Folder Include="ESC" />
     <Folder Include="AT45DB" />
-    <Folder Include="CC41A" />
+    <Folder Include="COMPort" />
     <Folder Include="Chassis" />
     <Folder Include="DriveController" />
+    <Folder Include="LowLevel\CC41A" />
     <Folder Include="LowLevel\SPI" />
-    <Folder Include="LowLevel\USART" />
     <Folder Include="LSM9D" />
   </ItemGroup>
   <ItemGroup>
