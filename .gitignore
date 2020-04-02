@@ -5,20 +5,13 @@
 /DiagMonitor/.vs/*
 /DiagMonitor/obj/Debug/*
 /DiagMonitor/bin/Debug/*
-/TraceView/.vs/*
-/TraceView/TraceView/.vs/*
-/TraceView/TracePersistence/bin/*
-/TraceView/TraceLoader/bin/*
-TraceView/TraceLoader/obj/*
 
-/TraceView/TracePersistence/obj/*
-
-/TraceView/TraceView/obj/*
-
-/TraceView/TraceView/bin/*
-
-/TraceView/packages/*
-/EmbeddedSoftware/eWheel_Node/Debug/*
+/TraceLoader/packages/*
+/TraceLoader/.vs/*
+/TraceLoader/TracePersistence/bin/*
+/TraceLoader/TracePersistence/obj/*
+/TraceLoader/TraceLoader/bin/*
+/TraceLoader/TraceLoader/obj/*
 
 *.atsln
 
