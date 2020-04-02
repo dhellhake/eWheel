@@ -6,9 +6,8 @@
  */
 #include "SERCOM.h"
 #include "..\GCLK\GCLK.h"
-#include "..\..\..\COMPort\COMPort.h"
+#include "..\..\CC41A\CC41A.h"
 #include "..\..\..\ESC\ESC.h"
-
 
 void InitSERCOM0()
 {
@@ -38,6 +37,13 @@ void InitSERCOM0()
 	
 	SERCOM0->SPI.CTRLA.bit.ENABLE = 1;
 	while(SERCOM0->SPI.SYNCBUSY.bit.ENABLE);
+}
+uint8_t SERCOM0_TransmitByte(uint8_t byte)
+{
+	while(SERCOM0->SPI.INTFLAG.bit.DRE == 0);
+	SERCOM0->SPI.DATA.reg = byte;
+	while(SERCOM0->SPI.INTFLAG.bit.RXC == 0);
+	return SERCOM0->SPI.DATA.reg;
 }
 
 void InitSERCOM1()
@@ -91,7 +97,7 @@ void SERCOM1_Handler()
 	{
 		uint8_t rxData = SERCOM1->USART.DATA.reg;
 		
-		Bluetooth.ReceiveByte(rxData);
+		BLEDevice.ReceiveByte(rxData);
 		
 		return;
 	}
@@ -128,6 +134,13 @@ void InitSERCOM2()
 	SERCOM2->SPI.CTRLA.bit.ENABLE = 1;
 	while(SERCOM2->SPI.SYNCBUSY.bit.ENABLE);
 }
+uint8_t SERCOM2_TransmitByte(uint8_t byte)
+{
+	while(SERCOM2->SPI.INTFLAG.bit.DRE == 0);
+	SERCOM2->SPI.DATA.reg = byte;
+	while(SERCOM2->SPI.INTFLAG.bit.RXC == 0);
+	return SERCOM2->SPI.DATA.reg;
+}
 
 void InitSERCOM3()
 {
@@ -135,7 +148,7 @@ void InitSERCOM3()
 	//VESC.RX => PA23 / SERCOM3.PAD0
 	//VESC.TX => PA22 / SERCOM3.PAD1
 	//230400
-	uint32_t baud_val = calculate_baud_value(230400 , GetGCLK_Hz(SERCOM5_GCLK_ID_CORE), 16);
+	uint32_t baud_val = calculate_baud_value(230400, GetGCLK_Hz(SERCOM3_GCLK_ID_CORE), 16);
 	//Enable Clock for SERCOM3
 	//Set bits in the clock mask for an APBx bus.
 	MCLK->APBCMASK.bit.SERCOM3_ = 1;

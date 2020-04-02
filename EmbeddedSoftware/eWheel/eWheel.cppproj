@@ -269,12 +269,6 @@
     <Compile Include="LowLevel\Device\SysTick\SysTick.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LowLevel\SPI\SPI.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="LowLevel\SPI\SPI.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="LSM9D\LSM9D.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -304,7 +298,6 @@
     <Folder Include="Chassis" />
     <Folder Include="DriveController" />
     <Folder Include="LowLevel\CC41A" />
-    <Folder Include="LowLevel\SPI" />
     <Folder Include="LSM9D" />
   </ItemGroup>
   <ItemGroup>

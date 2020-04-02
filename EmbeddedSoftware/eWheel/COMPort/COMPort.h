@@ -8,6 +8,7 @@
 #define __CC41A_H__
 
 #include "samc21.h"
+#include "..\LowLevel\CC41A\CC41A.h"
 #include "..\Executable.h"
 #include "..\Utilities.h"
 
@@ -18,15 +19,6 @@ enum class DEBUG_CMD
 	
 	SetLED = 65
 };
-
-typedef struct {
-	PackageType _type;
-	uint32_t _timeStamp;
-	uint8_t _length;
-	uint8_t* _data;
-} DataPackage;
-
-#define RECEIVE_BUFFER_SIZE 1024
 
 class COMPort : public Executable
 {
@@ -39,23 +31,17 @@ class COMPort : public Executable
 	/* Class implementation                                                 */
 	/************************************************************************/
 	private:
-		uint32_t LastReported;
-		
-		uint32_t ReceiveBufferIndex = 0;
-		uint8_t ReceiveBuffer[RECEIVE_BUFFER_SIZE];
-		
+	
 		void ReadDriveConfig(uint32_t timeStamp);
 		void WriteDriveConfig(uint8_t *data);
 		
-		void SendESCTrace(uint32_t timeStamp);
-		void SendChassisTrace(uint32_t timeStamp);
-		void SendDriveTrace(uint32_t timeStamp);
 	public:
 		COMPort();
-		void ReceiveByte(uint8_t data);
-		void SendDataPackage(DataPackage *pkg);
+		
+		DataPacket ReceivedPacket;
+		
 }; //CC41A
 
-extern COMPort Bluetooth;
+extern COMPort ComLink;
 
 #endif //__CC41A_H__

@@ -7,7 +7,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "AT45DB.h"
-#include "..\LowLevel/SPI/SPI.h"
+#include "..\LowLevel/Device/SERCOM/SERCOM.h"
 
 AT45DB Flash;
 
@@ -28,8 +28,8 @@ bool AT45DB::IsReady()
 	//CS Low
 	PORT->Group[0].OUTCLR.reg = PORT_PA08;
 	
-	SPIPort::SERCOM0_TransmitByte(OP_STATUS);
-	uint8_t result = SPIPort::SERCOM0_TransmitByte(0x00);
+	SERCOM0_TransmitByte(OP_STATUS);
+	uint8_t result = SERCOM0_TransmitByte(0x00);
 	
 	//CS High
 	PORT->Group[0].OUTSET.reg = PORT_PA08;
@@ -42,10 +42,10 @@ void AT45DB::Erase()
 	//CS Low
 	PORT->Group[0].OUTCLR.reg = PORT_PA08;
 	
-	SPIPort::SERCOM0_TransmitByte(OP_CHIP_ERASE_1);
-	SPIPort::SERCOM0_TransmitByte(OP_CHIP_ERASE_2);
-	SPIPort::SERCOM0_TransmitByte(OP_CHIP_ERASE_3);
-	SPIPort::SERCOM0_TransmitByte(OP_CHIP_ERASE_4);
+	SERCOM0_TransmitByte(OP_CHIP_ERASE_1);
+	SERCOM0_TransmitByte(OP_CHIP_ERASE_2);
+	SERCOM0_TransmitByte(OP_CHIP_ERASE_3);
+	SERCOM0_TransmitByte(OP_CHIP_ERASE_4);
 	
 	//CS High
 	PORT->Group[0].OUTSET.reg = PORT_PA08;	
@@ -71,16 +71,16 @@ uint8_t AT45DB::MemPage_Read(uint16_t pageIndex, FlashPage *page)
 	
 	// Send OP-Code D2 & page/byte address
 	for (uint8_t x = 0; x < 4; x++)
-	SPIPort::SERCOM0_TransmitByte(tmp[3 - x]);
+	SERCOM0_TransmitByte(tmp[3 - x]);
 	
 	// Send dont-care bytes
 	for (uint8_t x = 0; x < 4; x++)
-	SPIPort::SERCOM0_TransmitByte(0x00);
+	SERCOM0_TransmitByte(0x00);
 	
 	// Read page
 	uint8_t *dest = (uint8_t*)page;
 	for (uint16_t x = 0; x < 528; x++)
-	dest[x] = SPIPort::SERCOM0_TransmitByte(0x00);
+	dest[x] = SERCOM0_TransmitByte(0x00);
 	
 	//CS High
 	PORT->Group[0].OUTSET.reg = PORT_PA08;
@@ -125,12 +125,12 @@ uint8_t AT45DB::MemPage_Write(uint16_t pageIndex, FlashPage *page, bool primBuff
 	
 	// Send OP-Code & page/byte address
 	for (uint8_t x = 0; x < 4; x++)
-	SPIPort::SERCOM0_TransmitByte(tmp[3 - x]);
+	SERCOM0_TransmitByte(tmp[3 - x]);
 	
 	// Read page
 	uint8_t *data = (uint8_t*)page;
 	for (uint16_t x = 0; x < 528; x++)
-	SPIPort::SERCOM0_TransmitByte(data[x]);
+	SERCOM0_TransmitByte(data[x]);
 	
 	//CS High
 	PORT->Group[0].OUTSET.reg = PORT_PA08;

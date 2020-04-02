@@ -8,6 +8,8 @@
 /TraceView/.vs/*
 /TraceView/TraceView/.vs/*
 /TraceView/TracePersistence/bin/*
+/TraceView/TraceLoader/bin/*
+TraceView/TraceLoader/obj/*
 
 /TraceView/TracePersistence/obj/*
 

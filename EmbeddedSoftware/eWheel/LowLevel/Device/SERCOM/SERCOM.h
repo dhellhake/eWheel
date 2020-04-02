@@ -15,11 +15,13 @@ extern "C" {
 #include "..\..\..\Utilities.h"
 
 void InitSERCOM0();
+uint8_t SERCOM0_TransmitByte(uint8_t byte);
 
 void InitSERCOM1();
 void SERCOM1_SendByte(uint8_t byte);
 
 void InitSERCOM2();
+uint8_t SERCOM2_TransmitByte(uint8_t byte);
 
 void InitSERCOM3();
 void SERCOM3_SendByte(uint8_t byte);

@@ -71,7 +71,7 @@ void Chassis::Trace()
 /************************************************************************/
 Chassis::Chassis()
 {
-	this->Page._type = BoardTrace;
+	//this->Page._type = BoardTrace;
 } //Chassis
 
 void Chassis::SetLED(bool state)
