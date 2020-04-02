@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using TracePersistence.utility;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.Devices.Enumeration;
@@ -7,18 +9,6 @@ using Windows.Storage.Streams;
 
 namespace TracePersistence
 {
-
-    /// <summary>
-    /// BLEService == DEBUG_CMD
-    /// </summary>
-    public enum BLEService
-    {
-        None = 0,
-        Orientation = 1,
-        VESC = 2,
-        Drive = 3
-    }
-
     public enum BLEDeviceStatus
     {
         Connected,
@@ -40,17 +30,13 @@ namespace TracePersistence
 
         private GattCharacteristic DeviceCharacteristic { get; set; }
 
-        private ReceiveState ReceiveState { get; set; }
         private List<byte> ReceiveBuffer { get; set; }
 
-        public event EventHandler<ChassisEventArgs> OrientationPackageReceived;
-        public event EventHandler<VESCEventArgs> VESCPackageReceived;
-        public event EventHandler<DrivePackageEventArgs> DrivePackageReceived;
+        public event EventHandler<DataPacketReceivedEventArgs> DataPacketReceived;
 
         public BLEDevice(string name)
         {
             this.Name = name;
-            this.ReceiveState = ReceiveState.Idle;
             this.ReceiveBuffer = new List<byte>();
 
             // Query for extra properties you want returned
@@ -75,6 +61,11 @@ namespace TracePersistence
             // Start the watcher.
             deviceWatcher.Start();
             this.Status = BLEDeviceStatus.Enumerating;
+        }
+
+        protected virtual void OnDataPacketReceived(DataPacket dataPacket)
+        {
+            this.DataPacketReceived?.Invoke(this, new DataPacketReceivedEventArgs(dataPacket));
         }
 
 
@@ -126,7 +117,7 @@ namespace TracePersistence
             }
         }
 
-        private async void WriteBytes(byte[] bytes)
+        public async void WriteBytes(byte[] bytes)
         {
             var writer = new DataWriter();
             writer.WriteBytes(bytes);
@@ -134,73 +125,49 @@ namespace TracePersistence
             GattCommunicationStatus result = await this.DeviceCharacteristic.WriteValueAsync(writer.DetachBuffer());
             if (result == GattCommunicationStatus.Success)
             {
-                // Successfully wrote to device
+
             }
         }
 
-        protected virtual void OnOrientationPackageReceived(ChassisPackage package)
-        {
-            this.OrientationPackageReceived?.Invoke(this, new ChassisEventArgs(package));
-        }
-
-        protected virtual void OnVESCPackageReceived(VESCPackage package)
-        {
-            this.VESCPackageReceived?.Invoke(this, new VESCEventArgs(package));
-        }
-        protected virtual void OnDrivePackageReceived(DrivePackage package)
-        {
-            this.DrivePackageReceived?.Invoke(this, new DrivePackageEventArgs(package));
-        }
 
         private void Characteristic_ValueChangedAsync(GattCharacteristic sender, GattValueChangedEventArgs args)
         {
             byte[] data = new byte[args.CharacteristicValue.Length];
             DataReader.FromBuffer(args.CharacteristicValue).ReadBytes(data);
 
-            foreach (byte b in data)
+            this.ReceiveBuffer.AddRange(data);
+
+            if (this.ReceiveBuffer.Count >= 4)
             {
-                switch (this.ReceiveState)
+                UInt16 type = BitConverter.ToUInt16(new byte[] { 0, 0, this.ReceiveBuffer[1], this.ReceiveBuffer[0] }.Reverse().ToArray(), 0);
+                UInt16 pkgLength = BitConverter.ToUInt16(new byte[] {0, 0, this.ReceiveBuffer[3], this.ReceiveBuffer[2] }.Reverse().ToArray(), 0);
+
+                if (this.ReceiveBuffer.Count >= 4 + pkgLength + 4)
                 {
-                    case ReceiveState.Idle:
-                        this.ReceiveBuffer.Clear();
-                        this.ReceiveState = (ReceiveState)b;
-                        break;
-                    case ReceiveState.Orientation:
-                        this.ReceiveBuffer.Add(b);
+                    List<byte> payload = new List<byte>();
+                    for (int x = 0; x < pkgLength; x++)
+                        payload.Add(this.ReceiveBuffer[4 + x]);
 
-                        if (this.ReceiveBuffer.Count == ChassisPackage.PayLoadLength + 4)
-                        {
-                            int timeStamp = BitConverter.ToInt32(this.ReceiveBuffer.ToArray(), 0);
-                            this.ReceiveBuffer.RemoveRange(0, 4);
+                    UInt32 crc32 = BitConverter.ToUInt32(CRC.CRC32(payload.ToArray()).Reverse().ToArray(), 0);
+                    UInt32 crc32_act = BitConverter.ToUInt32(new byte[]
+                    {
+                        this.ReceiveBuffer[4 + pkgLength + 0],
+                        this.ReceiveBuffer[4 + pkgLength + 1],
+                        this.ReceiveBuffer[4 + pkgLength + 2],
+                        this.ReceiveBuffer[4 + pkgLength + 3],
+                    }, 0);
 
-                            this.OnOrientationPackageReceived(new ChassisPackage(timeStamp, this.ReceiveBuffer.ToArray()));
-                            this.ReceiveState = ReceiveState.Idle;
-                        }
-                        break;
-                    case ReceiveState.VESC:
-                        this.ReceiveBuffer.Add(b);
+                    if (crc32_act == crc32)
+                    {
+                        DataPacket pkt = new DataPacket(type, pkgLength);
 
-                        if (this.ReceiveBuffer.Count == VESCPackage.PayLoadLength + 4)
-                        {
-                            int timeStamp = BitConverter.ToInt32(this.ReceiveBuffer.ToArray(), 0);
-                            this.ReceiveBuffer.RemoveRange(0, 4);
+                        for (int x = 0; x < pkgLength; x++)
+                            pkt.Data.Add(this.ReceiveBuffer[4 + x]);
 
-                            this.OnVESCPackageReceived(new VESCPackage(timeStamp, this.ReceiveBuffer.ToArray()));
-                            this.ReceiveState = ReceiveState.Idle;
-                        }
-                        break;
-                    case ReceiveState.Drive:
-                        this.ReceiveBuffer.Add(b);
+                        this.ReceiveBuffer.RemoveRange(0, 4 + pkgLength + 4);
 
-                        if (this.ReceiveBuffer.Count == DrivePackage.PayLoadLength + 4)
-                        {
-                            int timeStamp = BitConverter.ToInt32(this.ReceiveBuffer.ToArray(), 0);
-                            this.ReceiveBuffer.RemoveRange(0, 4);
-
-                            this.OnDrivePackageReceived(new DrivePackage(timeStamp, this.ReceiveBuffer.ToArray()));
-                            this.ReceiveState = ReceiveState.Idle;
-                        }
-                        break;
+                        this.OnDataPacketReceived(pkt);
+                    }
                 }
             }
         }
