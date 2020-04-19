@@ -9,28 +9,55 @@
 
 #include "samc21.h"
 #include "..\..\Utilities.h"
+#include "..\..\Executable.h"
 
+#define SEND_BUFFER_SIZE 536
 #define RECEIVE_BUFFER_SIZE 128
 
-typedef struct 
+enum class BLEPacketFlags : uint8_t
 {
-	uint16_t _type;
-	uint16_t _length;
-	uint8_t _data[64 + 4];
-} DataPacket;
+	ACK = 1,
+	FIN = 2
+};
+enum class BLESwc : uint8_t
+{
+	INVALID = 0,
+	SELF = 1,
+	ComLink = 2
+};
 
-class CC41A
-{	
+
+class CC41A : public Executable
+{
+	/************************************************************************/
+	/* Executable Interface implementation                                  */
+	/************************************************************************/
+	virtual RUN_RESULT Run(uint32_t timeStamp);
+
+	/************************************************************************/
+	/* Class implementation                                                 */
+	/************************************************************************/
 	private:	
-		uint32_t ReceiveBufferIndex = 0;
+		uint8_t ReceiveBufferIndex = 0;
+		
+		COMPILER_ALIGNED(4)
 		uint8_t ReceiveBuffer[RECEIVE_BUFFER_SIZE];
-	
+		
+		bool ClearToSend = true;
+		BLESwc SourceSwc;
+		BLESwc DestinationSwc;
+		uint16_t BytesToSend = 0;
+		uint16_t SendBufferIndex = 0;
+		uint8_t SendBuffer[SEND_BUFFER_SIZE];
+		
+		void SendACK(BLESwc sSwc, BLESwc dSwc);
+		void SendDataPacket(uint8_t *data, uint16_t length, uint16_t sequence, BLESwc sSwc, BLESwc dSwc, uint8_t flags);
+		void ReceivedDataPacket(uint8_t *data);
 	public:	
 		CC41A();
 		void ReceiveByte(uint8_t data);
-		void SendDataPacket(DataPacket *pkg);
 		
-		void ReceivedDataPacket(uint8_t *data);
+		void SendData(uint8_t *data, uint16_t length, BLESwc sSwc, BLESwc dSwc);
 };
 extern CC41A BLEDevice;
 

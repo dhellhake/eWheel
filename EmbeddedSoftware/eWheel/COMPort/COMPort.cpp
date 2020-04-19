@@ -4,13 +4,13 @@
 * Created: 09.03.2019 18:06:43
 * Author: Dominik Hellhake
 */
+#include <string.h>
 #include "COMPort.h"
-#include "..\Chassis\Chassis.h"
-#include "..\ESC\ESC.h"
-#include "..\DriveController\DriveController.h"
-#include "..\LowLevel\Device\SERCOM\SERCOM.h"
 
 #include "..\LowLevel\CC41A\CC41A.h"
+#include "..\LowLevel\AT45DB\AT45DB.h"
+
+#include "..\DriveController\DriveController.h"
 
 COMPort ComLink;
 
@@ -19,22 +19,46 @@ COMPort ComLink;
 /************************************************************************/
 RUN_RESULT COMPort::Run(uint32_t timeStamp)
 {	
-	if (this->ReceivedPacket._type != 0)
+	if (this->PacketReceived)
 	{
-		this->ReceivedPacket._type = 0;
+		switch ((ComPortCMD)this->ReceiveBuffer[0])
+		{
+			case ComPortCMD::READ_FLASHPAGE:
+				this->ReadFlashPage(this->ReceiveBuffer[1] << 8 | this->ReceiveBuffer[2]);
+			break;
+			case ComPortCMD::WRITE_FLASHPAGE:
+				this->WriteFlashPage(this->ReceiveBuffer[1] << 8 | this->ReceiveBuffer[2], &this->ReceiveBuffer[3]);
+			default:
+			break;
+		}	
 		
-		DataPacket pkg; 
-		pkg._type = 94;
-		pkg._length = 4;
-		
-		for ( uint8_t x = 0; x < 4; x++)
-			pkg._data[0] = x;
-			
-		BLEDevice.SendDataPacket(&pkg);
+		this->PacketReceived = false;		
 	}
+	
 	
 	return RUN_RESULT::SUCCESS;
 }
+
+void COMPort::ReadFlashPage(uint16_t pageIndex)
+{	
+	FlashPage page;
+	
+	AT45DB::MemPage_Read(pageIndex, &page);
+	
+	BLEDevice.SendData(page.Data, 530, BLESwc::ComLink, BLESwc::SELF);
+}
+
+void COMPort::WriteFlashPage(uint16_t pageIndex, uint8_t *data)
+{
+	FlashPage page;
+	memcpy(page.Data, data, FLASHPAGE_SIZE);
+	
+	AT45DB::MemPage_Write(pageIndex, &page, true);
+	
+	uint8_t response[1] = { (uint8_t)ComPortCMD::ACK_CMD };
+	BLEDevice.SendData(response, 1, BLESwc::ComLink, BLESwc::SELF); 
+}
+
 
 /************************************************************************/
 /* Class implementation                                                 */
@@ -42,26 +66,3 @@ RUN_RESULT COMPort::Run(uint32_t timeStamp)
 COMPort::COMPort()
 {
 } //CC41A
-
-void COMPort::ReadDriveConfig(uint32_t timeStamp)
-{
-	DataPacket pkg;
-	
-	float* fPtr = (float*)pkg._data;
-	*fPtr = Drive.Balancing_Kp;
-	
-	fPtr = (float*)(pkg._data + 4);
-	*fPtr = Drive.Balancing_Kd;
-	
-	pkg._length = 8;
-	
-	BLEDevice.SendDataPacket(&pkg);
-}
-void COMPort::WriteDriveConfig(uint8_t *data)
-{	
-	float* fPtr = (float*)data;	
-	Drive.Balancing_Kp = *fPtr;
-	
-	fPtr = (float*)(data + 4);
-	Drive.Balancing_Kd = *fPtr;
-}

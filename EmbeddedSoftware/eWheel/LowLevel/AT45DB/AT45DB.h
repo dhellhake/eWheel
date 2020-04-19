@@ -8,14 +8,12 @@
 #define __AT45DB_H__
 
 #include "samc21.h"
-#include "..\Executable.h"
-#include "..\Utilities.h"
 
 
 #define FLASHBUFFER_SIZE 4
 
 #define FLASHPAGE_CNT		8192
-#define FLASHPAGE_SIZE		512
+#define FLASHPAGE_SIZE		528
 
 #define OP_STATUS			0xD7
 #define OP_PAGE_READ_MEM	0xD2
@@ -29,9 +27,8 @@
 
 
 typedef struct {
-	uint8_t _data[FLASHPAGE_SIZE];
-	//PackageType _type;
-	uint32_t _Sequence;
+	uint16_t PageIndex;
+	uint8_t Data[FLASHPAGE_SIZE];
 } FlashPage;
 
 class AT45DB
@@ -43,12 +40,13 @@ class AT45DB
 		AT45DB();
 		void Erase();
 		bool IsReady();
-		uint8_t MemPage_Read(uint16_t pageIndex, FlashPage *page);
+		static uint8_t MemPage_Read(uint16_t pageIndex, FlashPage *page);
+		static uint8_t MemPage_Write(uint16_t pageIndex, FlashPage *page, bool primBuff);
+		
 		uint8_t MemPage_Write(FlashPage *page, bool primBuff);
 	private:
 		uint16_t PageWrite_Ind;		
 		
-		uint8_t MemPage_Write(uint16_t pageIndex, FlashPage *page, bool primBuff);	
 }; //AT45DB
 
 extern AT45DB Flash;

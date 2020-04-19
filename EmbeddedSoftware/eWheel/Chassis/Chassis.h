@@ -9,7 +9,6 @@
 
 #include "samc21.h"
 #include "..\Executable.h"
-#include "..\AT45DB\AT45DB.h"
 
 #define CHASSIS_FLASH_PAGE_BLOCK_CNT	40
 #define CHASSIS_FLASH_PAGE_BLOCK_SIZE	12
@@ -27,7 +26,6 @@ class Chassis : public Executable
 	/* Executable Interface implementation                                  */
 	/************************************************************************/
 	virtual RUN_RESULT Run(uint32_t timeStamp);
-	virtual void Trace();
 	
 	/************************************************************************/
 	/* Class implementation                                                 */
@@ -45,7 +43,6 @@ class Chassis : public Executable
 		void SetLED(bool state);
 	
 	private:		
-		FlashPage Page;
 		uint32_t PageSequence_Ind = 0;
 		uint8_t PageBlock_Ind = 0;
 		

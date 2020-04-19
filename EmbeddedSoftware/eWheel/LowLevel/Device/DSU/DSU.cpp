@@ -15,9 +15,12 @@ uint32_t CalculateCRC32(const uint32_t *addr, const uint32_t len)
 	PAC->WRCTRL.reg = SYSTEM_PERIPHERAL_ID(DSU) | PAC_WRCTRL_KEY(PAC_WRCTRL_KEY_CLR_Val);
 	
 	DSU->DATA.reg = pcrc32;
-	DSU->ADDR.reg = (uint32_t)addr;
+	
+	uint32_t addrReg = (((uint32_t)addr) & 0xFFFFFFFC);
+	DSU->ADDR.reg = addrReg;
 	DSU->LENGTH.reg = len;
 
+	
 	DSU->CTRL.bit.CRC = 1;
 	while ((DSU->STATUSA.reg & DSU_STATUSA_DONE) != 1) { }
 

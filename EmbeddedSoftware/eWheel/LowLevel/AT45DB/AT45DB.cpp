@@ -7,7 +7,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "AT45DB.h"
-#include "..\LowLevel/Device/SERCOM/SERCOM.h"
+#include "..\Device/SERCOM/SERCOM.h"
 
 AT45DB Flash;
 
@@ -16,7 +16,7 @@ AT45DB Flash;
 /************************************************************************/
 AT45DB::AT45DB()
 {
-	this->PageWrite_Ind = rand() % FLASHPAGE_CNT;
+	this->PageWrite_Ind = 1;
 }
 
 ///<summary>
@@ -66,25 +66,26 @@ uint8_t AT45DB::MemPage_Read(uint16_t pageIndex, FlashPage *page)
 	uint8_t tmp[4];
 	memcpy(tmp, (const char *) &(op_addr), sizeof(uint32_t));
 	
+	page->PageIndex = pageIndex;
+	
 	//CS Low
 	PORT->Group[0].OUTCLR.reg = PORT_PA08;
 	
 	// Send OP-Code D2 & page/byte address
 	for (uint8_t x = 0; x < 4; x++)
-	SERCOM0_TransmitByte(tmp[3 - x]);
+		SERCOM0_TransmitByte(tmp[3 - x]);
 	
 	// Send dont-care bytes
 	for (uint8_t x = 0; x < 4; x++)
-	SERCOM0_TransmitByte(0x00);
+		SERCOM0_TransmitByte(0x00);
 	
 	// Read page
-	uint8_t *dest = (uint8_t*)page;
 	for (uint16_t x = 0; x < 528; x++)
-	dest[x] = SERCOM0_TransmitByte(0x00);
+		page->Data[x] = SERCOM0_TransmitByte(0x00);
 	
 	//CS High
 	PORT->Group[0].OUTSET.reg = PORT_PA08;
-	
+		
 	return 1;
 }
 
@@ -111,9 +112,9 @@ uint8_t AT45DB::MemPage_Write(uint16_t pageIndex, FlashPage *page, bool primBuff
 	uint32_t op_addr = 0x00000000;
 	
 	if (primBuff)
-	op_addr |= (OP_PAGE_PROG_BUFF_1 << 24);
+		op_addr |= (OP_PAGE_PROG_BUFF_1 << 24);
 	else
-	op_addr |= (OP_PAGE_PROG_BUFF_2 << 24);
+		op_addr |= (OP_PAGE_PROG_BUFF_2 << 24);
 	
 	op_addr |= (pageIndex << 10) & 0b11111111111110000000000;
 	
@@ -125,12 +126,11 @@ uint8_t AT45DB::MemPage_Write(uint16_t pageIndex, FlashPage *page, bool primBuff
 	
 	// Send OP-Code & page/byte address
 	for (uint8_t x = 0; x < 4; x++)
-	SERCOM0_TransmitByte(tmp[3 - x]);
+		SERCOM0_TransmitByte(tmp[3 - x]);
 	
-	// Read page
-	uint8_t *data = (uint8_t*)page;
+	// Write page
 	for (uint16_t x = 0; x < 528; x++)
-	SERCOM0_TransmitByte(data[x]);
+		SERCOM0_TransmitByte(page->Data[x]);
 	
 	//CS High
 	PORT->Group[0].OUTSET.reg = PORT_PA08;

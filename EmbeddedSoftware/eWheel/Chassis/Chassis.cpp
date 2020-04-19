@@ -39,39 +39,15 @@ RUN_RESULT Chassis::Run(uint32_t timeStamp)
 		break;
 	}
 	
-	if (this->TraceEnabled)
-		Trace();
-	
 	return RUN_RESULT::SUCCESS;
 }
-
-void Chassis::Trace()
-{
-	float* fPtr = (float*)this->Page._data + ((this->PageBlock_Ind * CHASSIS_FLASH_PAGE_BLOCK_SIZE) / 4);
-	
-	fPtr += 1;
-	*fPtr = Gyro.Pitch;
-	
-	fPtr += 1;
-	*fPtr = Gyro.Roll;
-	
-	this->PageBlock_Ind++;
-	if (this->PageBlock_Ind == CHASSIS_FLASH_PAGE_BLOCK_CNT)
-	{
-		this->Page._Sequence = this->PageSequence_Ind;
-		Flash.MemPage_Write(&this->Page, true);
-		this->PageSequence_Ind++;
-		this->PageBlock_Ind = 0;
-	}
-}
-
 
 /************************************************************************/
 /* Class implementation                                                 */
 /************************************************************************/
 Chassis::Chassis()
 {
-	//this->Page._type = BoardTrace;
+	
 } //Chassis
 
 void Chassis::SetLED(bool state)

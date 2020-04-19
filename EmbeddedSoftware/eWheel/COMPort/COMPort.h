@@ -20,6 +20,14 @@ enum class DEBUG_CMD
 	SetLED = 65
 };
 
+enum class ComPortCMD : uint8_t
+{
+	INVALID = 0,
+	ACK_CMD = 1,
+	READ_FLASHPAGE = 2,
+	WRITE_FLASHPAGE =3
+};
+
 class COMPort : public Executable
 {
 	/************************************************************************/
@@ -31,14 +39,18 @@ class COMPort : public Executable
 	/* Class implementation                                                 */
 	/************************************************************************/
 	private:
-	
+		
+		void ReadFlashPage(uint16_t pageIndex);
+		void WriteFlashPage(uint16_t pageIndex, uint8_t *data);
+		
 		void ReadDriveConfig(uint32_t timeStamp);
 		void WriteDriveConfig(uint8_t *data);
 		
 	public:
 		COMPort();
 		
-		DataPacket ReceivedPacket;
+		bool PacketReceived = false;
+		uint8_t ReceiveBuffer[536];
 		
 }; //CC41A
 
