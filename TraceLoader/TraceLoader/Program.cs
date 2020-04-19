@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using TracePersistence;
 using TracePersistence.utility;
@@ -21,7 +23,7 @@ namespace TraceLoader
 
             Console.Write("Connecting...");
             while (Program.eWheel.Status != BLEDeviceStatus.Connected)
-                Thread.Sleep(200);
+                Thread.Sleep(20);
             Console.WriteLine(".. Done!");
 
 
@@ -35,42 +37,41 @@ namespace TraceLoader
                     LoadTraceFromDevice();
                 else if (inputLine.ToLower().Trim().StartsWith("convert"))
                     ConvertBinToCsv(inputLine.Split(' ')[1]);
-                if (inputLine.ToLower().Trim().StartsWith("test"))
-                    Test(Convert.ToInt32(inputLine.Split(' ')[1]));
             }   
         }
 
+        private static List<DataPacket> PacketBuffer = new List<DataPacket>();
+
         private static void EWheel_DataPacketReceived(object sender, DataPacketReceivedEventArgs e)
         {
-            Console.WriteLine("Received DataPacket; Type: " + e.DataPacket.Type + " , Length: " + e.DataPacket.Length);
-        }
-
-        private static void Test(int len)
-        {
-            List<byte> payload = new List<byte>(); 
-            UInt32[] crc_data = new UInt32[] {
-                0x00000000, 0x11111111, 0x22222222, 0x33333333, 0x44444444,
-                0x55555555, 0x66666666, 0x77777777, 0x88888888, 0x99999999, 0x44444444
-            };
-            foreach (UInt32 cd in crc_data)
-                payload.AddRange(BitConverter.GetBytes(cd));
-
-            UInt16 type = BitConverter.ToUInt16(BitConverter.GetBytes(90), 0);
-            UInt16 length = (UInt16)payload.Count;
-                        
-
-            List<byte> packet = new List<byte>();
-            packet.AddRange(BitConverter.GetBytes(type));
-            packet.AddRange(BitConverter.GetBytes(length));
-            packet.AddRange(payload);
-            packet.AddRange(CRC.CRC32(payload.ToArray()));
-
-            Program.eWheel.WriteBytes(packet.ToArray());
+            PacketBuffer.Add(e.DataPacket);
         }
 
         private static void LoadTraceFromDevice()
         {
+            List<byte> payload = new List<byte>();
 
+            // Write page 0
+            payload.Clear();
+            payload.Add(3);
+            payload.Add(0);
+            payload.Add(0);
+
+            for (int x = 0; x < 528; x++)
+                payload.Add((byte)x);
+
+            Program.eWheel.SendData(payload.ToArray(), BLESwc.SELF, BLESwc.ComLink);
+            while (PacketBuffer.Count < 1)
+                Thread.Sleep(10);
+
+            // Read page 0
+            payload.Clear();
+            payload.Add(2);
+            payload.Add(0);
+            payload.Add(0);
+            Program.eWheel.SendData(payload.ToArray(), BLESwc.SELF, BLESwc.ComLink);
+            while (PacketBuffer.Count < 2)
+                Thread.Sleep(10);
         }
 
         private static void ConvertBinToCsv(string pathToBin)

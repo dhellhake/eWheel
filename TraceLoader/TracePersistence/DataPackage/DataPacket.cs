@@ -1,24 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using Windows.Foundation.Metadata;
 
 namespace TracePersistence
 {
     public class DataPacket
     {
-        public UInt16 Type { get; private set; }
-        public UInt16 Length { get; private set; }
+        public BLESwc SourceSwc { get; private set; }
+        public BLESwc DestinationSwc { get; private set; }
+        public byte[] Data { get; private set; }
 
-        public List<byte> Data { get; private set; }
         protected DataPacket()
         {
-            this.Data = new List<byte>();
+            this.Data = new byte[536];
         }
-        public DataPacket(UInt16 type, UInt16 length)
+        public DataPacket(BLESwc sSwc, BLESwc dSwc)
             : this()
         {
-            this.Type = type;
-            this.Length = length;
+            this.SourceSwc = sSwc;
+            this.DestinationSwc = dSwc;
         }
     }
 

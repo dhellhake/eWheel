@@ -4,6 +4,15 @@
  * Created: 15.03.2019 15:34:48
  *  Author: Dominik Hellhake
  */ 
+
+
+#if (defined __GNUC__) || (defined __CC_ARM)
+#   define COMPILER_ALIGNED(a)        __attribute__((__aligned__(a)))
+#elif (defined __ICCARM__)
+#   define COMPILER_ALIGNED(a)        COMPILER_PRAGMA(data_alignment = a)
+#endif
+
+
 #ifndef UTILITIES_H_
 #define UTILITIES_H_
 
@@ -12,15 +21,6 @@ extern "C" {
 #endif
 
 #include "samc21.h"
-
-enum PackageType
-{
-	BoardTrace = 1,
-	VESCTrace = 2,
-	DriveTrace = 3,
-	
-	DriveConfig = 4
-};
 
 const uint16_t crc16_tab[] = {
 	0x0000, 0x1021, 0x2042, 0x3063, 0x4084,
