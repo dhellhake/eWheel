@@ -45,7 +45,7 @@ void COMPort::ReadFlashPage(uint16_t pageIndex)
 	
 	AT45DB::MemPage_Read(pageIndex, &page);
 	
-	BLEDevice.SendData(page.Data, 530, BLESwc::ComLink, BLESwc::SELF);
+	BLEDevice.SendData(page.Data, FLASHPAGE_SIZE, BLESwc::ComLink, BLESwc::SELF);
 }
 
 void COMPort::WriteFlashPage(uint16_t pageIndex, uint8_t *data)

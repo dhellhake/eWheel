@@ -27,7 +27,10 @@ RUN_RESULT CC41A::Run(uint32_t timeStamp)
 		if(this->ReceiveBufferIndex >= length)
 		{
 			this->ReceivedDataPacket(this->ReceiveBuffer);
+			
 			this->ReceiveBufferIndex = 0;
+			for (uint8_t x = 0; x < RECEIVE_BUFFER_SIZE; x++)
+				this->ReceiveBuffer[x] = 0x00;
 		}
 	}
 	
@@ -104,7 +107,8 @@ void CC41A::SendDataPacket(uint8_t *data, uint16_t length, uint16_t sequence, BL
 			SERCOM1_SendByte(data[x]);
 	
 		//CRC32
-		uint32_t crc32_act = CalculateCRC32((uint32_t*)data, length	);
+		uint32_t crc32_act = CalculateCRC32((uint32_t*)data, GetCRC32Length(length));
+		
 		uint8_t* crc32 = (uint8_t*)&crc32_act;
 		for (uint8_t x = 0; x < 4; x++)
 			SERCOM1_SendByte(crc32[x]);
@@ -145,7 +149,7 @@ void CC41A::ReceivedDataPacket(uint8_t *data)
 		
 	if (len > 0)
 	{
-		uint32_t crc32_act = CalculateCRC32((uint32_t*)&data[8], len);
+		uint32_t crc32_act = CalculateCRC32((uint32_t*)&data[8], GetCRC32Length(len));
 		
 		if (crc32 == crc32_act)
 		{

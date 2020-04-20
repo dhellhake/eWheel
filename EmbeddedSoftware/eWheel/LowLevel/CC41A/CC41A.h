@@ -53,6 +53,15 @@ class CC41A : public Executable
 		void SendACK(BLESwc sSwc, BLESwc dSwc);
 		void SendDataPacket(uint8_t *data, uint16_t length, uint16_t sequence, BLESwc sSwc, BLESwc dSwc, uint8_t flags);
 		void ReceivedDataPacket(uint8_t *data);
+		
+		inline uint16_t GetCRC32Length(uint16_t length)
+		{
+			uint16_t result = length % 4;
+			if (result != 0)
+				return length + (4 - result);
+			else
+				return length;
+		}
 	public:	
 		CC41A();
 		void ReceiveByte(uint8_t data);

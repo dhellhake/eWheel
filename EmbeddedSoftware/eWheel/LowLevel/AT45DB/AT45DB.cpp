@@ -80,7 +80,7 @@ uint8_t AT45DB::MemPage_Read(uint16_t pageIndex, FlashPage *page)
 		SERCOM0_TransmitByte(0x00);
 	
 	// Read page
-	for (uint16_t x = 0; x < 528; x++)
+	for (uint16_t x = 0; x < FLASHPAGE_SIZE; x++)
 		page->Data[x] = SERCOM0_TransmitByte(0x00);
 	
 	//CS High
@@ -88,8 +88,6 @@ uint8_t AT45DB::MemPage_Read(uint16_t pageIndex, FlashPage *page)
 		
 	return 1;
 }
-
-
 
 uint8_t AT45DB::MemPage_Write(FlashPage *page, bool primBuff)
 {
@@ -129,7 +127,7 @@ uint8_t AT45DB::MemPage_Write(uint16_t pageIndex, FlashPage *page, bool primBuff
 		SERCOM0_TransmitByte(tmp[3 - x]);
 	
 	// Write page
-	for (uint16_t x = 0; x < 528; x++)
+	for (uint16_t x = 0; x < FLASHPAGE_SIZE; x++)
 		SERCOM0_TransmitByte(page->Data[x]);
 	
 	//CS High
