@@ -39,6 +39,20 @@ namespace TracePersistence
         FIN = 2
     }
 
+    public enum BLECmd
+    {
+        INVALID = 0,
+        ACK_CMD = 1,
+
+        SET_FLASHPAGE = 2,
+        REQUEST_FLASHPAGE = 3,
+        RESPONSE_FLASHPAGE = 3,
+
+        SET_DRIVECONFIG = 63,
+        REQUEST_DRIVECONFIG = 64,
+        RESPONSE_DRIVECONFIG = 65
+    }
+
 
     public class BLEDevice
     {
@@ -56,6 +70,8 @@ namespace TracePersistence
         public BLEDevice(string name)
         {
             this.Name = name;
+            this.Status = BLEDeviceStatus.Enumerating;
+            this.TransmissionStatus = BLETransmissionStatus.Idle;
             this.ReceiveBuffer = new List<byte>();
             this.IncompletePackets = new List<DataPacket>();
 
@@ -75,8 +91,6 @@ namespace TracePersistence
 
             // Start the watcher.
             deviceWatcher.Start();
-            this.Status = BLEDeviceStatus.Enumerating;
-            this.TransmissionStatus = BLETransmissionStatus.Idle;
         }
 
 
@@ -94,8 +108,8 @@ namespace TracePersistence
         private async void ConnectDevice(DeviceInformation deviceInfo)
         {
             // Note: BluetoothLEDevice.FromIdAsync must be called from a UI thread because it may prompt for consent.
-            BluetoothLEDevice bluetoothLeDevice = await BluetoothLEDevice.FromIdAsync(deviceInfo.Id);
-            GattDeviceServicesResult result = await bluetoothLeDevice.GetGattServicesAsync();
+            BluetoothLEDevice bleDevice = await BluetoothLEDevice.FromIdAsync(deviceInfo.Id);
+            GattDeviceServicesResult result = await bleDevice.GetGattServicesAsync();
 
             if (result.Status == GattCommunicationStatus.Success)
             {
@@ -131,7 +145,7 @@ namespace TracePersistence
         #endregion
 
         #region Transmission
-        public async void SendData(byte[] data, BLESwc srcSwc, BLESwc dstSwc)
+        public async void SendData(BLECmd cmd, byte[] data, BLESwc srcSwc, BLESwc dstSwc)
         {
             await Task.Run(() =>
             {
@@ -149,7 +163,7 @@ namespace TracePersistence
                         for (int x = dataIndex; x < dataIndex + 64; x++)
                             payload.Add(data[x]);
 
-                        this.SendDataPacket(payload.ToArray(), srcSwc, dstSwc, (UInt16)dataIndex, BLEFlag.NONE);
+                        this.SendDataPacket(cmd, payload.ToArray(), srcSwc, dstSwc, (UInt16)dataIndex, BLEFlag.NONE);
                         this.TransmissionStatus = BLETransmissionStatus.Waiting;
                         dataIndex += 64;
                     }
@@ -165,7 +179,7 @@ namespace TracePersistence
                                 payload.Add(0);
 
 
-                        this.SendDataPacket(payload.ToArray(), srcSwc, dstSwc, (UInt16)dataIndex, BLEFlag.FIN);
+                        this.SendDataPacket(cmd, payload.ToArray(), srcSwc, dstSwc, (UInt16)dataIndex, BLEFlag.FIN);
                         this.TransmissionStatus = BLETransmissionStatus.Idle;
                         break;
                     }
@@ -173,7 +187,7 @@ namespace TracePersistence
             });
         }
 
-        private void SendDataPacket(byte[] bytes, BLESwc srcSwc, BLESwc dstSwc, UInt16 sequence, BLEFlag flags)
+        private void SendDataPacket(BLECmd cmd, byte[] bytes, BLESwc srcSwc, BLESwc dstSwc, UInt16 sequence, BLEFlag flags)
         {
             List<byte> payload = new List<byte>();
             payload.AddRange(bytes);
@@ -189,19 +203,19 @@ namespace TracePersistence
             List<byte> packet = new List<byte>();
             packet.Add(sSwc);
             packet.Add(dSwc);
-            packet.AddRange(BitConverter.GetBytes(sequence).Reverse());
-            packet.AddRange(BitConverter.GetBytes(length).Reverse());
+            packet.AddRange(BitConverter.GetBytes(sequence));
+            packet.AddRange(BitConverter.GetBytes(length));
             packet.Add((byte)flags);
-            packet.Add(0);  //Reserved
+            packet.Add((byte)cmd);
+            packet.AddRange(CRC.CRC32(payload.ToArray()).Reverse().ToArray());
             packet.AddRange(payload);
-            packet.AddRange(CRC.CRC32(payload.ToArray()));
 
             this.WriteBytes(packet.ToArray());
         }
 
         private void SendAck(BLESwc srcSwc, BLESwc dstSwc)
         {
-            this.SendDataPacket(new byte[] { }, srcSwc, dstSwc, 0, BLEFlag.ACK);
+            this.SendDataPacket(BLECmd.ACK_CMD, new byte[] { }, srcSwc, dstSwc, 0, BLEFlag.ACK);
         }
 
         private async void WriteBytes(byte[] bytes)
@@ -228,7 +242,7 @@ namespace TracePersistence
 
             //Buffer validation
             if (this.ReceiveBuffer.Count == 0)
-                if (data.Length < 8 || data[7] != 170)
+                if (data.Length < 8 || data[7] == (byte)BLECmd.INVALID)
                     return;
 
             this.ReceiveBuffer.AddRange(data);
@@ -240,53 +254,64 @@ namespace TracePersistence
                 UInt16 sequence = BitConverter.ToUInt16(new byte[] { 0, 0, this.ReceiveBuffer[2], this.ReceiveBuffer[3] }.Reverse().ToArray(), 0);
                 UInt16 length = BitConverter.ToUInt16(new byte[] { 0, 0, this.ReceiveBuffer[4], this.ReceiveBuffer[5] }.Reverse().ToArray(), 0);
                 BLEFlag flags = (BLEFlag)this.ReceiveBuffer[6];
+                BLECmd cmd = (BLECmd)this.ReceiveBuffer[7];
 
                 if ((flags & BLEFlag.ACK) == BLEFlag.ACK)
                 {
                     this.ReceiveBuffer.RemoveRange(0, 8 + 4);
                     this.TransmissionStatus = BLETransmissionStatus.Sending;
-                }
-
-                else if (length > 0 && this.ReceiveBuffer.Count >= 8 + length + 4)
+                } else
                 {
-                    List<byte> payload = new List<byte>();
-                    for (int x = 0; x < length; x++)
-                        payload.Add(this.ReceiveBuffer[8 + x]);
-
-                    UInt32 crc32 = BitConverter.ToUInt32(CRC.CRC32(payload.ToArray()).Reverse().ToArray(), 0);
                     UInt32 crc32_act = BitConverter.ToUInt32(new byte[]
                     {
-                        this.ReceiveBuffer[8 + length + 0],
-                        this.ReceiveBuffer[8 + length + 1],
-                        this.ReceiveBuffer[8 + length + 2],
-                        this.ReceiveBuffer[8 + length + 3],
+                        this.ReceiveBuffer[8 + 0],
+                        this.ReceiveBuffer[8 + 1],
+                        this.ReceiveBuffer[8 + 2],
+                        this.ReceiveBuffer[8 + 3],
                     }, 0);
 
-                    if (crc32_act == crc32)
+
+                    if (length == 0)
                     {
-                        this.ReceiveBuffer.RemoveRange(0, 8 + length + 4);
+                        this.OnDataPacketReceived(new DataPacket(cmd, sSwc, dSwc));
+                        // Remove Packet
+                        this.ReceiveBuffer.RemoveRange(0, 12);
+                    }
+                    else if (this.ReceiveBuffer.Count >= length + 12)
+                    {
+                        List<byte> payload = new List<byte>();
+                        for (int x = 0; x < length; x++)
+                            payload.Add(this.ReceiveBuffer[12 + x]);
 
-                        DataPacket parentPacket = this.IncompletePackets.FirstOrDefault(pP => pP.SourceSwc == sSwc && pP.DestinationSwc == dSwc);
-                        if (parentPacket == null)
+                        UInt32 crc32 = BitConverter.ToUInt32(CRC.CRC32(payload.ToArray()).Reverse().ToArray(), 0);
+
+                        if (crc32_act == crc32)
                         {
-                            parentPacket = new DataPacket(sSwc, dSwc);
-                            this.IncompletePackets.Add(parentPacket);
-                        }
+                            DataPacket parentPacket = this.IncompletePackets.FirstOrDefault(pP => pP.SourceSwc == sSwc && pP.DestinationSwc == dSwc);
+                            if (parentPacket == null)
+                            {
+                                parentPacket = new DataPacket((BLECmd)data[7], sSwc, dSwc);
+                                this.IncompletePackets.Add(parentPacket);
+                            }
 
+                            for (int x = sequence; x < sequence + length; x++)
+                                parentPacket.Data[x] = payload[x - sequence];
 
-                        for (int x = sequence; x < sequence + length; x++)
-                            parentPacket.Data[x] = payload[x - sequence];
-
-                        if ((flags & BLEFlag.FIN) == BLEFlag.FIN)
-                        {
-                            this.OnDataPacketReceived(parentPacket);
-                            this.IncompletePackets.Remove(parentPacket);
+                            if ((flags & BLEFlag.FIN) == BLEFlag.FIN)
+                            {
+                                this.OnDataPacketReceived(parentPacket);
+                                this.IncompletePackets.Remove(parentPacket);
+                            }
+                            else
+                                this.SendAck(sSwc, dSwc);
                         }
                         else
-                            this.SendAck(sSwc, dSwc);
+                            Console.WriteLine("CRC missmatch");
+
+                        // Remove Packet
+                        this.ReceiveBuffer.RemoveRange(0, 8 + length + 4);
                     }
-                    else
-                        Console.WriteLine("CRC missmatch");
+
                 }
             }
         }

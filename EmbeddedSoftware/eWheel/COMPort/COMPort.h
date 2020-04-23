@@ -12,22 +12,6 @@
 #include "..\Executable.h"
 #include "..\Utilities.h"
 
-enum class DEBUG_CMD
-{
-	SetDriveConfig = 63,
-	GetDriveConfig = 64,
-	
-	SetLED = 65
-};
-
-enum class ComPortCMD : uint8_t
-{
-	INVALID = 0,
-	ACK_CMD = 1,
-	READ_FLASHPAGE = 2,
-	WRITE_FLASHPAGE =3
-};
-
 class COMPort : public Executable
 {
 	/************************************************************************/
@@ -40,16 +24,16 @@ class COMPort : public Executable
 	/************************************************************************/
 	private:
 		
-		void ReadFlashPage(uint16_t pageIndex);
-		void WriteFlashPage(uint16_t pageIndex, uint8_t *data);
+		void ResponseFlashPage(uint16_t pageIndex);
+		void SetFlashPage(uint16_t pageIndex, uint8_t *data);
 		
-		void ReadDriveConfig(uint32_t timeStamp);
+		void RequestDriveConfig();
 		void WriteDriveConfig(uint8_t *data);
 		
 	public:
 		COMPort();
 		
-		bool PacketReceived = false;
+		BLECmd ReceivedCommand = BLECmd::INVALID;
 		uint8_t ReceiveBuffer[536];
 		
 }; //CC41A

@@ -4,6 +4,7 @@ namespace TracePersistence
 {
     public class DataPacket
     {
+        public BLECmd Command { get; private set; }
         public BLESwc SourceSwc { get; private set; }
         public BLESwc DestinationSwc { get; private set; }
         public byte[] Data { get; private set; }
@@ -12,9 +13,10 @@ namespace TracePersistence
         {
             this.Data = new byte[536];
         }
-        public DataPacket(BLESwc sSwc, BLESwc dSwc)
+        public DataPacket(BLECmd cmd, BLESwc sSwc, BLESwc dSwc)
             : this()
         {
+            this.Command = cmd;
             this.SourceSwc = sSwc;
             this.DestinationSwc = dSwc;
         }
