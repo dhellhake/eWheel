@@ -7,7 +7,7 @@
 #ifndef EXECUTABLE_H_
 #define EXECUTABLE_H_
 
-#include "samc21.h"
+#include "sam.h"
 
 enum class RUN_RESULT
 {

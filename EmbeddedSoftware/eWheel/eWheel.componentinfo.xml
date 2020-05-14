@@ -57,7 +57,7 @@
 			<CSub></CSub>
 			<CVariant></CVariant>
 			<CVendor>Atmel</CVendor>
-			<CVersion>1.2.0</CVersion>
+			<CVersion>1.0.0</CVersion>
 			<DefaultRepoPath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs</DefaultRepoPath>
 			<DependentComponents xmlns:d4p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
 				<d4p1:anyType z:Ref="i1" />
@@ -65,99 +65,121 @@
 			<Description></Description>
 			<Files xmlns:d4p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
 				<d4p1:anyType i:type="FileInfo">
-					<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\SAMC21_DFP\1.2.176\samc21\include</AbsolutePath>
+					<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\SAM4S_DFP\1.0.56\sam4s\include</AbsolutePath>
 					<Attribute></Attribute>
 					<Category>include</Category>
 					<Condition>C</Condition>
 					<FileContentHash i:nil="true" />
 					<FileVersion></FileVersion>
-					<Name>samc21/include</Name>
+					<Name>sam4s/include</Name>
 					<SelectString></SelectString>
 					<SourcePath></SourcePath>
 				</d4p1:anyType>
 				<d4p1:anyType i:type="FileInfo">
-					<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\SAMC21_DFP\1.2.176\samc21\include\sam.h</AbsolutePath>
+					<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\SAM4S_DFP\1.0.56\sam4s\include\sam.h</AbsolutePath>
 					<Attribute></Attribute>
 					<Category>header</Category>
 					<Condition>C</Condition>
-					<FileContentHash>2Rk75rgdSdFbgPkrL7+Wow==</FileContentHash>
+					<FileContentHash>BxC/xxYrWruCFlKYLTv8cg==</FileContentHash>
 					<FileVersion></FileVersion>
-					<Name>samc21/include/sam.h</Name>
+					<Name>sam4s/include/sam.h</Name>
 					<SelectString></SelectString>
 					<SourcePath></SourcePath>
 				</d4p1:anyType>
 				<d4p1:anyType i:type="FileInfo">
-					<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\SAMC21_DFP\1.2.176\samc21\templates\main.c</AbsolutePath>
+					<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\SAM4S_DFP\1.0.56\sam4s\templates\main.c</AbsolutePath>
 					<Attribute>template</Attribute>
 					<Category>source</Category>
 					<Condition>C Exe</Condition>
 					<FileContentHash>o0ncidL5gR0Z0YwWJ1YroQ==</FileContentHash>
 					<FileVersion></FileVersion>
-					<Name>samc21/templates/main.c</Name>
+					<Name>sam4s/templates/main.c</Name>
 					<SelectString>Main file (.c)</SelectString>
 					<SourcePath></SourcePath>
 				</d4p1:anyType>
 				<d4p1:anyType i:type="FileInfo">
-					<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\SAMC21_DFP\1.2.176\samc21\templates\main.cpp</AbsolutePath>
+					<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\SAM4S_DFP\1.0.56\sam4s\templates\main.cpp</AbsolutePath>
 					<Attribute>template</Attribute>
 					<Category>source</Category>
 					<Condition>C Exe</Condition>
-					<FileContentHash>W4tJxwACyw5GHrKhqRA1WA==</FileContentHash>
+					<FileContentHash>V1Jn16261Qic2ib6ND+biA==</FileContentHash>
 					<FileVersion></FileVersion>
-					<Name>samc21/templates/main.cpp</Name>
+					<Name>sam4s/templates/main.cpp</Name>
 					<SelectString>Main file (.cpp)</SelectString>
 					<SourcePath></SourcePath>
 				</d4p1:anyType>
 				<d4p1:anyType i:type="FileInfo">
-					<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\SAMC21_DFP\1.2.176\samc21\gcc\system_samc21.c</AbsolutePath>
+					<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\SAM4S_DFP\1.0.56\sam4s\gcc\system_sam4s.c</AbsolutePath>
 					<Attribute>config</Attribute>
 					<Category>source</Category>
 					<Condition>GCC Exe</Condition>
-					<FileContentHash>iZApSPlKT5sFShfs2MMw3A==</FileContentHash>
+					<FileContentHash>OZZTnLK+tORP+CJNBlXV3A==</FileContentHash>
 					<FileVersion></FileVersion>
-					<Name>samc21/gcc/system_samc21.c</Name>
+					<Name>sam4s/gcc/system_sam4s.c</Name>
 					<SelectString></SelectString>
 					<SourcePath></SourcePath>
 				</d4p1:anyType>
 				<d4p1:anyType i:type="FileInfo">
-					<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\SAMC21_DFP\1.2.176\samc21\gcc\gcc\startup_samc21.c</AbsolutePath>
+					<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\SAM4S_DFP\1.0.56\sam4s\gcc\gcc\startup_sam4s.c</AbsolutePath>
 					<Attribute>config</Attribute>
 					<Category>source</Category>
 					<Condition>GCC Exe</Condition>
-					<FileContentHash>bpsG10hjzf37y3bP6vwBHA==</FileContentHash>
+					<FileContentHash>Y5Se3PkUJJdjeARZBB9QGg==</FileContentHash>
 					<FileVersion></FileVersion>
-					<Name>samc21/gcc/gcc/startup_samc21.c</Name>
+					<Name>sam4s/gcc/gcc/startup_sam4s.c</Name>
 					<SelectString></SelectString>
 					<SourcePath></SourcePath>
 				</d4p1:anyType>
 				<d4p1:anyType i:type="FileInfo">
-					<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\SAMC21_DFP\1.2.176\samc21\gcc\gcc\samc21g18a_flash.ld</AbsolutePath>
+					<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\SAM4S_DFP\1.0.56\sam4s\gcc\gcc\sam4s2b_flash.ld</AbsolutePath>
 					<Attribute>config</Attribute>
 					<Category>linkerScript</Category>
 					<Condition>GCC Exe</Condition>
-					<FileContentHash>+ADRQBgz3lt3/bQaN54YAw==</FileContentHash>
+					<FileContentHash>DV2fwycRQTpXwIyd8jDckA==</FileContentHash>
 					<FileVersion></FileVersion>
-					<Name>samc21/gcc/gcc/samc21g18a_flash.ld</Name>
+					<Name>sam4s/gcc/gcc/sam4s2b_flash.ld</Name>
 					<SelectString></SelectString>
 					<SourcePath></SourcePath>
 				</d4p1:anyType>
 				<d4p1:anyType i:type="FileInfo">
-					<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\SAMC21_DFP\1.2.176\samc21\gcc\gcc\samc21g18a_sram.ld</AbsolutePath>
+					<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\SAM4S_DFP\1.0.56\sam4s\gcc\gcc\sam4s2b_sram.ld</AbsolutePath>
 					<Attribute>config</Attribute>
 					<Category>other</Category>
 					<Condition>GCC Exe</Condition>
-					<FileContentHash>EeRJsUrXd5BzGgGrKxIvNg==</FileContentHash>
+					<FileContentHash>gbev+AO3yFtnDPqsMLm5qQ==</FileContentHash>
 					<FileVersion></FileVersion>
-					<Name>samc21/gcc/gcc/samc21g18a_sram.ld</Name>
+					<Name>sam4s/gcc/gcc/sam4s2b_sram.ld</Name>
+					<SelectString></SelectString>
+					<SourcePath></SourcePath>
+				</d4p1:anyType>
+				<d4p1:anyType i:type="FileInfo">
+					<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\SAM4S_DFP\1.0.56\sam4s\gcc\gcc\sam4s_flash.ld</AbsolutePath>
+					<Attribute>config</Attribute>
+					<Category>other</Category>
+					<Condition>GCC Exe</Condition>
+					<FileContentHash>czGbovk6f1LTVnu4XUL9FQ==</FileContentHash>
+					<FileVersion></FileVersion>
+					<Name>sam4s/gcc/gcc/sam4s_flash.ld</Name>
+					<SelectString></SelectString>
+					<SourcePath></SourcePath>
+				</d4p1:anyType>
+				<d4p1:anyType i:type="FileInfo">
+					<AbsolutePath>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\SAM4S_DFP\1.0.56\sam4s\gcc\gcc\sam4s_sram.ld</AbsolutePath>
+					<Attribute>config</Attribute>
+					<Category>other</Category>
+					<Condition>GCC Exe</Condition>
+					<FileContentHash>i4E3XYkonwRIB46d42R6Ow==</FileContentHash>
+					<FileVersion></FileVersion>
+					<Name>sam4s/gcc/gcc/sam4s_sram.ld</Name>
 					<SelectString></SelectString>
 					<SourcePath></SourcePath>
 				</d4p1:anyType>
 			</Files>
-			<PackName>SAMC21_DFP</PackName>
-			<PackPath>C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/SAMC21_DFP/1.2.176/Atmel.SAMC21_DFP.pdsc</PackPath>
-			<PackVersion>1.2.176</PackVersion>
+			<PackName>SAM4S_DFP</PackName>
+			<PackPath>C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/SAM4S_DFP/1.0.56/Atmel.SAM4S_DFP.pdsc</PackPath>
+			<PackVersion>1.0.56</PackVersion>
 			<PresentInProject>true</PresentInProject>
-			<ReferenceConditionId>ATSAMC21G18A</ReferenceConditionId>
+			<ReferenceConditionId>ATSAM4S2B</ReferenceConditionId>
 			<RteComponents xmlns:d4p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
 				<d4p1:string></d4p1:string>
 			</RteComponents>
