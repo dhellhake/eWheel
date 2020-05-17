@@ -188,6 +188,15 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ESC\ESC.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="ESC\ESC.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="ESC\ESCUtilities.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Executable.h">
       <SubType>compile</SubType>
     </Compile>
@@ -238,6 +247,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="ESC" />
     <Folder Include="Peripheral" />
     <Folder Include="Peripheral\USART" />
     <Folder Include="Peripheral\WDT" />

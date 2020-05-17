@@ -6,6 +6,7 @@
 */
 #include "USARTlib.h"
 #include "..\System\System.h"
+#include "..\..\ESC\ESC.h"
 
 uint32_t usart_set_async_baudrate(Usart *usart, uint32_t baudrate, uint32_t ul_mck)
 {
@@ -51,12 +52,10 @@ void InitUSART0()
 	
 	USART0->US_CR =		US_CR_TXEN | US_CR_RXEN;
 	
-	USART0->US_IER =	US_IER_RXBUFF;
+	USART0->US_IDR =	0xffffffff;
+	USART0->US_IER =	US_IDR_RXRDY;
 	
 	/* Configure and enable interrupt of PIOB. */
-	NVIC_DisableIRQ(USART0_IRQn);
-	NVIC_ClearPendingIRQ(USART0_IRQn);
-	NVIC_SetPriority(USART0_IRQn, 4);
 	NVIC_EnableIRQ(USART0_IRQn);
 }
 
@@ -68,6 +67,8 @@ void USART0_Handler ( void )
 	if (status & US_CSR_RXRDY)
 	{
 		uint32_t d = USART0->US_RHR & US_RHR_RXCHR_Msk;
-		
+		VESC.ReceiveByte((uint8_t)d);
 	}
 }
+
+

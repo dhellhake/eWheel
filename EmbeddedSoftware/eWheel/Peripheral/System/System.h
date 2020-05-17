@@ -14,7 +14,23 @@ extern "C" {
 
 	#define SYSTEM_CPU_CLK		120000000UL
 
+	// Overflow of 24bit-Systick-Counter running at 120Mhz
+	extern volatile uint64_t SysTick_Overflow;
+
 	void InitSysTick();
+
+	inline uint32_t GetElapsedMilis()
+	{
+		uint64_t result = (SysTick_Overflow * 0xFFFFFF) + (0xFFFFFF - SysTick->VAL);
+		return (uint32_t)(result / 120000);
+	}
+
+	inline uint64_t GetElapsedMicros()
+	{
+		uint64_t result = (SysTick_Overflow * 0xFFFFFF) + (0xFFFFFF - SysTick->VAL);
+		return (uint32_t)(result / 120);
+	}
+
 	
 	extern volatile uint32_t ElapsedMillis;
 #ifdef __cplusplus
