@@ -30,6 +30,7 @@
 #include "sam4s.h"
 #include "..\PMC\PMClib.h"
 #include "..\SPI\SPIlib.h"
+#include "..\USART\USARTlib.h"
 #include "..\PIO\PIOlib.h"
 #include "..\WDT\WDTlib.h"
 #include "..\System\System.h"
@@ -248,6 +249,10 @@ void Reset_Handler(void)
 		/* Init SPI */
 		EnablePeripheral(ID_SPI);
 		InitSPI();
+
+		/* Init USART0 (VESC) */		
+		EnablePeripheral(ID_USART0);
+		InitUSART0();
 
 		/* Init Systick to count Millis */
 		InitSysTick();

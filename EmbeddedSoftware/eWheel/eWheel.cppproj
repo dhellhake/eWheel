@@ -154,7 +154,6 @@
             <Value>%24(PackRepoDir)\atmel\SAM4S_DFP\1.0.56\sam4s\include</Value>
           </ListValues>
         </armgcccpp.compiler.directories.IncludePaths>
-        <armgcccpp.compiler.optimization.level>Optimize (-O1)</armgcccpp.compiler.optimization.level>
         <armgcccpp.compiler.optimization.PrepareFunctionsForGarbageCollection>True</armgcccpp.compiler.optimization.PrepareFunctionsForGarbageCollection>
         <armgcccpp.compiler.optimization.DebugLevel>Maximum (-g3)</armgcccpp.compiler.optimization.DebugLevel>
         <armgcccpp.compiler.warnings.AllWarnings>True</armgcccpp.compiler.warnings.AllWarnings>
@@ -192,9 +191,6 @@
     <Compile Include="Executable.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LSM9DS1\LSM9DS1.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="Peripheral\PIO\PIOlib.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -225,6 +221,12 @@
     <Compile Include="Peripheral\System\System.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Peripheral\USART\USARTlib.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Peripheral\USART\USARTlib.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Peripheral\WDT\WDTlib.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -236,8 +238,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="LSM9DS1\" />
     <Folder Include="Peripheral" />
+    <Folder Include="Peripheral\USART" />
     <Folder Include="Peripheral\WDT" />
     <Folder Include="Peripheral\System" />
     <Folder Include="Peripheral\SPI" />
