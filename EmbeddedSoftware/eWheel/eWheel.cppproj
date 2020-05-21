@@ -188,13 +188,16 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ESC\ESC.cpp">
+    <Compile Include="ESC\DriveController.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="ESC\ESC.h">
+    <Compile Include="ESC\DriveController.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="ESC\ESCUtilities.h">
+    <Compile Include="Peripheral\VESC\VESC.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Peripheral\VESC\VESC.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Task.h">
@@ -249,6 +252,7 @@
   <ItemGroup>
     <Folder Include="ESC" />
     <Folder Include="Peripheral" />
+    <Folder Include="Peripheral\VESC" />
     <Folder Include="Peripheral\SAM4S\PIO\" />
     <Folder Include="Peripheral\SAM4S\PMC\" />
     <Folder Include="Peripheral\SAM4S\SPI\" />

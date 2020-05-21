@@ -1,39 +1,16 @@
-/*
- * ESCUtilities.h
- *
- * Created: 22.03.2020 13:53:24
- *  Author: dominik hellhake
- */ 
-#ifndef ESCUTILITIES_H_
-#define ESCUTILITIES_H_
+/* 
+* VESC.h
+*
+* Created: 21.05.2020 15:10:08
+* Author: dominik hellhake
+*/
+#ifndef __VESC_H__
+#define __VESC_H__
 
-static inline void buffer_set_int32(uint8_t *buffer, int32_t value)
-{
-	uint8_t *v = (uint8_t*)&value;
-	for (uint8_t i = 0; i < 4; i++)
-		buffer[i] = v[3-i];
-}
+#include "sam.h"
 
-
-static inline int32_t buffer_get_int32(const uint8_t *buffer)
-{
-	return 	buffer[0] << 24		|
-			buffer[1] << 16		|
-			buffer[2] << 8		|
-			buffer[3];
-}
-static inline int16_t buffer_get_int16(const uint8_t *buffer)
-{
-	return	buffer[0] << 8 | buffer[1];
-}
-static inline float buffer_get_float16(const uint8_t *buffer, float scale) 
-{
-	return (float)buffer_get_int16(buffer) / scale;
-}
-static inline float buffer_get_float32(const uint8_t *buffer, float scale) 
-{
-	return (float)buffer_get_int32(buffer) / scale;
-}
+#define VESC_USART			USART0
+#define VESC_RCV_BUF_SIZE	128
 
 enum class VESCFaultCode {
 	FAULT_CODE_NONE = 0,
@@ -150,4 +127,71 @@ enum class VESCPackageType
 	COMM_CAN_FWD_FRAME
 };
 
-#endif /* ESCUTILITIES_H_ */
+enum class VESC_COM_STATE
+{
+	Waiting,
+	Requested,
+	Received
+};
+
+class VESC
+{
+	private:		
+		VESC_COM_STATE ComState = VESC_COM_STATE::Waiting;
+		uint8_t ReceiveBufferIndex = 0;
+		uint8_t ReceiveBuffer[VESC_RCV_BUF_SIZE];
+			
+		void SendVESCPacket(VESCPackageType type, uint8_t* payload, uint16_t length);
+		void UnpackVESCPacket(uint8_t* payload, uint16_t length);	
+	
+	public:		
+		VESCFaultCode FaultCode;
+		float Avl_TempFET;
+		float Avl_RPM;
+		float Avl_Current;
+		float Avl_CurrentIn;
+		float Avl_Duty;
+		float Avl_Vin;
+		float Avl_Ah;
+		float Avl_AhCharged;
+		float Avl_Wh;
+		float Avl_WhCharged;
+		int32_t Avl_Tach;
+			
+		void ReceiveByte(uint8_t data);
+		void Update();		
+		void SetCurrent(float current_val);
+		void SetDuty(float duty_val);
+	
+	
+	
+		static inline void buffer_set_int32(uint8_t *buffer, int32_t value)
+		{
+			uint8_t *v = (uint8_t*)&value;
+			for (uint8_t i = 0; i < 4; i++)
+				buffer[i] = v[3-i];
+		}
+		static inline int32_t buffer_get_int32(const uint8_t *buffer)
+		{
+			return 	buffer[0] << 24		|
+					buffer[1] << 16		|
+					buffer[2] << 8		|
+					buffer[3];
+		}
+		static inline int16_t buffer_get_int16(const uint8_t *buffer)
+		{
+			return	buffer[0] << 8 | buffer[1];
+		}
+		static inline float buffer_get_float16(const uint8_t *buffer, float scale)
+		{
+			return (float)buffer_get_int16(buffer) / scale;
+		}
+		static inline float buffer_get_float32(const uint8_t *buffer, float scale)
+		{
+			return (float)buffer_get_int32(buffer) / scale;
+		}
+}; //VESC
+
+extern VESC ESC;
+
+#endif //__VESC_H__

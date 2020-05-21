@@ -6,7 +6,7 @@
 */
 #include "USARTlib.h"
 #include "..\..\System\System.h"
-#include "..\..\..\ESC\ESC.h"
+#include "..\..\VESC\VESC.h"
 
 uint32_t usart_set_async_baudrate(Usart *usart, uint32_t baudrate, uint32_t ul_mck)
 {
@@ -97,7 +97,7 @@ void USART0_Handler ( void )
 	if (status & US_CSR_RXRDY)
 	{
 		uint32_t d = USART0->US_RHR & US_RHR_RXCHR_Msk;
-		VESC.ReceiveByte((uint8_t)d);
+		ESC.ReceiveByte((uint8_t)d);
 	}
 }
 

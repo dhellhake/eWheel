@@ -7,14 +7,14 @@
 #include <string.h>
 #include "sam.h"
 #include "Peripheral/System/System.h"
-#include "ESC/ESC.h"
+#include "ESC/DriveController.h"
 
 #define TASKPOOL_SIZE	1
 
 int main(void)
 {				
 	Task* taskPool[TASKPOOL_SIZE] = {
-		&VESC
+		&Drive
 	};
 	
 	uint16_t timeSlot[TASKPOOL_SIZE]
