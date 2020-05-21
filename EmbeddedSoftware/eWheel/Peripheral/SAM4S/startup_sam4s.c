@@ -254,6 +254,10 @@ void Reset_Handler(void)
 		EnablePeripheral(ID_USART0);
 		InitUSART0();
 
+		/* Init USART0 (BNO055) */
+		EnablePeripheral(ID_USART1);
+		InitUSART1();
+
 		/* Init Systick to count Millis */
 		InitSysTick();
 

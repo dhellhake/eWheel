@@ -22,7 +22,7 @@ void InitSPI()
 	SPI->SPI_MR &= (~SPI_MR_PCS_Msk);
 	SPI->SPI_MR |= SPI_MR_PCS(0x0);
 	
-	/* SPI to LSM9DS1 */
+	/* SPI to W25Q128 */
 	// Set SPI-Mode 1
 	SPI->SPI_CSR[0] &= ~(SPI_CSR_CPOL);
 	SPI->SPI_CSR[0] |= (SPI_CSR_NCPHA);

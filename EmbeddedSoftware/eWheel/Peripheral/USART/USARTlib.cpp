@@ -59,6 +59,36 @@ void InitUSART0()
 	NVIC_EnableIRQ(USART0_IRQn);
 }
 
+void InitUSART1()
+{
+	usart_set_async_baudrate(USART1, 115200, SYSTEM_CPU_CLK);
+	
+	USART1->US_MR =		US_MR_CHMODE_NORMAL |
+						US_MR_NBSTOP_1_BIT |
+						US_MR_PAR_NO |
+						US_MR_CHRL_8_BIT |
+						US_MR_USCLKS_MCK |
+						US_MR_USART_MODE_NORMAL;
+	
+	USART1->US_CR =		US_CR_TXEN | US_CR_RXEN;
+	
+	USART1->US_IDR =	0xffffffff;
+	USART1->US_IER =	US_IDR_RXRDY;
+	
+	/* Configure and enable interrupt of PIOB. */
+	NVIC_EnableIRQ(USART1_IRQn);
+}
+
+void USART1_Handler ( void )
+{
+	uint32_t status = USART1->US_CSR;
+	
+	if (status & US_CSR_RXRDY)
+	{
+		uint32_t d = USART1->US_RHR & US_RHR_RXCHR_Msk;
+		d++;
+	}
+}
 
 void USART0_Handler ( void )
 {

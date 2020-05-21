@@ -23,4 +23,12 @@ void InitPIO()
 	PIOA->PIO_ABCDSR[0] &= ~(PIO_PA5 | PIO_PA6);
 	PIOA->PIO_ABCDSR[1] &= ~(PIO_PA5 | PIO_PA6);
 	PIOA->PIO_PDR = PIO_PA5 | PIO_PA6;
+		
+	/* USART1 Pins */
+	// Disable interrupts on the pin PB0
+	PIOA->PIO_IDR = PIO_PA21 | PIO_PA22;
+	// Select Peripheral function A
+	PIOA->PIO_ABCDSR[0] &= ~(PIO_PA21 | PIO_PA22);
+	PIOA->PIO_ABCDSR[1] &= ~(PIO_PA21 | PIO_PA22);
+	PIOA->PIO_PDR = PIO_PA21 | PIO_PA22;
 }

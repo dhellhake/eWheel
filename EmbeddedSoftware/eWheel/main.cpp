@@ -9,10 +9,12 @@
 #include "Peripheral/System/System.h"
 #include "ESC/ESC.h"
 
+#include "Peripheral/USART/USARTlib.h"
+
 #define TASKPOOL_SIZE	1
 
 int main(void)
-{			
+{				
 	Executable* taskPool[TASKPOOL_SIZE] = {
 		&VESC
 	};
@@ -41,6 +43,6 @@ int main(void)
 		
 		taskIndex++;
 		if (taskIndex >= TASKPOOL_SIZE)
-		taskIndex = 0;
+			taskIndex = 0;
 	}
 }
