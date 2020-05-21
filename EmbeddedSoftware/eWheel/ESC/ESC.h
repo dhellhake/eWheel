@@ -8,7 +8,7 @@
 #define __ESC_H__
 
 #include "ESCUtilities.h"
-#include "..\Executable.h"
+#include "..\Task.h"
 
 #define VESC_USART			USART0
 
@@ -21,7 +21,7 @@ enum VESC_COM_STATE
 	Received
 };
 
-class ESC : public Executable
+class ESC : public Task
 {
 	/************************************************************************/
 	/* Executable Interface implementation                                  */

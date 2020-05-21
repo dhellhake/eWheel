@@ -9,13 +9,11 @@
 #include "Peripheral/System/System.h"
 #include "ESC/ESC.h"
 
-#include "Peripheral/USART/USARTlib.h"
-
 #define TASKPOOL_SIZE	1
 
 int main(void)
 {				
-	Executable* taskPool[TASKPOOL_SIZE] = {
+	Task* taskPool[TASKPOOL_SIZE] = {
 		&VESC
 	};
 	

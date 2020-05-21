@@ -197,19 +197,25 @@
     <Compile Include="ESC\ESCUtilities.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Executable.h">
+    <Compile Include="Task.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Peripheral\PIO\PIOlib.cpp">
+    <Compile Include="Peripheral\SAM4S\PIO\PIOlib.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Peripheral\PIO\PIOlib.h">
+    <Compile Include="Peripheral\SAM4S\PIO\PIOlib.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Peripheral\PMC\PMClib.cpp">
+    <Compile Include="Peripheral\SAM4S\PMC\PMClib.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Peripheral\PMC\PMClib.h">
+    <Compile Include="Peripheral\SAM4S\PMC\PMClib.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Peripheral\SAM4S\SPI\SPIlib.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Peripheral\SAM4S\SPI\SPIlib.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Peripheral\SAM4S\startup_sam4s.c">
@@ -218,28 +224,22 @@
     <Compile Include="main.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Peripheral\SPI\SPIlib.cpp">
+    <Compile Include="Peripheral\SAM4S\USART\USARTlib.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Peripheral\SPI\SPIlib.h">
+    <Compile Include="Peripheral\SAM4S\USART\USARTlib.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Peripheral\SAM4S\WDT\WDTlib.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Peripheral\SAM4S\WDT\WDTlib.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Peripheral\System\System.cpp">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Peripheral\System\System.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="Peripheral\USART\USARTlib.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="Peripheral\USART\USARTlib.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="Peripheral\WDT\WDTlib.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="Peripheral\WDT\WDTlib.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Utilities.h">
@@ -249,13 +249,13 @@
   <ItemGroup>
     <Folder Include="ESC" />
     <Folder Include="Peripheral" />
-    <Folder Include="Peripheral\USART" />
-    <Folder Include="Peripheral\WDT" />
+    <Folder Include="Peripheral\SAM4S\PIO\" />
+    <Folder Include="Peripheral\SAM4S\PMC\" />
+    <Folder Include="Peripheral\SAM4S\SPI\" />
+    <Folder Include="Peripheral\SAM4S\USART\" />
+    <Folder Include="Peripheral\SAM4S\WDT\" />
     <Folder Include="Peripheral\System" />
-    <Folder Include="Peripheral\SPI" />
-    <Folder Include="Peripheral\PMC" />
     <Folder Include="Peripheral\SAM4S" />
-    <Folder Include="Peripheral\PIO" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Peripheral\SAM4S\sam4s2b_flash.ld">

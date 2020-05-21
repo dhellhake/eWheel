@@ -28,11 +28,11 @@
 /* ---------------------------------------------------------------------------- */
 
 #include "sam4s.h"
-#include "..\PMC\PMClib.h"
-#include "..\SPI\SPIlib.h"
-#include "..\USART\USARTlib.h"
-#include "..\PIO\PIOlib.h"
-#include "..\WDT\WDTlib.h"
+#include "PMC\PMClib.h"
+#include "SPI\SPIlib.h"
+#include "USART\USARTlib.h"
+#include "PIO\PIOlib.h"
+#include "WDT\WDTlib.h"
 #include "..\System\System.h"
 
 /* Initialize segments */

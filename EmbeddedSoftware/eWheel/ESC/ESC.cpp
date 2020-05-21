@@ -7,7 +7,7 @@
 #include <string.h>
 #include "sam.h"
 #include "ESC.h"
-#include "..\Peripheral\USART\USARTlib.h"
+#include "..\Peripheral\SAM4S\USART\USARTlib.h"
 #include "..\Utilities.h"
 
 ESC VESC;

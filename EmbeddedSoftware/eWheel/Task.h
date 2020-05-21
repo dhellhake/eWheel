@@ -4,8 +4,8 @@
  * Created: 08.07.2018 09:44:01
  *  Author: Dominik Hellhake
  */
-#ifndef EXECUTABLE_H_
-#define EXECUTABLE_H_
+#ifndef TASK_H_
+#define TASK_H_
 
 #include "sam.h"
 
@@ -17,7 +17,7 @@ enum class RUN_RESULT
 	NOT_IMPLEMENTED
 };
 
-class Executable
+class Task
 {
 	public:	
 		virtual RUN_RESULT Run(uint32_t timeStamp) { return RUN_RESULT::NOT_IMPLEMENTED; };
@@ -29,6 +29,6 @@ class Executable
 		uint32_t LAST_RUNNED = 0;
 		
 		bool TraceEnabled = false;
-}; //Executable
+}; //Task
 
-#endif /* EXECUTABLE_H_ */
+#endif /* TASK_H_ */
