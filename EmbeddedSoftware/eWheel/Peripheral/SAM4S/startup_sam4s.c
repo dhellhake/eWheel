@@ -30,6 +30,7 @@
 #include "sam4s.h"
 #include "PMC\PMClib.h"
 #include "SPI\SPIlib.h"
+#include "UART\UARTlib.h"
 #include "USART\USARTlib.h"
 #include "PIO\PIOlib.h"
 #include "WDT\WDTlib.h"
@@ -257,6 +258,10 @@ void Reset_Handler(void)
 		/* Init USART0 (BNO055) */
 		EnablePeripheral(ID_USART1);
 		InitUSART1();
+		
+		/* Init UART1 (CP2102) */		
+		EnablePeripheral(ID_UART1);
+		InitUART1();
 
 		/* Init Systick to count Millis */
 		InitSysTick();

@@ -7,19 +7,25 @@
 #include <string.h>
 #include "sam.h"
 #include "Peripheral/System/System.h"
-#include "ESC/DriveController.h"
+#include "DriveController/DriveController.h"
+#include "Board/Board.h"
 
-#define TASKPOOL_SIZE	1
+#include "Peripheral/SAM4S/PMC/PMClib.h"
+
+#define TASKPOOL_SIZE	2
+
 
 int main(void)
 {				
 	Task* taskPool[TASKPOOL_SIZE] = {
-		&Drive
+		&Drive,
+		&Chassis
 	};
 	
 	uint16_t timeSlot[TASKPOOL_SIZE]
 	{
 		1000,
+		9000
 	};
 	
 	uint64_t t_now = 0;

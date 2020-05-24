@@ -7,6 +7,7 @@
 #include "USARTlib.h"
 #include "..\..\System\System.h"
 #include "..\..\VESC\VESC.h"
+#include "..\..\BNO055\BNO055.h"
 
 uint32_t usart_set_async_baudrate(Usart *usart, uint32_t baudrate, uint32_t ul_mck)
 {
@@ -86,7 +87,7 @@ void USART1_Handler ( void )
 	if (status & US_CSR_RXRDY)
 	{
 		uint32_t d = USART1->US_RHR & US_RHR_RXCHR_Msk;
-		d++;
+		IMU.ReceiveByte((uint8_t)d);
 	}
 }
 
