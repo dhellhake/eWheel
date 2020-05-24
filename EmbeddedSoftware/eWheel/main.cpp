@@ -10,13 +10,12 @@
 #include "DriveController/DriveController.h"
 #include "Board/Board.h"
 
-#include "Peripheral/SAM4S/PMC/PMClib.h"
-
 #define TASKPOOL_SIZE	2
 
-
 int main(void)
-{				
+{	
+	
+				
 	Task* taskPool[TASKPOOL_SIZE] = {
 		&Drive,
 		&Chassis

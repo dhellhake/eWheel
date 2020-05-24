@@ -12,27 +12,21 @@
 extern "C" {
 #endif
 	#include "sam.h"
-		
-	#define SPI_PCS_PER_LSM9DS1		0
+	
+	#define  SPI_PCS_PER_W25Q	0
 	
 	void InitSPI();
-	
-	inline void SPI_SelectPeripheral(uint8_t per_id)
-	{		
-		SPI->SPI_MR &= (~SPI_MR_PCS_Msk);
-		SPI->SPI_MR |= SPI_MR_PCS(per_id);
-	}
-	
-	inline void SPI_TransferData(uint8_t* data, uint16_t length)
+		
+	inline void SPI_TransferData(uint8_t per_idx, uint8_t *data, uint16_t length)
 	{						
 		//Indicate multiple byte transfer
-		SPI->SPI_CSR[0] |= SPI_CSR_CSAAT;
+		SPI->SPI_CSR[per_idx] |= SPI_CSR_CSAAT;
 		
 		for (uint16_t x = 0; x < length; x++)
 		{
 			SPI->SPI_TDR = data[x];
 			while ((SPI->SPI_SR & SPI_SR_RDRF) == 0);
-			data[x] = SPI->SPI_RDR;
+			data[per_idx] = SPI->SPI_RDR;
 		}
 		
 		//Idicate last transfer

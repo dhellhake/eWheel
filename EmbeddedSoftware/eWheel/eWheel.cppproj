@@ -206,10 +206,22 @@
     <Compile Include="Peripheral\BNO055\BNO055.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Peripheral\SAM4S\UART\UARTlib.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Peripheral\SAM4S\UART\UARTlib.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Peripheral\VESC\VESC.cpp">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Peripheral\VESC\VESC.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Peripheral\W25Q128\W25Q128.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Peripheral\W25Q128\W25Q128.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Task.h">
@@ -266,6 +278,8 @@
     <Folder Include="Board" />
     <Folder Include="Peripheral" />
     <Folder Include="Peripheral\BNO055" />
+    <Folder Include="Peripheral\W25Q128" />
+    <Folder Include="Peripheral\SAM4S\UART" />
     <Folder Include="Peripheral\VESC" />
     <Folder Include="Peripheral\SAM4S\PIO\" />
     <Folder Include="Peripheral\SAM4S\PMC\" />
