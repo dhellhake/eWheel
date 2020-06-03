@@ -7,10 +7,6 @@
 #include "DriveController.h"
 #include "..\Peripheral\VESC\VESC.h"
 
-
-#include "..\Peripheral/W25Q128/W25Q128.h"
-
-
 DriveController Drive;
 
 /************************************************************************/
@@ -21,12 +17,8 @@ RUN_RESULT DriveController::Run(uint32_t timeStamp)
 	RUN_RESULT result = RUN_RESULT::IDLE;
 				
 	if (timeStamp - this->ESC_Update_Tstmp >= 100)
-	{
-		
-		DataFlash.ReadJEDEC();
-		
-		
-		//ESC.Update();
+	{		
+		ESC.Update();
 		this->ESC_Update_Tstmp = timeStamp;
 		result = RUN_RESULT::SUCCESS;
 	}

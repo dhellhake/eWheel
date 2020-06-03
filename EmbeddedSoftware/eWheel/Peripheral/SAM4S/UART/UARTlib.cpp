@@ -5,6 +5,7 @@
 * Author: dominik hellhake
 */
 #include "UARTlib.h"
+#include "..\..\CP2102\CP2102.h"
 
 void InitUART0()
 {
@@ -18,7 +19,7 @@ void InitUART1()
 	/* Set baudrate 120Mhz/16/8 = 937500 */
 	UART1->UART_BRGR = 8;
 	/* Configure mode */
-	UART1->UART_MR = UART_MR_CHMODE_NORMAL | UART_MR_PAR_EVEN;
+	UART1->UART_MR = UART_MR_CHMODE_NORMAL | UART_MR_PAR_NO;
 	/* Disable PDC channel */
 	UART1->UART_PTCR = UART_PTCR_RXTDIS | UART_PTCR_TXTDIS;
 	
@@ -42,6 +43,6 @@ void UART1_Handler()
 	if (status & UART_SR_RXBUFF)
 	{
 		uint8_t data = UART1->UART_RHR;
-		data++;
+		TracePort.ReceiveByte(data);
 	}
 }

@@ -6,6 +6,8 @@
 */
 #include "System.h"
 
+volatile RUN_MODE Mode = NORMAL;
+
 // Overflow of 24bit-Systick-Counter running at 120Mhz
 volatile uint64_t SysTick_Overflow = 0;
 

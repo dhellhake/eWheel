@@ -20,6 +20,7 @@ typedef struct BNO_REG_VAL
 enum class BNO_REG_ADR
 {
 	ACC_DATA_X_LSB = 0x08,
+	TEMP = 0x35,
 	
 	OPR_MODE = 0x3D
 };
@@ -68,7 +69,6 @@ class BNO055
 		void ReceivedAcknowledge(BNO_COM_ACK ackStatus);
 		void ReceivedResponse(uint8_t length, uint8_t *data);
 		
-		void ReadRegister(BNO_REG_ADR addr, uint8_t length);
 		void WriteRegister(BNO_REG_ADR addr, uint8_t length, uint8_t *data);
 	public:
 		float Yaw;
@@ -81,11 +81,20 @@ class BNO055
 		float GyroX;
 		float GyroY;
 		float GyroZ;
+		float LinAX;
+		float LinAY;
+		float LinAZ;
+		float GravX;
+		float GravY;
+		float GravZ;
 		
+		int8_t Temp;
+		uint8_t CalibStatus;
 		
 		BNO055();		
 		void Update();
 				
+		void ReadRegister(BNO_REG_ADR addr, uint8_t length);
 		void ReceiveByte(uint8_t data);
 }; //BNO055
 

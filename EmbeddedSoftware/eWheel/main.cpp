@@ -9,13 +9,13 @@
 #include "Peripheral/System/System.h"
 #include "DriveController/DriveController.h"
 #include "Board/Board.h"
+#include "TraceLink/TraceLink.h"
 
 #define TASKPOOL_SIZE	2
 
+
 int main(void)
 {	
-	
-				
 	Task* taskPool[TASKPOOL_SIZE] = {
 		&Drive,
 		&Chassis
@@ -33,6 +33,10 @@ int main(void)
 	uint32_t runtime[TASKPOOL_SIZE] { 0 };
 	while (1)
 	{
+		if (Mode == TRACE_MODE)
+			while(1)
+				((Task*)&Trace)->Run(GetElapsedMilis());	
+		
 		t_now = GetElapsedMicros();
 		if (taskPool[taskIndex]->Run(GetElapsedMilis()) == RUN_RESULT::SUCCESS)
 		taskPool[taskIndex]->LAST_RUNNED = t_now;

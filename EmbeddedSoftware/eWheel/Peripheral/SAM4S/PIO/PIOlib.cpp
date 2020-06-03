@@ -34,9 +34,9 @@ void InitPIO()
 		
 	/* UART1 Pins */
 	// Disable interrupts 
-	PIOA->PIO_IDR = PIO_PA2 | PIO_PA3;
+	PIOB->PIO_IDR = PIO_PB2 | PIO_PB3;
 	// Select Peripheral function A
-	PIOA->PIO_ABCDSR[0] &= ~(PIO_PA2 | PIO_PA3);
-	PIOA->PIO_ABCDSR[1] &= ~(PIO_PA2 | PIO_PA3);
-	PIOA->PIO_PDR = PIO_PA2 | PIO_PA3;
+	PIOB->PIO_ABCDSR[0] &= ~(PIO_PB2 | PIO_PB3);
+	PIOB->PIO_ABCDSR[1] &= ~(PIO_PB2 | PIO_PB3);
+	PIOB->PIO_PDR = PIO_PB2 | PIO_PB3;
 }

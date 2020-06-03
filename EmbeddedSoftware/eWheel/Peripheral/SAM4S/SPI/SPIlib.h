@@ -12,25 +12,32 @@
 extern "C" {
 #endif
 	#include "sam.h"
-	
-	#define  SPI_PCS_PER_W25Q	0
-	
+		
 	void InitSPI();
-		
-	inline void SPI_TransferData(uint8_t per_idx, uint8_t *data, uint16_t length)
-	{						
-		//Indicate multiple byte transfer
-		SPI->SPI_CSR[per_idx] |= SPI_CSR_CSAAT;
-		
+	
+	typedef enum SPI_PCS_PER
+	{
+		W25Q = 0
+	}SPI_PCS_PER;
+	
+	inline void SPI_Select(SPI_PCS_PER per)
+	{
+		SPI->SPI_CSR[(uint8_t)per] |= SPI_CSR_CSAAT;
+	}
+	
+	inline void SPI_Finish()
+	{	
+		SPI->SPI_CR = SPI_CR_LASTXFER;	
+	}
+	
+	inline void SPI_TransferData(uint8_t *data, uint16_t length)
+	{	
 		for (uint16_t x = 0; x < length; x++)
 		{
 			SPI->SPI_TDR = data[x];
 			while ((SPI->SPI_SR & SPI_SR_RDRF) == 0);
-			data[per_idx] = SPI->SPI_RDR;
+			data[x] = SPI->SPI_RDR;
 		}
-		
-		//Idicate last transfer
-		SPI->SPI_CR = SPI_CR_LASTXFER;
 	}
 
 #ifdef __cplusplus

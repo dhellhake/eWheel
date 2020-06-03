@@ -22,7 +22,7 @@ void InitSPI()
 	SPI->SPI_MR &= (~SPI_MR_PCS_Msk);
 	SPI->SPI_MR |= SPI_MR_PCS(0x0);
 	
-	/* SPI to W25Q128 */
+	/* SPI to LSM9DS1 */
 	// Set SPI-Mode 1
 	SPI->SPI_CSR[0] &= ~(SPI_CSR_CPOL);
 	SPI->SPI_CSR[0] |= (SPI_CSR_NCPHA);
@@ -30,11 +30,11 @@ void InitSPI()
 	SPI->SPI_CSR[0] |= SPI_CSR_BITS_8_BIT;
 	// Set bautrate to 6 Mhz
 	SPI->SPI_CSR[0] &= (~SPI_CSR_SCBR_Msk);
-	SPI->SPI_CSR[0] |= SPI_CSR_SCBR(20);
+	SPI->SPI_CSR[0] |= SPI_CSR_SCBR(3);
 	// Set Chip-Select setup and multiple transfer delay
 	SPI->SPI_CSR[0] &= ~(SPI_CSR_DLYBS_Msk | SPI_CSR_DLYBCT_Msk);
 	SPI->SPI_CSR[0] |= SPI_CSR_DLYBS(0x0) | SPI_CSR_DLYBCT(0);
 	
 	// Enable SPI
-	SPI->SPI_CR = SPI_CR_SPIEN;	
+	SPI->SPI_CR = SPI_CR_SPIEN;
 }

@@ -206,6 +206,12 @@
     <Compile Include="Peripheral\BNO055\BNO055.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Peripheral\CP2102\CP2102.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Peripheral\CP2102\CP2102.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Peripheral\SAM4S\UART\UARTlib.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -269,6 +275,12 @@
     <Compile Include="Peripheral\System\System.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="TraceLink\TraceLink.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="TraceLink\TraceLink.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Utilities.h">
       <SubType>compile</SubType>
     </Compile>
@@ -276,6 +288,8 @@
   <ItemGroup>
     <Folder Include="DriveController" />
     <Folder Include="Board" />
+    <Folder Include="TraceLink" />
+    <Folder Include="Peripheral\CP2102" />
     <Folder Include="Peripheral" />
     <Folder Include="Peripheral\BNO055" />
     <Folder Include="Peripheral\W25Q128" />
