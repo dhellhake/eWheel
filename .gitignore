@@ -1,10 +1,5 @@
-/EmbeddedSoftware/SandBox/Debug/*
-/EmbeddedSoftware/SandBox/.vs/*
-/EmbeddedSoftware/eWheel/Debug/*
-/EmbeddedSoftware/eWheel/.vs/*
-/DiagMonitor/.vs/*
-/DiagMonitor/obj/Debug/*
-/DiagMonitor/bin/Debug/*
+/Firmware/Debug/*
+/Firmware/.vs/*
 
 /TraceLoader/packages/*
 /TraceLoader/.vs/*
