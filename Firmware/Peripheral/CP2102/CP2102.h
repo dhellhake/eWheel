@@ -8,7 +8,7 @@
 #define __CP2102_H__
 
 #include "sam.h"
-#include "..\..\TraceLink\TraceLink.h"
+#include "..\..\DiagLink\DiagLink.h"
 
 #define CP2102_UART			UART1
 #define CP2102_RCV_BUF_SIZE		64
@@ -17,16 +17,16 @@ class CP2102
 {
 	public:
 		void ReceiveByte(uint8_t data);
-		void WriteMessage(TRACE_CMD cmd, uint8_t length, uint8_t *data);
+		void WriteMessage(DIAGNOSTIC_CMD cmd, uint8_t length, uint8_t *data);
 		
 	private:
 		uint8_t ReceiveBufferIndex = 0;
 		uint8_t ReceiveBuffer[CP2102_RCV_BUF_SIZE];
 		
-		void EnterTraceMode(uint8_t *data);
+		void EnterDiagnosticMode(uint8_t *data);
 		void ResponseMode();
 };
 
-extern CP2102 TracePort;
+extern CP2102 DiagPort;
 
 #endif //__CP2102_H__

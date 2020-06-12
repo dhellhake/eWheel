@@ -34,7 +34,6 @@
 #include "USART\USARTlib.h"
 #include "PIO\PIOlib.h"
 #include "WDT\WDTlib.h"
-#include "..\System\System.h"
 
 /* Initialize segments */
 extern uint32_t _sfixed;
@@ -49,6 +48,7 @@ extern uint32_t _estack;
 
 /** \cond DOXYGEN_SHOULD_SKIP_THIS */
 int main(void);
+int diag(void);
 /** \endcond */
 
 void __libc_init_array(void);
@@ -263,14 +263,14 @@ void Reset_Handler(void)
 		EnablePeripheral(ID_UART1);
 		InitUART1();
 
-		/* Init Systick to count Millis */
-		InitSysTick();
-
         /* Initialize the C library */
         __libc_init_array();
 
         /* Branch to main function */
-        main();
+		if (GPBR->SYS_GPBR[0] == 0xDEADBEEF)
+			diag();
+		else
+			main();
 
         /* Infinite loop */
         while (1);

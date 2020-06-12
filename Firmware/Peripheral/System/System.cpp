@@ -6,12 +6,9 @@
 */
 #include "System.h"
 
-volatile RUN_MODE Mode = NORMAL;
+Sys System;
 
-// Overflow of 24bit-Systick-Counter running at 120Mhz
-volatile uint64_t SysTick_Overflow = 0;
-
-void InitSysTick()
+Sys::Sys()
 {
 	/* Configure SysTick Counter */
 	SysTick->LOAD  =	0xFFFFFF;											/* set reload register */
@@ -24,5 +21,5 @@ void InitSysTick()
 
 void SysTick_Handler()
 {
-	SysTick_Overflow++;
+	System.SysTick_Overflow++;
 }

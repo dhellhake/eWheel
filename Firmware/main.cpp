@@ -9,22 +9,23 @@
 #include "Peripheral/System/System.h"
 #include "DriveController/DriveController.h"
 #include "Board/Board.h"
-#include "TraceLink/TraceLink.h"
+#include "DiagLink/DiagLink.h"
 
-#define TASKPOOL_SIZE	2
-
+#define TASKPOOL_SIZE	3
 
 int main(void)
-{	
+{		
 	Task* taskPool[TASKPOOL_SIZE] = {
 		&Drive,
-		&Chassis
+		&Chassis,
+		&Diagnostic
 	};
 	
 	uint16_t timeSlot[TASKPOOL_SIZE]
 	{
 		1000,
-		9000
+		1000,
+		8000
 	};
 	
 	uint64_t t_now = 0;
@@ -32,24 +33,31 @@ int main(void)
 	uint8_t taskIndex = 0;
 	uint32_t runtime[TASKPOOL_SIZE] { 0 };
 	while (1)
-	{
-		if (Mode == TRACE_MODE)
-			while(1)
-				((Task*)&Trace)->Run(GetElapsedMilis());	
-		
-		t_now = GetElapsedMicros();
-		if (taskPool[taskIndex]->Run(GetElapsedMilis()) == RUN_RESULT::SUCCESS)
+	{		
+		t_now = System.GetElapsedMicros();
+		if (taskPool[taskIndex]->Run(System.GetElapsedMilis()) == RUN_RESULT::SUCCESS)
 		taskPool[taskIndex]->LAST_RUNNED = t_now;
-		t_now_2 = GetElapsedMicros();
+		t_now_2 = System.GetElapsedMicros();
 		
 		if (runtime[taskIndex] < t_now_2 - t_now)
 		runtime[taskIndex] = t_now_2 - t_now;
 		
 		while (t_now_2 - t_now < timeSlot[taskIndex])
-			t_now_2 = GetElapsedMicros();
+			t_now_2 = System.GetElapsedMicros();
 		
 		taskIndex++;
 		if (taskIndex >= TASKPOOL_SIZE)
 			taskIndex = 0;
 	}
 }
+
+
+extern "C" {
+	int diag(void)
+	{
+		Diagnostic.SetDiagnosticMode();
+		
+		while (1)
+			((Task*)&Diagnostic)->Run(System.GetElapsedMilis());
+	}
+};

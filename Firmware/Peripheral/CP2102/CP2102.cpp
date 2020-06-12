@@ -9,17 +9,7 @@
 #include "..\SAM4S\UART\UARTlib.h"
 #include "..\System\System.h"
 
-CP2102 TracePort;
-
-void CP2102::EnterTraceMode(uint8_t *data)
-{
-	if (data[1] == 0xDE &&
-		data[2] == 0xAD &&
-		data[3] == 0xBE &&
-		data[4] == 0xEF)
-		Mode = RUN_MODE::TRACE_MODE;
-}
-
+CP2102 DiagPort;
 
 void CP2102::ReceiveByte(uint8_t data)
 {
@@ -35,26 +25,13 @@ void CP2102::ReceiveByte(uint8_t data)
 		
 		if (this->ReceiveBufferIndex >= length + 4)
 		{			
-			this->ReceiveBufferIndex = 0;	
-			
-			if (this->ReceiveBuffer[3] == ((uint8_t)TRACE_CMD::ENTER_TRACEMODE))
-				this->EnterTraceMode(&this->ReceiveBuffer[3]);
-			else if (this->ReceiveBuffer[3] == ((uint8_t)TRACE_CMD::REQUEST_MODE))
-				this->ResponseMode();
-			else
-				memcpy(Trace.ReceiveBuffer, &this->ReceiveBuffer[3], length + 1);
+			this->ReceiveBufferIndex = 0;
+			memcpy(Diagnostic.ReceiveBuffer, &this->ReceiveBuffer[3], length + 1);
 		}
 	}
 }
 
-void CP2102::ResponseMode()
-{
-	uint8_t data[1] = { (uint8_t)Mode };
-	
-	this->WriteMessage(TRACE_CMD::RESPONSE_MODE, 1, data);
-}
-
-void CP2102::WriteMessage(TRACE_CMD cmd, uint8_t length, uint8_t *data)
+void CP2102::WriteMessage(DIAGNOSTIC_CMD cmd, uint8_t length, uint8_t *data)
 {
 	length = 1;
 	uint8_t buffer[4] = 

@@ -275,10 +275,10 @@
     <Compile Include="Peripheral\System\System.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="TraceLink\TraceLink.cpp">
+    <Compile Include="DiagLink\DiagLink.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="TraceLink\TraceLink.h">
+    <Compile Include="DiagLink\DiagLink.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Utilities.h">
@@ -288,7 +288,7 @@
   <ItemGroup>
     <Folder Include="DriveController" />
     <Folder Include="Board" />
-    <Folder Include="TraceLink" />
+    <Folder Include="DiagLink" />
     <Folder Include="Peripheral\CP2102" />
     <Folder Include="Peripheral" />
     <Folder Include="Peripheral\BNO055" />

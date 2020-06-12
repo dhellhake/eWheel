@@ -43,6 +43,6 @@ void UART1_Handler()
 	if (status & UART_SR_RXBUFF)
 	{
 		uint8_t data = UART1->UART_RHR;
-		TracePort.ReceiveByte(data);
+		DiagPort.ReceiveByte(data);
 	}
 }
