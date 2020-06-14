@@ -17,12 +17,13 @@ extern "C" {
 	
 	typedef enum SPI_PCS_PER
 	{
-		W25Q = 0
+		W25Q = 0,
+		ADS11 = 1
 	}SPI_PCS_PER;
 	
 	inline void SPI_Select(SPI_PCS_PER per)
-	{
-		SPI->SPI_CSR[(uint8_t)per] |= SPI_CSR_CSAAT;
+	{		
+		SPI->SPI_MR |= SPI_MR_PCS((uint8_t)per);
 	}
 	
 	inline void SPI_Finish()
@@ -35,6 +36,7 @@ extern "C" {
 		for (uint16_t x = 0; x < length; x++)
 		{
 			SPI->SPI_TDR = data[x];
+			data[x] = 0x00;
 			while ((SPI->SPI_SR & SPI_SR_RDRF) == 0);
 			data[x] = SPI->SPI_RDR;
 		}

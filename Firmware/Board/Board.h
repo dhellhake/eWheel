@@ -24,6 +24,7 @@ class Board : public Task
 	
 	private:
 		uint32_t IMU_Update_Tstmp;
+		uint32_t ADS_Update_Tstmp;
 
 }; //Board
 

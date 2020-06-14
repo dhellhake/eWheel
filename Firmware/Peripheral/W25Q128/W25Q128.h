@@ -33,7 +33,7 @@ class W25Q128
 		void WriteEnable();
 		
 	public:
-	uint8_t ReadStatus();
+		uint8_t ReadStatus();
 		
 		W25Q_RESULT SectorErase(uint16_t index);
 		W25Q_RESULT PageRead(uint16_t index, uint8_t *data);	

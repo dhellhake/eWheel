@@ -200,6 +200,12 @@
     <Compile Include="DriveController\DriveController.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Peripheral\ADS1118\ADS1118.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Peripheral\ADS1118\ADS1118.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Peripheral\BNO055\BNO055.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -292,6 +298,7 @@
     <Folder Include="Peripheral\CP2102" />
     <Folder Include="Peripheral" />
     <Folder Include="Peripheral\BNO055" />
+    <Folder Include="Peripheral\ADS1118" />
     <Folder Include="Peripheral\W25Q128" />
     <Folder Include="Peripheral\SAM4S\UART" />
     <Folder Include="Peripheral\VESC" />

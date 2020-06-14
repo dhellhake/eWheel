@@ -7,6 +7,10 @@
 #include <math.h>
 #include "Board.h"
 #include "..\Peripheral\BNO055\BNO055.h"
+#include "..\Peripheral\ADS1118\ADS1118.h"
+
+
+#include "..\Peripheral/W25Q128/W25Q128.h"
 
 Board Chassis;
 
@@ -21,6 +25,15 @@ RUN_RESULT Board::Run(uint32_t timeStamp)
 	{		
 		IMU.Update();
 		this->IMU_Update_Tstmp = timeStamp;
+		result = RUN_RESULT::SUCCESS;
+	}
+	
+	if (timeStamp - this->ADS_Update_Tstmp >= 10)
+	{
+		//DataFlash.ReadJEDEC();
+		ADS.Update();
+		
+		this->ADS_Update_Tstmp = timeStamp;		
 		result = RUN_RESULT::SUCCESS;
 	}
 		
