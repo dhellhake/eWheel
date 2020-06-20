@@ -259,6 +259,10 @@ void Reset_Handler(void)
 		EnablePeripheral(ID_USART1);
 		InitUSART1();
 		
+		/* Init UART0 (CC41A) */
+		EnablePeripheral(ID_UART0);
+		InitUART0();
+		
 		/* Init UART1 (CP2102) */		
 		EnablePeripheral(ID_UART1);
 		InitUART1();

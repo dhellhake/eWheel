@@ -5,6 +5,7 @@
 /TraceLoader/.vs/*
 /TraceLoader/TracePersistence/bin/*
 /TraceLoader/TracePersistence/obj/*
+/TraceLoader/TraceLoader/.vs/*
 /TraceLoader/TraceLoader/bin/*
 /TraceLoader/TraceLoader/obj/*
 
