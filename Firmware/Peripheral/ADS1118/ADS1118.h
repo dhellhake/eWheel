@@ -43,9 +43,6 @@ class ADS1118
 		uint16_t ReadRaw(uint16_t config);
 		
 		ADS_QU_Voltage SetVoltage(uint16_t rawValue, float *ref);
-		
-		float testSamples[255] = {0.0f};
-		uint8_t testSamples_Idx = 0;
 
 }; //ADS1118
 

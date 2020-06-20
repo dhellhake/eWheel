@@ -14,7 +14,7 @@
 #define TASKPOOL_SIZE	3
 
 int main(void)
-{	
+{		
 	Task* taskPool[TASKPOOL_SIZE] = {
 		&Drive,
 		&Chassis,
@@ -40,7 +40,7 @@ int main(void)
 		t_now_2 = System.GetElapsedMicros();
 		
 		if (runtime[taskIndex] < t_now_2 - t_now)
-		runtime[taskIndex] = t_now_2 - t_now;
+			runtime[taskIndex] = t_now_2 - t_now;
 		
 		while (t_now_2 - t_now < timeSlot[taskIndex])
 			t_now_2 = System.GetElapsedMicros();

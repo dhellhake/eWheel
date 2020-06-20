@@ -30,7 +30,6 @@ RUN_RESULT Board::Run(uint32_t timeStamp)
 	
 	if (timeStamp - this->ADS_Update_Tstmp >= 10)
 	{
-		//DataFlash.ReadJEDEC();
 		ADS.Update();
 		
 		this->ADS_Update_Tstmp = timeStamp;		
