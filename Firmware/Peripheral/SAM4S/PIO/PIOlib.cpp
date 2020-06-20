@@ -10,11 +10,11 @@ void InitPIO()
 {	
 	/* SPI Pins */
 	// Disable interrupts
-	PIOA->PIO_IDR = PIO_PA9 | PIO_PA11 | PIO_PA12 | PIO_PA13 | PIO_PA14;
+	PIOA->PIO_IDR = PIO_PA31 | PIO_PA11 | PIO_PA12 | PIO_PA13 | PIO_PA14;
 	// Select Peripheral function A
-	PIOA->PIO_ABCDSR[0] = PIO_PA9;
+	PIOA->PIO_ABCDSR[0] = 0x00000000;
 	PIOA->PIO_ABCDSR[1] = 0x00000000;	
-	PIOA->PIO_PDR = PIO_PA9 | PIO_PA11 | PIO_PA12 | PIO_PA13 | PIO_PA14;
+	PIOA->PIO_PDR = PIO_PA31 | PIO_PA11 | PIO_PA12 | PIO_PA13 | PIO_PA14;
 	
 	/* USART0 Pins */
 	// Disable interrupts 
