@@ -25,7 +25,7 @@ void InitSPI()
 	/* SPI to WS25Q128 */
 	// Set SPI-Mode 1
 	SPI->SPI_CSR[0] &= ~(SPI_CSR_CPOL);
-	SPI->SPI_CSR[0] &= ~(SPI_CSR_NCPHA);
+	SPI->SPI_CSR[0] |= (SPI_CSR_NCPHA);
 	// Set 8 bits per transfer
 	SPI->SPI_CSR[0] |= SPI_CSR_BITS_8_BIT;
 	// Keep chip selected after transfer (manual finish)	

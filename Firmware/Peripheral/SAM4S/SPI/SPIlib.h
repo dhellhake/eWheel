@@ -23,12 +23,14 @@ extern "C" {
 	
 	inline void SPI_Select(SPI_PCS_PER per)
 	{		
+		SPI->SPI_MR &= ~(SPI_MR_PCS_Msk);
 		SPI->SPI_MR |= SPI_MR_PCS((uint8_t)per);
 	}
 	
 	inline void SPI_Finish()
 	{	
-		SPI->SPI_CR = SPI_CR_LASTXFER;	
+		SPI->SPI_CR = SPI_CR_LASTXFER;
+		
 	}
 	
 	inline void SPI_TransferData(uint8_t *data, uint16_t length)
