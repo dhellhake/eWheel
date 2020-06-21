@@ -16,6 +16,22 @@
 #define W25Q_PAGE_COUNT		65536
 #define W25Q_SECTOR_COUNT	4096
 
+#define BUFFER_SIZE 512
+#define BUFFER_available(buffer)    ( buffer._read != buffer._write )
+
+#define BUFFER_read(buffer)	 (														\
+		(BUFFER_available(buffer)) ?												\
+		buffer._buffer[buffer._read = (buffer._read + 1) & (BUFFER_SIZE-1)] : 0		\
+)
+
+#define BUFFER_write(buffer, data) {																\
+	uint16_t tmphead = ( buffer._write + 1 ) & (BUFFER_SIZE-1);      /* calculate buffer index */    \
+	if(tmphead != buffer._read) {									/* if buffer is not full */     \
+		buffer._buffer[tmphead] = data;								/* store data in buffer */      \
+		buffer._write = tmphead;									/* store new index */           \
+	}																								\
+}
+
 typedef enum W25Q_RESULT
 {
 	SUCCESS,
@@ -28,6 +44,12 @@ typedef struct W25Q_PAGE
 	uint8_t data[W25Q_PAGE_SIZE];	
 } W25Q_PAGE;
 
+typedef struct {
+	uint16_t _read;
+	uint16_t _write;
+	uint8_t _buffer[BUFFER_SIZE];
+} BUFFER_t;
+
 class W25Q128 : public Task
 {
 	/************************************************************************/
@@ -39,16 +61,25 @@ class W25Q128 : public Task
 	/* Class implementation                                                 */
 	/************************************************************************/
 	private:
+		BUFFER_t WriteBuffer;
+	
+		uint16_t PageWrite_Index;
+	
 		void WriteEnable();
+		void WriteData();
+		W25Q_RESULT PageProgram(uint16_t index, uint8_t *data);
 		
 	public:
+	uint16_t BufferWriteCount;
+		W25Q128();
+	
+		void ReadJEDEC();
 		uint8_t ReadStatus();
 		
 		W25Q_RESULT SectorErase(uint16_t index);
 		W25Q_RESULT PageRead(uint16_t index, uint8_t *data);	
-		W25Q_RESULT PageProgram(uint16_t index, uint8_t *data);
 		
-		void ReadJEDEC();
+		void WriteData(uint8_t *data, uint8_t length);
 		
 		volatile inline bool IsBusy()
 		{

@@ -21,14 +21,6 @@ class Task
 {
 	public:	
 		virtual RUN_RESULT Run(uint32_t timeStamp) { return RUN_RESULT::NOT_IMPLEMENTED; };
-		
-		virtual void EnableTrace() { this->TraceEnabled = true; };
-		
-		virtual void DisableTrace() { this->TraceEnabled = false; };
-		
-		uint32_t LAST_RUNNED = 0;
-		
-		bool TraceEnabled = false;
 }; //Task
 
 #endif /* TASK_H_ */

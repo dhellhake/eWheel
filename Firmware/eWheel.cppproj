@@ -194,6 +194,9 @@
     <Compile Include="Board\Board.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="DiagLink\Diagnostics.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="DriveController\DriveController.cpp">
       <SubType>compile</SubType>
     </Compile>

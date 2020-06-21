@@ -1,0 +1,47 @@
+/*
+ * Diagnostics.h
+ *
+ * Created: 21.06.2020 18:07:46
+ *  Author: dominik hellhake
+ */ 
+#ifndef DIAGNOSTICS_H_
+#define DIAGNOSTICS_H_
+
+
+enum class DIAGNOSTIC_CMD : uint8_t
+{
+	REQUEST_DIAGNOSTIC_MODE		= 0x01,
+	RESPONSE_DIAGNOSTIC_MODE	= 0x02,
+	
+	REQUEST_SECTOR_ERASE		= 0x03,
+	RESPONSE_SECTOR_ERASE		= 0x04,
+	
+	REQUEST_MODE				= 0x05,
+	RESPONSE_MODE				= 0x06,
+	
+	REQUEST_FLASH_PAGE			= 0x07,
+	RESPONSE_FLASH_PAGE			= 0x08,
+	
+	REQUEST_ENABLE_TRACE		= 0x09,
+	
+	SW_RESET					= 0xFF
+};
+
+enum class DIAGNOSTIC_MODE : uint8_t
+{
+	INVALID = 0x00,
+	TRACE = 0x01,
+	DIAGNOSTIC = 0x02
+};
+
+enum class SECTOR_ERASE_RESULT : uint8_t
+{
+	BUSY_REPEAT = 0x01,
+	SUCCESS = 0x02,
+	INVALID_MODE = 0x03,
+	ERROR = 0x04
+};
+
+
+
+#endif /* DIAGNOSTICS_H_ */

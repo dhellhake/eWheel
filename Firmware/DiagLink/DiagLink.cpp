@@ -9,6 +9,8 @@
 #include "..\Peripheral\CP2102\CP2102.h"
 #include "..\Peripheral\W25Q128\W25Q128.h"
 
+#include "..\Peripheral\BNO055\BNO055.h"
+
 DiagLink Diagnostic;
 
 /************************************************************************/
@@ -20,6 +22,9 @@ RUN_RESULT DiagLink::Run(uint32_t timeStamp)
 	{			
 		switch (((DIAGNOSTIC_CMD)this->ReceiveBuffer[0]))
 		{
+			case DIAGNOSTIC_CMD::REQUEST_ENABLE_TRACE:
+				this->Recording = true;
+			break;
 			case DIAGNOSTIC_CMD::REQUEST_MODE:
 				this->ResponseMode(this->Mode);
 			break;
@@ -58,6 +63,16 @@ RUN_RESULT DiagLink::Run(uint32_t timeStamp)
 		this->ReceiveBuffer[0] = 0x00;
 		return RUN_RESULT::SUCCESS;
 	}
+
+	if (this->Recording)
+	{
+		this->SampleTracePage(timeStamp);
+		this->PageCount++;
+	
+		if (PageCount > 10)
+			this->Recording = false;
+	
+	}
 	
 	return RUN_RESULT::IDLE;
 }
@@ -67,6 +82,7 @@ RUN_RESULT DiagLink::Run(uint32_t timeStamp)
 /************************************************************************/
 DiagLink::DiagLink()
 {
+	this->Recording = false;
 	this->Mode = DIAGNOSTIC_MODE::TRACE;
 }
 
@@ -91,6 +107,31 @@ void DiagLink::ResponseMode(DIAGNOSTIC_MODE mode)
 	uint8_t data[1] = { (uint8_t)mode };
 	
 	DiagPort.WriteMessage(DIAGNOSTIC_CMD::RESPONSE_MODE, 1, data);
+}
+
+void DiagLink::SampleTracePage(uint32_t timeStamp)
+{
+	
+	page.timeStamp = timeStamp;
+	page.AccX = IMU.AccX;
+	page.AccY = IMU.AccY;
+	page.AccZ = IMU.AccZ;
+	page.CalibStatus = IMU.CalibStatus;
+	page.GravX = IMU.GravX;
+	page.GravY = IMU.GravY;
+	page.GravZ = IMU.GravZ;
+	page.GyroX = IMU.GyroX;
+	page.GyroY = IMU.GyroY;
+	page.GyroZ = IMU.GyroZ;
+	page.LinAX = IMU.LinAX;
+	page.LinAY = IMU.LinAY;
+	page.LinAZ = IMU.LinAZ;
+	page.Roll = IMU.Roll;
+	page.Pitch = IMU.Pitch;
+	page.Yaw = IMU.Yaw;
+	page.Temp = IMU.Temp;
+	
+	DataFlash.WriteData((uint8_t*)&page, sizeof(TRACE_PAGE));
 }
 
 void DiagLink::SectorErase(uint16_t sector)

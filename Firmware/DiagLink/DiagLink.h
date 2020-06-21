@@ -8,40 +8,34 @@
 #define __DIAGLINK_H__
 
 #include "sam.h"
+#include "Diagnostics.h"
 #include "..\Task.h"
 
 #define DIAGNOSTIC_RCV_BUF_SIZE	128
 
-enum class DIAGNOSTIC_CMD : uint8_t
+struct TRACE_PAGE
 {
-	REQUEST_DIAGNOSTIC_MODE		= 0x01,
-	RESPONSE_DIAGNOSTIC_MODE	= 0x02,
+	uint16_t Preamble = 0xAAAA;
+	uint32_t timeStamp;
 	
-	REQUEST_SECTOR_ERASE		= 0x03,
-	RESPONSE_SECTOR_ERASE		= 0x04,
-	
-	REQUEST_MODE				= 0x05,
-	RESPONSE_MODE				= 0x06,
-	
-	REQUEST_FLASH_PAGE			= 0x07,
-	RESPONSE_FLASH_PAGE			= 0x08,
-	
-	SW_RESET					= 0xFF
-};
-
-enum class DIAGNOSTIC_MODE : uint8_t
-{
-	INVALID = 0x00,
-	TRACE = 0x01,
-	DIAGNOSTIC = 0x02
-};
-
-enum class SECTOR_ERASE_RESULT : uint8_t
-{
-	BUSY_REPEAT = 0x01,
-	SUCCESS = 0x02,
-	INVALID_MODE = 0x03,
-	ERROR = 0x04
+	//BNO
+	float Yaw;
+	float Roll;
+	float Pitch;	
+	float AccX;
+	float AccY;
+	float AccZ;
+	float GyroX;
+	float GyroY;
+	float GyroZ;
+	float LinAX;
+	float LinAY;
+	float LinAZ;
+	float GravX;
+	float GravY;
+	float GravZ;	
+	int8_t Temp;
+	uint8_t CalibStatus;
 };
 
 
@@ -61,8 +55,13 @@ class DiagLink : public Task
 		void SectorErase(uint16_t sector);
 		void ResponseMode(DIAGNOSTIC_MODE mode);
 		void ResponseFlashPage(uint16_t pageIndex);
+		void SampleTracePage(uint32_t timeStamp);
+		TRACE_PAGE page;
 		
-	public:	
+	public:
+		bool Recording;
+		uint8_t PageCount = 0;
+	
 		uint8_t ReceiveBufferIndex = 0;
 		uint8_t ReceiveBuffer[DIAGNOSTIC_RCV_BUF_SIZE];
 		

@@ -20,7 +20,7 @@
 #define TASKPOOL_SIZE	7
 
 int main(void)
-{			
+{	
 	Task* taskPool[TASKPOOL_SIZE] = {
 		&ESC,
 		&ADS,
@@ -46,11 +46,12 @@ int main(void)
 	uint64_t t_now_2 = 0;
 	uint8_t taskIndex = 0;
 	uint32_t runtime[TASKPOOL_SIZE] { 0 };
+		
+	RUN_RESULT runResult;
 	while (1)
 	{		
-		t_now = System.GetElapsedMicros();
-		if (taskPool[taskIndex]->Run(System.GetElapsedMilis()) == RUN_RESULT::SUCCESS)
-		taskPool[taskIndex]->LAST_RUNNED = t_now;
+		t_now = System.GetElapsedMicros();		
+		runResult = taskPool[taskIndex]->Run(System.GetElapsedMilis());		
 		t_now_2 = System.GetElapsedMicros();
 		
 		runtime[taskIndex] = t_now_2 - t_now;
