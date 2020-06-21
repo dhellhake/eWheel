@@ -130,7 +130,6 @@ enum class VESCPackageType
 
 enum class VESC_COM_STATE
 {
-	Waiting,
 	Requested,
 	Received
 };
@@ -146,13 +145,15 @@ class VESC : public Task
 	/* Class implementation                                                 */
 	/************************************************************************/
 	private:		
-		VESC_COM_STATE ComState = VESC_COM_STATE::Waiting;
+		VESC_COM_STATE ComState = VESC_COM_STATE::Received;
 		uint8_t ReceiveBufferIndex = 0;
 		uint8_t ReceiveBuffer[VESC_RCV_BUF_SIZE];
+		uint32_t RequestTstmp;
+		uint32_t timeOutCnt;
 			
 		void SendVESCPacket(VESCPackageType type, uint8_t* payload, uint16_t length);
 		void UnpackVESCPacket(uint8_t* payload, uint16_t length);	
-	
+		
 	public:		
 		VESCFaultCode FaultCode;
 		float Avl_TempFET;
@@ -171,8 +172,6 @@ class VESC : public Task
 		void Update();		
 		void SetCurrent(float current_val);
 		void SetDuty(float duty_val);
-	
-	
 	
 		static inline void buffer_set_int32(uint8_t *buffer, int32_t value)
 		{

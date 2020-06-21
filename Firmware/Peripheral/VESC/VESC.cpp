@@ -16,10 +16,20 @@ VESC ESC;
 /************************************************************************/
 RUN_RESULT VESC::Run(uint32_t timeStamp)
 {
-	RUN_RESULT result = RUN_RESULT::IDLE;	
+	RUN_RESULT result = RUN_RESULT::IDLE;
 	
-	this->ComState = VESC_COM_STATE::Requested;
-	SendVESCPacket(VESCPackageType::COMM_GET_VALUES, NULL, 0);	
+	if (this->ComState == VESC_COM_STATE::Received)
+	{
+		this->RequestTstmp = timeStamp;
+		this->ComState = VESC_COM_STATE::Requested;
+		SendVESCPacket(VESCPackageType::COMM_GET_VALUES, NULL, 0);
+	} else {
+		if (this->RequestTstmp + 50 < timeStamp)
+		{
+			this->ComState = VESC_COM_STATE::Received;
+			this->timeOutCnt++;
+		}
+	}
 	
 	return result;
 }
@@ -46,17 +56,22 @@ void VESC::SetCurrent(float current_val)
 
 void VESC::ReceiveByte(uint8_t data)
 {
-	this->ReceiveBuffer[this->ReceiveBufferIndex++] = data;
-	
-	if (this->ReceiveBufferIndex >= 2 &&						// at least start byte and length
-	this->ReceiveBuffer[0] == 0x2 &&						// start byte
-	this->ReceiveBuffer[this->ReceiveBuffer[1] + 4] == 0x3)	// end byte
-	{
-		this->ReceiveBufferIndex = 0;
-		this->ReceiveBuffer[this->ReceiveBuffer[1] + 4] = 0;	// delete stop byte
+	if (this->ReceiveBufferIndex == 0 && data != 0x02)
+		return;
 		
-		this->UnpackVESCPacket(&this->ReceiveBuffer[2], this->ReceiveBuffer[1] - 1);		
-		this->ComState = VESC_COM_STATE::Received;
+	this->ReceiveBuffer[this->ReceiveBufferIndex++] = data;
+		
+	if (this->ReceiveBufferIndex >= 2 &&
+		this->ReceiveBufferIndex > this->ReceiveBuffer[1] + 4)
+	{
+		if (this->ReceiveBuffer[this->ReceiveBuffer[1] + 4] == 0x3)
+		{
+			this->ReceiveBufferIndex = 0;
+			this->UnpackVESCPacket(&this->ReceiveBuffer[2], this->ReceiveBuffer[1] - 1);
+			this->ComState = VESC_COM_STATE::Received;
+		} else {
+			this->ReceiveBufferIndex = 0;
+		}
 	}
 }
 
@@ -81,8 +96,6 @@ void VESC::UnpackVESCPacket(uint8_t* payload, uint16_t length)
 		default:
 		break;
 	}
-	
-	this->ComState = VESC_COM_STATE::Waiting;
 }
 
 void VESC::SendVESCPacket(VESCPackageType type, uint8_t* payload, uint16_t length)
