@@ -12,7 +12,7 @@ W25Q128 DataFlash;
 /************************************************************************/
 /* Executable Interface implementation                                  */
 /************************************************************************/
-RUN_RESULT DriveController::Run(uint32_t timeStamp)
+RUN_RESULT W25Q128::Run(uint32_t timeStamp)
 {
 	RUN_RESULT result = RUN_RESULT::IDLE;
 	
