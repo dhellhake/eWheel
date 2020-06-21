@@ -37,7 +37,9 @@ class Sys
 		inline void SoftReset()
 		{
 			RSTC->RSTC_CR = RSTC_CR_KEY_PASSWD | RSTC_CR_PROCRST | RSTC_CR_PERRST;
-		}	
+		}
+		
+		
 }; //System
 
 extern Sys System;

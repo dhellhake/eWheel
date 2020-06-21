@@ -14,7 +14,7 @@
 #define TASKPOOL_SIZE	3
 
 int main(void)
-{		
+{			
 	Task* taskPool[TASKPOOL_SIZE] = {
 		&Drive,
 		&Chassis,

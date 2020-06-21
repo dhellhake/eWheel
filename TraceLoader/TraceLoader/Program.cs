@@ -26,6 +26,11 @@ namespace TraceLoader
                 Thread.Sleep(20);
             Console.WriteLine(".. Done!");
 
+            while(true)
+            {
+                Program.eWheel.WriteBytes(new byte[] { 0xAA });
+                Thread.Sleep(200);
+            }
 
             while (true)
             {

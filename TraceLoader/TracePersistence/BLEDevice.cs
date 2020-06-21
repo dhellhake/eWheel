@@ -218,7 +218,7 @@ namespace TracePersistence
             this.SendDataPacket(BLECmd.ACK_CMD, new byte[] { }, srcSwc, dstSwc, 0, BLEFlag.ACK);
         }
 
-        private async void WriteBytes(byte[] bytes)
+        public async void WriteBytes(byte[] bytes)
         {
             var writer = new DataWriter();
             writer.WriteBytes(bytes);

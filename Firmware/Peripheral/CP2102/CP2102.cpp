@@ -19,7 +19,7 @@ void CP2102::ReceiveByte(uint8_t data)
 	
 	this->ReceiveBuffer[this->ReceiveBufferIndex++] = data;
 	
-	if (this->ReceiveBufferIndex >= 3)						// at least start byte and length
+	if (this->ReceiveBufferIndex >= 3)
 	{
 		uint16_t length = (this->ReceiveBuffer[1] << 8 | this->ReceiveBuffer[2]);
 		
@@ -31,9 +31,8 @@ void CP2102::ReceiveByte(uint8_t data)
 	}
 }
 
-void CP2102::WriteMessage(DIAGNOSTIC_CMD cmd, uint8_t length, uint8_t *data)
+void CP2102::WriteMessage(DIAGNOSTIC_CMD cmd, uint16_t length, uint8_t *data)
 {
-	length = 1;
 	uint8_t buffer[4] = 
 	{
 		0xAA,
@@ -44,6 +43,6 @@ void CP2102::WriteMessage(DIAGNOSTIC_CMD cmd, uint8_t length, uint8_t *data)
 	
 	for (uint8_t x = 0; x < 4; x++)
 		UART_SendByte(CP2102_UART, buffer[x]);
-	for (uint8_t x = 0; x < length; x++)
+	for (uint16_t x = 0; x < length; x++)
 		UART_SendByte(CP2102_UART, data[x]);
 }

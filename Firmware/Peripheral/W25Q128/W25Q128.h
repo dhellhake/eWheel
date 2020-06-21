@@ -40,6 +40,14 @@ class W25Q128
 		W25Q_RESULT PageProgram(uint16_t index, uint8_t *data);
 		
 		void ReadJEDEC();
+		
+		volatile inline bool IsBusy()
+		{
+			uint8_t status = this->ReadStatus();
+			
+			return (status & 0x01) == 0x01;
+		}
+		
 }; //W25Q128
 
 extern W25Q128 DataFlash;

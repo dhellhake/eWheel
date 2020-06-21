@@ -17,7 +17,7 @@ class CP2102
 {
 	public:
 		void ReceiveByte(uint8_t data);
-		void WriteMessage(DIAGNOSTIC_CMD cmd, uint8_t length, uint8_t *data);
+		void WriteMessage(DIAGNOSTIC_CMD cmd, uint16_t length, uint8_t *data);
 		
 	private:
 		uint8_t ReceiveBufferIndex = 0;
