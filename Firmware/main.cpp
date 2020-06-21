@@ -7,15 +7,25 @@
 #include <string.h>
 #include "sam.h"
 #include "Peripheral/System/System.h"
+#include "Peripheral/ADS1118/ADS1118.h"
+#include "Peripheral/BNO055/BNO055.h"
+#include "Peripheral/VESC/VESC.h"
+#include "Peripheral/W25Q128/W25Q128.h"
+
 #include "DriveController/DriveController.h"
 #include "Board/Board.h"
 #include "DiagLink/DiagLink.h"
 
-#define TASKPOOL_SIZE	3
+
+#define TASKPOOL_SIZE	7
 
 int main(void)
 {			
 	Task* taskPool[TASKPOOL_SIZE] = {
+		&ESC,
+		&ADS,
+		&IMU,
+		&DataFlash,
 		&Drive,
 		&Chassis,
 		&Diagnostic
@@ -23,9 +33,13 @@ int main(void)
 	
 	uint16_t timeSlot[TASKPOOL_SIZE]
 	{
+		200,
+		100,
+		200,
+		1000
 		1000,
 		1000,
-		8000
+		6500
 	};
 	
 	uint64_t t_now = 0;
@@ -39,8 +53,7 @@ int main(void)
 		taskPool[taskIndex]->LAST_RUNNED = t_now;
 		t_now_2 = System.GetElapsedMicros();
 		
-		if (runtime[taskIndex] < t_now_2 - t_now)
-			runtime[taskIndex] = t_now_2 - t_now;
+		runtime[taskIndex] = t_now_2 - t_now;
 		
 		while (t_now_2 - t_now < timeSlot[taskIndex])
 			t_now_2 = System.GetElapsedMicros();

@@ -11,6 +11,23 @@
 
 VESC ESC;
 
+/************************************************************************/
+/* Executable Interface implementation                                  */
+/************************************************************************/
+RUN_RESULT VESC::Run(uint32_t timeStamp)
+{
+	RUN_RESULT result = RUN_RESULT::IDLE;	
+	
+	this->ComState = VESC_COM_STATE::Requested;
+	SendVESCPacket(VESCPackageType::COMM_GET_VALUES, NULL, 0);	
+	
+	return result;
+}
+
+/************************************************************************/
+/* Class implementation                                                 */
+/************************************************************************/
+
 void VESC::SetDuty(float duty_val)
 {
 	uint8_t data[4] = { 0 };
@@ -25,12 +42,6 @@ void VESC::SetCurrent(float current_val)
 	buffer_set_int32(data, ((int32_t)(current_val * 1000.0f)));
 	
 	SendVESCPacket(VESCPackageType::COMM_SET_HANDBRAKE, data, 4);
-}
-
-void VESC::Update()
-{
-	this->ComState = VESC_COM_STATE::Requested;
-	SendVESCPacket(VESCPackageType::COMM_GET_VALUES, NULL, 0);
 }
 
 void VESC::ReceiveByte(uint8_t data)

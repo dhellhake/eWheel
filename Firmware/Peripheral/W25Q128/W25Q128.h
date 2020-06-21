@@ -8,6 +8,7 @@
 #define __W25Q128_H__
 
 #include "sam.h"
+#include "..\..\Task.h"
 
 #define W25Q_SPI			SPI
 
@@ -27,8 +28,16 @@ typedef struct W25Q_PAGE
 	uint8_t data[W25Q_PAGE_SIZE];	
 } W25Q_PAGE;
 
-class W25Q128
+class W25Q128 : public Task
 {
+	/************************************************************************/
+	/* Executable Interface implementation                                  */
+	/************************************************************************/
+	virtual RUN_RESULT Run(uint32_t timeStamp);
+
+	/************************************************************************/
+	/* Class implementation                                                 */
+	/************************************************************************/
 	private:
 		void WriteEnable();
 		

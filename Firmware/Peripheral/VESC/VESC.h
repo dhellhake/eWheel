@@ -8,6 +8,7 @@
 #define __VESC_H__
 
 #include "sam.h"
+#include "..\..\Task.h"
 
 #define VESC_USART			USART0
 #define VESC_RCV_BUF_SIZE	128
@@ -134,8 +135,16 @@ enum class VESC_COM_STATE
 	Received
 };
 
-class VESC
+class VESC : public Task
 {
+	/************************************************************************/
+	/* Executable Interface implementation                                  */
+	/************************************************************************/
+	virtual RUN_RESULT Run(uint32_t timeStamp);
+
+	/************************************************************************/
+	/* Class implementation                                                 */
+	/************************************************************************/
 	private:		
 		VESC_COM_STATE ComState = VESC_COM_STATE::Waiting;
 		uint8_t ReceiveBufferIndex = 0;

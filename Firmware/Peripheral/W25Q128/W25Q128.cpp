@@ -9,6 +9,19 @@
 
 W25Q128 DataFlash;
 
+/************************************************************************/
+/* Executable Interface implementation                                  */
+/************************************************************************/
+RUN_RESULT DriveController::Run(uint32_t timeStamp)
+{
+	RUN_RESULT result = RUN_RESULT::IDLE;
+	
+	return result;
+}
+
+/************************************************************************/
+/* Class implementation                                                 */
+/************************************************************************/
 W25Q_RESULT W25Q128::PageRead(uint16_t index, uint8_t *data)
 {
 	uint8_t status = this->ReadStatus();

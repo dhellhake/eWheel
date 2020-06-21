@@ -10,32 +10,26 @@
 
 BNO055 IMU;
 
-BNO055::BNO055()
+/************************************************************************/
+/* Executable Interface implementation                                  */
+/************************************************************************/
+RUN_RESULT BNO055::Run(uint32_t timeStamp)
 {
-	this->Config.opr_mode = 0x08;
-	
-	this->ConfigState = BNO_CONFIG_STATE::RESET;
-}
-
-void BNO055::Update()
-{
-	if (this->ConfigState != BNO_CONFIG_STATE::READY)
-	{
-		this->ConfigRoutine();
-		return;
-	}
-	
+	RUN_RESULT result = RUN_RESULT::IDLE;
+		
 	this->ReadRegister(BNO_REG_ADR::ACC_DATA_X_LSB, 46);
 	this->ComState = BNO_COM_STATE::UPDATE_DATA;
+	
+	return result;
 }
 
-void BNO055::ConfigRoutine()
+/************************************************************************/
+/* Class implementation                                                 */
+/************************************************************************/
+BNO055::BNO055()
 {
-	uint8_t data [1] { 0x00 };
-	
-	data[0] = this->Config.opr_mode;
+	uint8_t data [1] { 0x08 };	
 	this->WriteRegister(BNO_REG_ADR::OPR_MODE, 1, data);
-	this->ConfigState = BNO_CONFIG_STATE::READY;	
 }
 
 void BNO055::ReceivedAcknowledge(BNO_COM_ACK ackStatus)

@@ -20,7 +20,6 @@ class DriveController : public Task
 	/************************************************************************/
 	/* Class implementation                                                 */
 	/************************************************************************/		
-		
 	public:
 		
 		// Duty Cycle [0.0 to 1.0]
@@ -50,7 +49,6 @@ class DriveController : public Task
 		void ReceiveByte(uint8_t data);
 		
 	private:	
-		uint32_t ESC_Update_Tstmp;
 		
 }; //DriveController
 

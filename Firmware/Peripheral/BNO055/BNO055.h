@@ -8,14 +8,10 @@
 #define __BNO055_H__
 
 #include "sam.h"
+#include "..\..\Task.h"
 
 #define BNO_USART			USART1
 #define BNO_RCV_BUF_SIZE	128
-
-typedef struct BNO_REG_VAL
-{
-	uint8_t opr_mode;
-} BNO_REG_VAL;
 
 enum class BNO_REG_ADR
 {
@@ -45,30 +41,28 @@ enum class BNO_COM_STATE
 	UPDATE_DATA
 };
 
-enum class BNO_CONFIG_STATE
-{
-	RESET,
-	READY
-};
 
-class BNO055
+class BNO055 : public Task
 {
+	/************************************************************************/
+	/* Executable Interface implementation                                  */
+	/************************************************************************/
+	virtual RUN_RESULT Run(uint32_t timeStamp);
+
+	/************************************************************************/
+	/* Class implementation                                                 */
+	/************************************************************************/
 	private:
 		uint8_t InterruptStatus = 0x00;
-		
-		BNO_REG_VAL Config;
-		BNO_CONFIG_STATE ConfigState;
 	
 		BNO_COM_STATE ComState = BNO_COM_STATE::IDLE;
 		uint8_t ReceiveBufferIndex = 0;
-		uint8_t ReceiveBuffer[BNO_RCV_BUF_SIZE];
-	
-		void ConfigRoutine();
-		
+		uint8_t ReceiveBuffer[BNO_RCV_BUF_SIZE];		
 		
 		void ReceivedAcknowledge(BNO_COM_ACK ackStatus);
 		void ReceivedResponse(uint8_t length, uint8_t *data);
 		
+		void ReadRegister(BNO_REG_ADR addr, uint8_t length);
 		void WriteRegister(BNO_REG_ADR addr, uint8_t length, uint8_t *data);
 	public:
 		float Yaw;
@@ -91,10 +85,8 @@ class BNO055
 		int8_t Temp;
 		uint8_t CalibStatus;
 		
-		BNO055();		
-		void Update();
+		BNO055();
 				
-		void ReadRegister(BNO_REG_ADR addr, uint8_t length);
 		void ReceiveByte(uint8_t data);
 }; //BNO055
 

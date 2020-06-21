@@ -9,8 +9,11 @@
 
 ADS1118 ADS;
 
-void ADS1118::Update()
-{	
+/************************************************************************/
+/* Executable Interface implementation                                  */
+/************************************************************************/
+RUN_RESULT ADS1118::Run(uint32_t timeStamp)
+{		
 	uint16_t rawValue;
 	switch(this->Current_Sampling)
 	{
@@ -23,9 +26,18 @@ void ADS1118::Update()
 			rawValue = this->ReadRaw(this->Config_Front);
 			this->Qu_Vback = this->SetVoltage(rawValue, &this->Avl_Vback);
 			this->Current_Sampling = ADS_IR_Pos::FRONT;
-		break;		
+		break;
 	}
+	
+	if (this->Qu_Vback == ADS_QU_Voltage::VALID && this->Qu_Vfront == ADS_QU_Voltage::VALID)
+		return RUN_RESULT::SUCCESS;
+	else
+		return RUN_RESULT::ERROR;
 }
+
+/************************************************************************/
+/* Class implementation                                                 */
+/************************************************************************/
 
 uint16_t ADS1118::ReadRaw(uint16_t config)
 {

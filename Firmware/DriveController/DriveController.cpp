@@ -15,14 +15,6 @@ DriveController Drive;
 RUN_RESULT DriveController::Run(uint32_t timeStamp)
 {	
 	RUN_RESULT result = RUN_RESULT::IDLE;
-				
-	if (timeStamp - this->ESC_Update_Tstmp >= 100)
-	{		
-		ESC.Update();
-		this->ESC_Update_Tstmp = timeStamp;
-		result = RUN_RESULT::SUCCESS;
-	}
-	
 	
 	return result;
 }

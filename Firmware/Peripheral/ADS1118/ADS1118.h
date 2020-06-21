@@ -8,6 +8,7 @@
 #define __ADS1118_H__
 
 #include "sam.h"
+#include "..\..\Task.h"
 
 enum class ADS_QU_Voltage : uint8_t
 {
@@ -21,8 +22,16 @@ enum class ADS_IR_Pos : uint8_t
 	BACK = 1	
 };
 
-class ADS1118
+class ADS1118 : public Task
 {
+	/************************************************************************/
+	/* Executable Interface implementation                                  */
+	/************************************************************************/
+	virtual RUN_RESULT Run(uint32_t timeStamp);
+
+	/************************************************************************/
+	/* Class implementation                                                 */
+	/************************************************************************/
 	public:
 		ADS1118();
 	
