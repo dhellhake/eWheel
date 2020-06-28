@@ -9,6 +9,8 @@
 #include "..\..\Utilities.h"
 #include "..\SAM4S\USART\USARTlib.h"
 
+#include "..\System\System.h"
+
 VESC ESC;
 
 /************************************************************************/
@@ -18,17 +20,17 @@ RUN_RESULT VESC::Run(uint32_t timeStamp)
 {
 	RUN_RESULT result = RUN_RESULT::IDLE;
 	
+	if (this->Tar_Duty != 0.0f)
+		this->SetDuty(this->Tar_Duty);
+	
 	if (this->ComState == VESC_COM_STATE::Received)
-	{
+	{				
 		this->RequestTstmp = timeStamp;
 		this->ComState = VESC_COM_STATE::Requested;
 		SendVESCPacket(VESCPackageType::COMM_GET_VALUES, NULL, 0);
 	} else {
 		if (this->RequestTstmp + 50 < timeStamp)
-		{
-			this->ComState = VESC_COM_STATE::Received;
-			this->timeOutCnt++;
-		}
+			this->ComState = VESC_COM_STATE::Received;		
 	}
 	
 	return result;
@@ -80,18 +82,18 @@ void VESC::UnpackVESCPacket(uint8_t* payload, uint16_t length)
 	switch(((VESCPackageType)payload[0]))
 	{
 		case VESCPackageType::COMM_GET_VALUES:
-		this->Avl_TempFET =		buffer_get_float16(&payload[1], 1e1);
-		this->Avl_Current =		buffer_get_float32(&payload[1 + 4], 1e2);
-		this->Avl_CurrentIn =	buffer_get_float32(&payload[1 + 8], 1e2);
-		this->Avl_Duty =		buffer_get_float16(&payload[1 + 20], 1e3);
-		this->Avl_RPM =			buffer_get_float32(&payload[1 + 22], 1e0);
-		this->Avl_Vin =			buffer_get_float16(&payload[1 + 26], 1e1);
-		this->Avl_Ah =			buffer_get_float32(&payload[1 + 28], 1e4);
-		this->Avl_AhCharged =	buffer_get_float32(&payload[1 + 32], 1e4);
-		this->Avl_Wh =			buffer_get_float32(&payload[1 + 36], 1e4);
-		this->Avl_WhCharged =	buffer_get_float32(&payload[1 + 40], 1e4);
-		this->Avl_Tach	=		buffer_get_int32(&payload[1 + 44]);
-		this->FaultCode =		(VESCFaultCode)payload[1 + 52];
+			this->Avl_TempFET =		buffer_get_float16(&payload[1], 1e1);
+			this->Avl_Current =		buffer_get_float32(&payload[1 + 4], 1e2);
+			this->Avl_CurrentIn =	buffer_get_float32(&payload[1 + 8], 1e2);
+			this->Avl_Duty =		buffer_get_float16(&payload[1 + 20], 1e3);
+			this->Avl_RPM =			buffer_get_float32(&payload[1 + 22], 1e0);
+			this->Avl_Vin =			buffer_get_float16(&payload[1 + 26], 1e1);
+			this->Avl_Ah =			buffer_get_float32(&payload[1 + 28], 1e4);
+			this->Avl_AhCharged =	buffer_get_float32(&payload[1 + 32], 1e4);
+			this->Avl_Wh =			buffer_get_float32(&payload[1 + 36], 1e4);
+			this->Avl_WhCharged =	buffer_get_float32(&payload[1 + 40], 1e4);
+			this->Avl_Tach	=		buffer_get_int32(&payload[1 + 44]);
+			this->FaultCode =		(VESCFaultCode)payload[1 + 52];		
 		break;
 		default:
 		break;
