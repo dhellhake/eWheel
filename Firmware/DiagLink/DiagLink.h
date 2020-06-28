@@ -11,6 +11,10 @@
 #include "Diagnostics.h"
 #include "..\Task.h"
 
+#include "..\Peripheral\ADS1118\ADS1118.h"
+#include "..\Peripheral\BNO055\BNO055.h"
+#include "..\Peripheral\VESC\VESC.h"
+
 #define DIAGNOSTIC_RCV_BUF_SIZE	128
 
 struct TRACE_PAGE
@@ -36,6 +40,27 @@ struct TRACE_PAGE
 	float GravZ;	
 	int8_t Temp;
 	uint8_t CalibStatus;
+	
+	//ADS	
+	float Avl_Vfront;
+	ADS_QU_Voltage Qu_Vfront;	
+	float Avl_Vback;
+	ADS_QU_Voltage Qu_Vback;
+	
+	//VESC		
+	VESCFaultCode FaultCode;
+	float Avl_TempFET;
+	float Avl_RPM;
+	float Avl_Current;
+	float Avl_CurrentIn;
+	float Avl_Duty;
+	float Avl_Vin;
+	float Avl_Ah;
+	float Avl_AhCharged;
+	float Avl_Wh;
+	float Avl_WhCharged;
+	int32_t Avl_Tach;
+	float Tar_Duty;
 };
 
 

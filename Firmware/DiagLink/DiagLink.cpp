@@ -9,7 +9,6 @@
 #include "..\Peripheral\CP2102\CP2102.h"
 #include "..\Peripheral\W25Q128\W25Q128.h"
 
-#include "..\Peripheral\BNO055\BNO055.h"
 
 DiagLink Diagnostic;
 
@@ -111,7 +110,7 @@ void DiagLink::ResponseMode(DIAGNOSTIC_MODE mode)
 
 void DiagLink::SampleTracePage(uint32_t timeStamp)
 {
-	
+	//BNO
 	page.timeStamp = timeStamp;
 	page.AccX = IMU.AccX;
 	page.AccY = IMU.AccY;
@@ -130,6 +129,27 @@ void DiagLink::SampleTracePage(uint32_t timeStamp)
 	page.Pitch = IMU.Pitch;
 	page.Yaw = IMU.Yaw;
 	page.Temp = IMU.Temp;
+	
+	//ADS
+	page.Avl_Vback = ADS.Avl_Vback;
+	page.Qu_Vback = ADS.Qu_Vback;
+	page.Avl_Vfront = ADS.Avl_Vfront;
+	page.Qu_Vback = ADS.Qu_Vback;
+	
+	//VESC
+	page.FaultCode = ESC.FaultCode;
+	page.Avl_TempFET = ESC.Avl_TempFET;
+	page.Avl_RPM = ESC.Avl_RPM;
+	page.Avl_Current = ESC.Avl_Current;
+	page.Avl_CurrentIn = ESC.Avl_CurrentIn;
+	page.Avl_Duty = ESC.Avl_Duty;
+	page.Avl_Vin = ESC.Avl_Vin;
+	page.Avl_Ah = ESC.Avl_Ah;
+	page.Avl_AhCharged = ESC.Avl_AhCharged;
+	page.Avl_Wh = ESC.Avl_Wh;
+	page.Avl_WhCharged = ESC.Avl_WhCharged;
+	page.Avl_Tach = ESC.Avl_Tach;
+	page.Tar_Duty = ESC.Tar_Duty;
 	
 	DataFlash.WriteData((uint8_t*)&page, sizeof(TRACE_PAGE));
 }
