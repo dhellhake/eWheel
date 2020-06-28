@@ -39,7 +39,6 @@ RUN_RESULT VESC::Run(uint32_t timeStamp)
 /************************************************************************/
 /* Class implementation                                                 */
 /************************************************************************/
-
 void VESC::SetDuty(float duty_val)
 {
 	uint8_t data[4] = { 0 };
@@ -82,7 +81,7 @@ void VESC::UnpackVESCPacket(uint8_t* payload, uint16_t length)
 	switch(((VESCPackageType)payload[0]))
 	{
 		case VESCPackageType::COMM_GET_VALUES:
-			this->Avl_TempFET =		buffer_get_float16(&payload[1], 1e1);
+			this->Avl_Temp_ESC =		buffer_get_float16(&payload[1], 1e1);
 			this->Avl_Current =		buffer_get_float32(&payload[1 + 4], 1e2);
 			this->Avl_CurrentIn =	buffer_get_float32(&payload[1 + 8], 1e2);
 			this->Avl_Duty =		buffer_get_float16(&payload[1 + 20], 1e3);

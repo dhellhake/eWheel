@@ -65,25 +65,25 @@ class BNO055 : public Task
 		void ReadRegister(BNO_REG_ADR addr, uint8_t length);
 		void WriteRegister(BNO_REG_ADR addr, uint8_t length, uint8_t *data);
 	public:
-		float Yaw;
-		float Roll;
-		float Pitch;
+		float Avl_Yaw;
+		float Avl_Roll;
+		float Avl_Pitch;
 		
-		float AccX;
-		float AccY;
-		float AccZ;
-		float GyroX;
-		float GyroY;
-		float GyroZ;
-		float LinAX;
-		float LinAY;
-		float LinAZ;
-		float GravX;
-		float GravY;
-		float GravZ;
+		float Avl_AccX;
+		float Avl_AccY;
+		float Avl_AccZ;
+		float Avl_GyroX;
+		float Avl_GyroY;
+		float Avl_GyroZ;
+		float Avl_LinAccX;
+		float Avl_LinAccY;
+		float Avl_LinAccZ;
+		float Avl_GravX;
+		float Avl_GravY;
+		float Avl_GravZ;
 		
-		int8_t Temp;
-		uint8_t CalibStatus;
+		int8_t Avl_Temp_IMU;
+		uint8_t ST_Calib_IMU;
 		
 		BNO055();
 				

@@ -155,7 +155,7 @@ class VESC : public Task
 		
 	public:		
 		VESCFaultCode FaultCode;
-		float Avl_TempFET;
+		float Avl_Temp_ESC;
 		float Avl_RPM;
 		float Avl_Current;
 		float Avl_CurrentIn;

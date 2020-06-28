@@ -47,23 +47,23 @@ void BNO055::ReceivedResponse(uint8_t length, uint8_t *data)
 	switch(this->ComState)
 	{
 		case BNO_COM_STATE::UPDATE_DATA:
-			this->AccX = ((int16_t)(((int16_t)data[1] << 8) | data[0])) / 100.0;
-			this->AccY = ((int16_t)(((int16_t)data[3] << 8) | data[2])) / 100.0;
-			this->AccZ = ((int16_t)(((int16_t)data[5] << 8) | data[4])) / 100.0;
-			this->GyroX = ((int16_t)(((int16_t)data[13] << 8) | data[12])) / 16.0;
-			this->GyroY = ((int16_t)(((int16_t)data[15] << 8) | data[14])) / 16.0;
-			this->GyroZ = ((int16_t)(((int16_t)data[17] << 8) | data[16])) / 16.0;
-			this->Yaw = ((int16_t)(((int16_t)data[19] << 8) | data[18])) / 16.0;
-			this->Roll = ((int16_t)(((int16_t)data[21] << 8) | data[20])) / 16.0;
-			this->Pitch = ((int16_t)(((int16_t)data[23] << 8) | data[22])) / 16.0;			
-			this->LinAX = ((int16_t)(((int16_t)data[33] << 8) | data[32])) / 100.0;
-			this->LinAY = ((int16_t)(((int16_t)data[35] << 8) | data[34])) / 100.0;
-			this->LinAZ = ((int16_t)(((int16_t)data[37] << 8) | data[36])) / 100.0;
-			this->GravX = ((int16_t)(((int16_t)data[39] << 8) | data[38])) / 100.0;
-			this->GravY = ((int16_t)(((int16_t)data[41] << 8) | data[40])) / 100.0;
-			this->GravZ = ((int16_t)(((int16_t)data[43] << 8) | data[42])) / 100.0;
-			this->Temp = (int8_t)data[44];
-			this->CalibStatus = data[45];
+			this->Avl_AccX = ((int16_t)(((int16_t)data[1] << 8) | data[0])) / 100.0;
+			this->Avl_AccY = ((int16_t)(((int16_t)data[3] << 8) | data[2])) / 100.0;
+			this->Avl_AccZ = ((int16_t)(((int16_t)data[5] << 8) | data[4])) / 100.0;
+			this->Avl_GyroX = ((int16_t)(((int16_t)data[13] << 8) | data[12])) / 16.0;
+			this->Avl_GyroY = ((int16_t)(((int16_t)data[15] << 8) | data[14])) / 16.0;
+			this->Avl_GyroZ = ((int16_t)(((int16_t)data[17] << 8) | data[16])) / 16.0;
+			this->Avl_Yaw = ((int16_t)(((int16_t)data[19] << 8) | data[18])) / 16.0;
+			this->Avl_Roll = ((int16_t)(((int16_t)data[21] << 8) | data[20])) / 16.0;
+			this->Avl_Pitch = ((int16_t)(((int16_t)data[23] << 8) | data[22])) / 16.0;			
+			this->Avl_LinAccX = ((int16_t)(((int16_t)data[33] << 8) | data[32])) / 100.0;
+			this->Avl_LinAccY = ((int16_t)(((int16_t)data[35] << 8) | data[34])) / 100.0;
+			this->Avl_LinAccZ = ((int16_t)(((int16_t)data[37] << 8) | data[36])) / 100.0;
+			this->Avl_GravX = ((int16_t)(((int16_t)data[39] << 8) | data[38])) / 100.0;
+			this->Avl_GravY = ((int16_t)(((int16_t)data[41] << 8) | data[40])) / 100.0;
+			this->Avl_GravZ = ((int16_t)(((int16_t)data[43] << 8) | data[42])) / 100.0;
+			this->Avl_Temp_IMU = (int8_t)data[44];
+			this->ST_Calib_IMU = data[45];
 		break;
 		default:
 			this->ComState = BNO_COM_STATE::IDLE;

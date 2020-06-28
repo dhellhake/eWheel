@@ -110,25 +110,26 @@ void DiagLink::ResponseMode(DIAGNOSTIC_MODE mode)
 
 void DiagLink::SampleTracePage(uint32_t timeStamp)
 {
-	//BNO
 	page.timeStamp = timeStamp;
-	page.AccX = IMU.AccX;
-	page.AccY = IMU.AccY;
-	page.AccZ = IMU.AccZ;
-	page.CalibStatus = IMU.CalibStatus;
-	page.GravX = IMU.GravX;
-	page.GravY = IMU.GravY;
-	page.GravZ = IMU.GravZ;
-	page.GyroX = IMU.GyroX;
-	page.GyroY = IMU.GyroY;
-	page.GyroZ = IMU.GyroZ;
-	page.LinAX = IMU.LinAX;
-	page.LinAY = IMU.LinAY;
-	page.LinAZ = IMU.LinAZ;
-	page.Roll = IMU.Roll;
-	page.Pitch = IMU.Pitch;
-	page.Yaw = IMU.Yaw;
-	page.Temp = IMU.Temp;
+	
+	//BNO
+	page.Avl_AccX = IMU.Avl_AccX;
+	page.Avl_AccY = IMU.Avl_AccY;
+	page.Avl_AccZ = IMU.Avl_AccZ;
+	page.ST_Calib_IMU = IMU.ST_Calib_IMU;
+	page.Avl_GravX = IMU.Avl_GravX;
+	page.Avl_GravY = IMU.Avl_GravY;
+	page.Avl_GravZ = IMU.Avl_GravZ;
+	page.Avl_GyroX = IMU.Avl_GyroX;
+	page.Avl_GyroY = IMU.Avl_GyroY;
+	page.Avl_GyroZ = IMU.Avl_GyroZ;
+	page.Avl_LinAccX = IMU.Avl_LinAccX;
+	page.Avl_LinAccY = IMU.Avl_LinAccY;
+	page.Avl_LinAccZ = IMU.Avl_LinAccZ;
+	page.Avl_Roll = IMU.Avl_Roll;
+	page.Avl_Pitch = IMU.Avl_Pitch;
+	page.Avl_Yaw = IMU.Avl_Yaw;
+	page.Avl_Temp_IMU = IMU.Avl_Temp_IMU;
 	
 	//ADS
 	page.Avl_Vback = ADS.Avl_Vback;
@@ -138,7 +139,7 @@ void DiagLink::SampleTracePage(uint32_t timeStamp)
 	
 	//VESC
 	page.FaultCode = ESC.FaultCode;
-	page.Avl_TempFET = ESC.Avl_TempFET;
+	page.Avl_Temp_ESC = ESC.Avl_Temp_ESC;
 	page.Avl_RPM = ESC.Avl_RPM;
 	page.Avl_Current = ESC.Avl_Current;
 	page.Avl_CurrentIn = ESC.Avl_CurrentIn;
