@@ -15,12 +15,13 @@
 #include "DriveController/DriveController.h"
 #include "Board/Board.h"
 #include "DiagLink/DiagLink.h"
+#include "BLELink/BLELink.h"
 
 
-#define TASKPOOL_SIZE	7
+#define TASKPOOL_SIZE	8
 
 int main(void)
-{	
+{		
 	Task* taskPool[TASKPOOL_SIZE] = {
 		&ESC,
 		&ADS,
@@ -28,7 +29,8 @@ int main(void)
 		&DataFlash,
 		&Drive,
 		&Chassis,
-		&Diagnostic
+		&Diagnostic,
+		&BLE
 	};
 	
 	uint16_t timeSlot[TASKPOOL_SIZE]
@@ -39,7 +41,8 @@ int main(void)
 		1000,
 		1000,
 		1000,
-		6500
+		1000,
+		5500
 	};
 	
 	uint64_t t_now = 0;

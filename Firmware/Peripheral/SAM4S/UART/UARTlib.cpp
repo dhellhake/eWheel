@@ -5,6 +5,7 @@
 * Author: dominik hellhake
 */
 #include "UARTlib.h"
+#include "..\..\CC41A\CC41A.h"
 #include "..\..\CP2102\CP2102.h"
 
 void InitUART0()
@@ -37,9 +38,7 @@ void UART0_Handler()
 	if (status & UART_SR_RXBUFF)
 	{
 		uint8_t data = UART0->UART_RHR;
-		data++;
-		
-		UART_SendByte(UART0, data);
+		BLEPort.ReceiveByte(data);
 	}
 }
 

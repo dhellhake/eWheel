@@ -188,6 +188,15 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BLELink\BLE.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="BLELink\BLELink.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="BLELink\BLELink.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Board\Board.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -213,6 +222,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Peripheral\BNO055\BNO055.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Peripheral\CC41A\CC41A.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Peripheral\CC41A\CC41A.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Peripheral\CP2102\CP2102.cpp">
@@ -298,10 +313,12 @@
     <Folder Include="DriveController" />
     <Folder Include="Board" />
     <Folder Include="DiagLink" />
+    <Folder Include="BLELink" />
     <Folder Include="Peripheral\CP2102" />
     <Folder Include="Peripheral" />
     <Folder Include="Peripheral\BNO055" />
     <Folder Include="Peripheral\ADS1118" />
+    <Folder Include="Peripheral\CC41A" />
     <Folder Include="Peripheral\W25Q128" />
     <Folder Include="Peripheral\SAM4S\UART" />
     <Folder Include="Peripheral\VESC" />

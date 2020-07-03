@@ -9,7 +9,6 @@
 #include "..\Peripheral\CP2102\CP2102.h"
 #include "..\Peripheral\W25Q128\W25Q128.h"
 
-
 DiagLink Diagnostic;
 
 /************************************************************************/
