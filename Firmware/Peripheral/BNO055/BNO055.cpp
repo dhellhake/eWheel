@@ -17,7 +17,7 @@ RUN_RESULT BNO055::Run(uint32_t timeStamp)
 {
 	RUN_RESULT result = RUN_RESULT::IDLE;
 		
-	this->ReadRegister(BNO_REG_ADR::ACC_DATA_X_LSB, 46);
+	this->ReadRegister(BNO_REG_ADR_0::ACC_DATA_X_LSB, 46);
 	this->ComState = BNO_COM_STATE::UPDATE_DATA;
 	
 	return result;
@@ -26,7 +26,12 @@ RUN_RESULT BNO055::Run(uint32_t timeStamp)
 RUN_RESULT BNO055::Setup(uint32_t timeStamp)
 {
 	uint8_t data [1] { 0x08 };
-	this->WriteRegister(BNO_REG_ADR::OPR_MODE, 1, data);
+	
+	data[0] = 0x06;
+	this->WriteRegister(BNO_REG_ADR_0::AXIS_MAP_CONFIG, 1, data);	
+	
+	data[0] = 0x08;
+	this->WriteRegister(BNO_REG_ADR_0::OPR_MODE, 1, data);
 	
 	return RUN_RESULT::SUCCESS;
 }
@@ -105,7 +110,7 @@ void BNO055::ReceiveByte(uint8_t data)
 }
 
 
-void BNO055::ReadRegister(BNO_REG_ADR addr, uint8_t length)
+void BNO055::ReadRegister(BNO_REG_ADR_0 addr, uint8_t length)
 {
 	uint8_t buffer[4] = {
 		0xAA,
@@ -118,7 +123,7 @@ void BNO055::ReadRegister(BNO_REG_ADR addr, uint8_t length)
 		USART_SendByte(BNO_USART, buffer[x]);
 }
 
-void BNO055::WriteRegister(BNO_REG_ADR addr, uint8_t length, uint8_t *data)
+void BNO055::WriteRegister(BNO_REG_ADR_0 addr, uint8_t length, uint8_t *data)
 {
 	length = 1;
 	uint8_t buffer[4] = {

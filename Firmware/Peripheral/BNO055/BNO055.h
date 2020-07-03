@@ -13,10 +13,12 @@
 #define BNO_USART			USART1
 #define BNO_RCV_BUF_SIZE	128
 
-enum class BNO_REG_ADR
+enum class BNO_REG_ADR_0
 {
 	ACC_DATA_X_LSB = 0x08,
 	TEMP = 0x35,
+	
+	AXIS_MAP_CONFIG = 0x41,
 	
 	OPR_MODE = 0x3D
 };
@@ -63,8 +65,8 @@ class BNO055 : public Task
 		void ReceivedAcknowledge(BNO_COM_ACK ackStatus);
 		void ReceivedResponse(uint8_t length, uint8_t *data);
 		
-		void ReadRegister(BNO_REG_ADR addr, uint8_t length);
-		void WriteRegister(BNO_REG_ADR addr, uint8_t length, uint8_t *data);
+		void ReadRegister(BNO_REG_ADR_0 addr, uint8_t length);
+		void WriteRegister(BNO_REG_ADR_0 addr, uint8_t length, uint8_t *data);
 	public:
 		float Avl_Yaw;
 		float Avl_Roll;
