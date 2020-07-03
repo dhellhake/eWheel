@@ -35,6 +35,11 @@ RUN_RESULT ADS1118::Run(uint32_t timeStamp)
 		return RUN_RESULT::ERROR;
 }
 
+RUN_RESULT ADS1118::Setup(uint32_t timeStamp)
+{
+	return RUN_RESULT::SUCCESS;
+}
+
 /************************************************************************/
 /* Class implementation                                                 */
 /************************************************************************/

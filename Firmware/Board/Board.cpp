@@ -24,6 +24,11 @@ RUN_RESULT Board::Run(uint32_t timeStamp)
 	return result;
 }
 
+RUN_RESULT Board::Setup(uint32_t timeStamp)
+{
+	return RUN_RESULT::SUCCESS;
+}
+
 /************************************************************************/
 /* Class implementation                                                 */
 /************************************************************************/

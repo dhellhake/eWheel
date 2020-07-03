@@ -36,6 +36,11 @@ RUN_RESULT VESC::Run(uint32_t timeStamp)
 	return result;
 }
 
+RUN_RESULT VESC::Setup(uint32_t timeStamp)
+{
+	return RUN_RESULT::SUCCESS;
+}
+
 /************************************************************************/
 /* Class implementation                                                 */
 /************************************************************************/

@@ -23,13 +23,19 @@ RUN_RESULT BNO055::Run(uint32_t timeStamp)
 	return result;
 }
 
+RUN_RESULT BNO055::Setup(uint32_t timeStamp)
+{
+	uint8_t data [1] { 0x08 };
+	this->WriteRegister(BNO_REG_ADR::OPR_MODE, 1, data);
+	
+	return RUN_RESULT::SUCCESS;
+}
+
 /************************************************************************/
 /* Class implementation                                                 */
 /************************************************************************/
 BNO055::BNO055()
 {
-	uint8_t data [1] { 0x08 };	
-	this->WriteRegister(BNO_REG_ADR::OPR_MODE, 1, data);
 }
 
 void BNO055::ReceivedAcknowledge(BNO_COM_ACK ackStatus)

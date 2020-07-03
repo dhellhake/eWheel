@@ -19,6 +19,11 @@ RUN_RESULT DriveController::Run(uint32_t timeStamp)
 	return result;
 }
 
+RUN_RESULT DriveController::Setup(uint32_t timeStamp)
+{
+	return RUN_RESULT::SUCCESS;
+}
+
 /************************************************************************/
 /* Class implementation                                                 */
 /************************************************************************/

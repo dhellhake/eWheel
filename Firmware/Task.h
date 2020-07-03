@@ -21,6 +21,7 @@ class Task
 {
 	public:	
 		virtual RUN_RESULT Run(uint32_t timeStamp) { return RUN_RESULT::NOT_IMPLEMENTED; };
+		virtual RUN_RESULT Setup(uint32_t timeStamp) {return RUN_RESULT::NOT_IMPLEMENTED; };
 }; //Task
 
 #endif /* TASK_H_ */

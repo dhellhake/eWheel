@@ -56,6 +56,7 @@ class W25Q128 : public Task
 	/* Executable Interface implementation                                  */
 	/************************************************************************/
 	virtual RUN_RESULT Run(uint32_t timeStamp);
+	virtual RUN_RESULT Setup(uint32_t timeStamp);
 
 	/************************************************************************/
 	/* Class implementation                                                 */

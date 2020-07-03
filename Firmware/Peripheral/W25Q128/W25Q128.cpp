@@ -26,6 +26,11 @@ RUN_RESULT W25Q128::Run(uint32_t timeStamp)
 	return result;
 }
 
+RUN_RESULT W25Q128::Setup(uint32_t timeStamp)
+{
+	return RUN_RESULT::SUCCESS;
+}
+
 /************************************************************************/
 /* Class implementation                                                 */
 /************************************************************************/

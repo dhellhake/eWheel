@@ -33,6 +33,11 @@ RUN_RESULT BLELink::Run(uint32_t timeStamp)
 	return RUN_RESULT::IDLE;
 }
 
+RUN_RESULT BLELink::Setup(uint32_t timeStamp)
+{
+	return RUN_RESULT::SUCCESS;
+}
+
 /************************************************************************/
 /* Class implementation                                                 */
 /************************************************************************/

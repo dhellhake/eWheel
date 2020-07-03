@@ -17,40 +17,44 @@
 #include "DiagLink/DiagLink.h"
 #include "BLELink/BLELink.h"
 
-
 #define TASKPOOL_SIZE	8
 
+Task* taskPool[TASKPOOL_SIZE] = {
+	&ESC,
+	&ADS,
+	&IMU,
+	&DataFlash,
+	&Drive,
+	&Chassis,
+	&Diagnostic,
+	&BLE
+};
+uint16_t timeSlot[TASKPOOL_SIZE]
+{
+	200,
+	100,
+	200,
+	1000,
+	1000,
+	1000,
+	1000,
+	5500
+};
+
+void Setup();
+
+
 int main(void)
-{		
-	Task* taskPool[TASKPOOL_SIZE] = {
-		&ESC,
-		&ADS,
-		&IMU,
-		&DataFlash,
-		&Drive,
-		&Chassis,
-		&Diagnostic,
-		&BLE
-	};
-	
-	uint16_t timeSlot[TASKPOOL_SIZE]
-	{
-		200,
-		100,
-		200,
-		1000,
-		1000,
-		1000,
-		1000,
-		5500
-	};
-	
+{			
 	uint64_t t_now = 0;
 	uint64_t t_now_2 = 0;
 	uint8_t taskIndex = 0;
 	uint32_t runtime[TASKPOOL_SIZE] { 0 };
-		
 	RUN_RESULT runResult;
+	
+	
+	Setup();
+	
 	while (1)
 	{		
 		t_now = System.GetElapsedMicros();		
@@ -72,9 +76,23 @@ int main(void)
 extern "C" {
 	int diag(void)
 	{
+		Setup();
 		Diagnostic.SetDiagnosticMode();
 		
 		while (1)
 			((Task*)&Diagnostic)->Run(System.GetElapsedMilis());
 	}
 };
+
+/************************************************************************/
+/* Setup of each task after a short delay at startup                    */
+/************************************************************************/
+void Setup()
+{
+	uint64_t t_now = 0;
+	while (t_now <= 500)
+	t_now = System.GetElapsedMilis();
+	
+	for (uint8_t idx = 0; idx < TASKPOOL_SIZE; idx++)
+	taskPool[idx]->Setup(System.GetElapsedMilis());
+}

@@ -75,6 +75,11 @@ RUN_RESULT DiagLink::Run(uint32_t timeStamp)
 	return RUN_RESULT::IDLE;
 }
 
+RUN_RESULT DiagLink::Setup(uint32_t timeStamp)
+{
+	return RUN_RESULT::SUCCESS;
+}
+
 /************************************************************************/
 /* Class implementation                                                 */
 /************************************************************************/
