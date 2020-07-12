@@ -19,6 +19,7 @@ enum class BNO_REG_ADR_0
 	TEMP = 0x35,
 	
 	AXIS_MAP_CONFIG = 0x41,
+	AXIS_MAP_SIGN = 0x42,
 	
 	OPR_MODE = 0x3D
 };

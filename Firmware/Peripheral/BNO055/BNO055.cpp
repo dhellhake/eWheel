@@ -28,10 +28,14 @@ RUN_RESULT BNO055::Setup(uint32_t timeStamp)
 	uint8_t data [1] { 0x08 };
 	
 	data[0] = 0x06;
-	this->WriteRegister(BNO_REG_ADR_0::AXIS_MAP_CONFIG, 1, data);	
+	this->WriteRegister(BNO_REG_ADR_0::AXIS_MAP_CONFIG, 1, data);
+	
+	data[0] = 0x02;
+	this->WriteRegister(BNO_REG_ADR_0::AXIS_MAP_SIGN, 1, data);
 	
 	data[0] = 0x08;
 	this->WriteRegister(BNO_REG_ADR_0::OPR_MODE, 1, data);
+	
 	
 	return RUN_RESULT::SUCCESS;
 }
