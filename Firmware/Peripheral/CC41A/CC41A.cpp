@@ -26,6 +26,12 @@ void CC41A::ReceiveByte(uint8_t data)
 	{
 		uint16_t length = (this->ReceiveBuffer[1] << 8 | this->ReceiveBuffer[2]);
 		
+		if (length >= CC41A_RCV_BUF_SIZE)
+		{
+			this->ReceiveBufferIndex = 0;
+			return;
+		}
+		
 		if (this->ReceiveBufferIndex >= length + 4)
 		{
 			this->ReceiveBufferIndex = 0;
