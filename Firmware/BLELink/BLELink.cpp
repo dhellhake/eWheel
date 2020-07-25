@@ -7,6 +7,7 @@
 #include "BLELink.h"
 #include "..\Peripheral\CC41A\CC41A.h"
 #include "..\Peripheral\BNO055\BNO055.h"
+#include "..\Peripheral\W25Q128\W25Q128.h"
 
 BLELink BLE;
 
@@ -22,6 +23,13 @@ RUN_RESULT BLELink::Run(uint32_t timeStamp)
 			case BLE_CMD::REQUEST_IMU_ValSet:
 				this->ResponseIMUValSet();
 			break;
+			case BLE_CMD::REQUEST_STATE:			
+				BLEPort.WriteMessage(BLE_CMD::RESPONSE_STATE, 1, (uint8_t*)&this->State);
+			break;
+			case BLE_CMD::REQUEST_FLASH_ERASE:			
+				if (DataFlash.ChipErase() == W25Q_RESULT::SUCCESS)
+					this->State = BLE_STATE::ERASING;
+			break;				
 			default:
 			break;
 		}
@@ -30,21 +38,23 @@ RUN_RESULT BLELink::Run(uint32_t timeStamp)
 		return RUN_RESULT::SUCCESS;
 	}
 	
+	if (this->State == BLE_STATE::ERASING)
+		if ((DataFlash.ReadStatus() & 0x01) == 0x00)
+			this->State = BLE_STATE::IDLE;
+		
 	return RUN_RESULT::IDLE;
 }
 
 RUN_RESULT BLELink::Setup(uint32_t timeStamp)
 {
+	this->State = BLE_STATE::IDLE;
+	
 	return RUN_RESULT::SUCCESS;
 }
 
 /************************************************************************/
 /* Class implementation                                                 */
 /************************************************************************/
-BLELink::BLELink()
-{
-} //BLELink
-
 void BLELink::ResponseIMUValSet()
 {
 	BLE_IMU_ValSet_1 valSet;

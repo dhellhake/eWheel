@@ -77,6 +77,7 @@ class W25Q128 : public Task
 		void ReadJEDEC();
 		uint8_t ReadStatus();
 		
+		W25Q_RESULT ChipErase();
 		W25Q_RESULT SectorErase(uint16_t index);
 		W25Q_RESULT PageRead(uint16_t index, uint8_t *data);	
 		

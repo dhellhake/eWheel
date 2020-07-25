@@ -123,6 +123,25 @@ W25Q_RESULT W25Q128::SectorErase(uint16_t index)
 	return W25Q_RESULT::SUCCESS;	
 }
 
+W25Q_RESULT W25Q128::ChipErase()
+{
+	uint8_t status = this->ReadStatus();
+	if (status != 0x00)
+		return W25Q_RESULT::BUSY;
+	
+	this->WriteEnable();
+		
+	uint8_t data [1] {
+		0x60
+	};
+	
+	SPI_Select(SPI_PCS_PER::W25Q);
+	SPI_TransferData(data, 1);
+	SPI_Finish();
+	
+	return W25Q_RESULT::SUCCESS;	
+}
+
 uint8_t W25Q128::ReadStatus()
 {
 	uint8_t data [2] { 0x05, 0x00 };

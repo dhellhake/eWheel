@@ -25,14 +25,15 @@ class BLELink : public Task
 	/************************************************************************/
 	/* Class implementation                                                 */
 	/************************************************************************/
-	public:
-	BLELink();
-	
+	public:	
 	uint8_t ReceiveBufferIndex = 0;
 	uint8_t ReceiveBuffer[BLE_RCV_BUF_SIZE];
 	
 	private:
+	BLE_STATE State;
+	
 	void ResponseIMUValSet();
+	void EraseFlash();
 }; //BLELink
 
 extern BLELink BLE;

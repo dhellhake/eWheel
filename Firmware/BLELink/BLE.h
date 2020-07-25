@@ -11,6 +11,11 @@ enum class BLE_CMD : uint8_t
 {	
 	REQUEST_IMU_ValSet		= 0x01,
 	RESPONSE_IMU_ValSet		= 0x02,
+	
+	REQUEST_STATE			= 0x03,
+	RESPONSE_STATE			= 0x04,
+	
+	REQUEST_FLASH_ERASE		= 0x05
 };
 
 
@@ -27,6 +32,12 @@ struct BLE_IMU_ValSet_1
 	float Avl_GyroX;
 	float Avl_GyroY;
 	float Avl_GyroZ;
+};
+
+enum class BLE_STATE : uint8_t
+{	
+	ERASING				= 0x01,
+	IDLE				= 0xFF
 };
 
 #endif /* BLE_H_ */
