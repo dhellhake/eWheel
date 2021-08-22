@@ -15,6 +15,7 @@ typedef struct VolumeID
 	uint8_t BPB_NumFATs;
 	uint32_t BPB_FATSz32;
 	uint32_t BPB_RootClus;
+	uint32_t SectorBeginLBA;
 } VolumeID;
 
 typedef struct MBR

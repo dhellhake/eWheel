@@ -60,7 +60,15 @@ RUN_RESULT SDCard::Run(uint32_t timeStamp)
 		}
 		break;
 		case SDCardState::Ready:
-		
+			this->State = SDCardState::Recording;
+		break;
+		case SDCardState::Recording:
+			if (this->RecordBufferDataCnt >= 512)
+			{				
+				this->WriteRecords();
+				this->State = SDCardState::CardError;
+			} else
+				return RUN_RESULT::IDLE;			
 		break;
 		case SDCardState::FileNotFound:		
 		case SDCardState::CardError:
@@ -68,9 +76,16 @@ RUN_RESULT SDCard::Run(uint32_t timeStamp)
 	}
 		
 		
-	return result;
+	return RUN_RESULT::SUCCESS;
 }
 
+/************************************************************************/
+/* Class implementation                                                 */
+/************************************************************************/
+SDCard::SDCard()
+{
+	FIFO_init(this->RecordBuffer);	
+}
 
 uint32_t SDCard::ReadPartition()
 {
@@ -97,8 +112,8 @@ uint32_t SDCard::ReadPartition()
 		return 0;
 		
 	uint32_t fat_begin_lba = this->MasterBootRecord.LBA_begin + (uint32_t)this->Volume.BPB_RsvdSecCnt;
-	uint32_t cluster_begin_lba = fat_begin_lba + (this->Volume.BPB_NumFATs * this->Volume.BPB_FATSz32);
-	this->CurentLBA = cluster_begin_lba + (this->Volume.BPB_RootClus - 2) * this->Volume.BPB_SecPerClus;
+	this->Volume.SectorBeginLBA = fat_begin_lba + (this->Volume.BPB_NumFATs * this->Volume.BPB_FATSz32);
+	this->CurentLBA = this->Volume.SectorBeginLBA + (this->Volume.BPB_RootClus - 2) * this->Volume.BPB_SecPerClus;
 		
 	return 1;
 }
@@ -178,6 +193,10 @@ uint32_t SDCard::ReadFilePosition()
 	return 1;
 }
 
+uint32_t SDCard::WriteRecords()
+{
+	
+}
 
 RUN_RESULT SDCard::Setup(uint32_t timeStamp)
 {
