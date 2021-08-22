@@ -19,12 +19,20 @@ uint16_t timeSlot[TASKPOOL_SIZE]
 	10000,
 };
 
+typedef struct RuntimeRecord
+{
+	RecordType Type			= RecordType::Runtime;
+	uint32_t Runtime[TASKPOOL_SIZE] { 0 };
+	uint64_t ElapsedMicros	= 0;
+	uint16_t Postamble		= 0xAA55;
+} RuntimeRecord;
+
 int main(void)
 {
 	uint64_t t_now = 0;
 	uint64_t t_now_2 = 0;
 	uint8_t taskIndex = 0;
-	uint32_t runtime[TASKPOOL_SIZE] { 0 };
+	RuntimeRecord runtimeRecord;
 	RUN_RESULT runResult;
 	
 	while (1)
@@ -33,13 +41,19 @@ int main(void)
 		runResult = taskPool[taskIndex]->Run(System.GetElapsedMilis());
 		t_now_2 = System.GetElapsedMicros();
 		
-		runtime[taskIndex] = t_now_2 - t_now;
+		runtimeRecord.Runtime[taskIndex] = t_now_2 - t_now;
 		
 		while (t_now_2 - t_now < timeSlot[taskIndex])
 			t_now_2 = System.GetElapsedMicros();
 		
 		taskIndex++;
 		if (taskIndex >= TASKPOOL_SIZE)
+		{
+#ifdef RecordRuntime
+			runtimeRecord.ElapsedMicros = t_now_2;
+			Disk.AddRecord((uint8_t*)&runtimeRecord);
+#endif
 			taskIndex = 0;
+		}
 	}
 }
