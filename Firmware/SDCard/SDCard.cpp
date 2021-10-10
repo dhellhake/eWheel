@@ -35,8 +35,8 @@ RUN_RESULT SDCard::Run(uint32_t timeStamp)
 		case SDCardState::PartitionValid:
 			if ((this->tFile.ClusterList[0] = this->ReadRootDirectoryEntries()) != 0x00)
 			{
+				// Set LBA to FAT-Table
 				this->CurentLBA = this->MasterBootRecord.LBA_begin + (uint32_t)this->Volume.BPB_RsvdSecCnt;
-				this->CurentLBA += (this->tFile.ClusterList[0] - (this->tFile.ClusterList[0] % 128)) / 128;
 				this->State = SDCardState::FileFound;
 			}
 			else
@@ -47,7 +47,11 @@ RUN_RESULT SDCard::Run(uint32_t timeStamp)
 			uint32_t result = this->ReadFilePosition();
 			switch (result)
 			{
-				case 0x00:	// EOF found.				
+				case 0x00:	// EOF found.
+					// Set LBA to SOF
+					this->tFile.SectorIndex = 0;
+					this->tFile.ClusterIndex = this->tFile.ClusterList[0];
+					this->tFile.ClusterListIndex = 1;
 					this->State = SDCardState::Ready;
 				break;
 				case 0x01: // continue with next block of FAT
@@ -63,10 +67,15 @@ RUN_RESULT SDCard::Run(uint32_t timeStamp)
 			this->State = SDCardState::Recording;
 		break;
 		case SDCardState::Recording:
-			if (this->RecordBufferDataCnt >= 512)
+			if (this->RecordBufferDataCnt >= SDCard_Buffer_Size / 2)
 			{				
-				this->WriteRecords();
-				this->State = SDCardState::CardError;
+				if (this->WriteRecords() == 0x01)
+				{
+					if (this->tFile.ClusterIndex >= 12)
+						this->State = SDCardState::CardError;
+				}
+				else
+					this->State = SDCardState::CardError;
 			} else
 				return RUN_RESULT::IDLE;			
 		break;
@@ -195,7 +204,39 @@ uint32_t SDCard::ReadFilePosition()
 
 uint32_t SDCard::WriteRecords()
 {
+	uint8_t* txd;
 	
+	if (this->RecordBuffer._write >= SDCard_Buffer_Size / 2)
+		txd = &this->RecordBuffer._buffer[0];
+	else
+		txd = &this->RecordBuffer._buffer[SDCard_Buffer_Size / 2];
+	
+	if (WriteMultipleSector(this->RelativeCardAddress, 
+							this->Volume.SectorBeginLBA + ((this->tFile.ClusterIndex - 2) * this->Volume.BPB_SecPerClus) + this->tFile.SectorIndex, 
+							(uint32_t*)txd, 
+							8))
+	{
+		this->RecordBufferDataCnt -= (512 * 8);
+		
+		this->tFile.SectorIndex += 8;
+		if (this->tFile.SectorIndex >= this->Volume.BPB_SecPerClus)
+		{
+			this->tFile.ClusterIndex++;
+			if (this->tFile.ClusterIndex > this->tFile.ClusterList[this->tFile.ClusterListIndex])
+			{
+				if (this->tFile.ClusterList[this->tFile.ClusterListIndex + 1] > 0)
+				{
+					this->tFile.ClusterIndex = this->tFile.ClusterList[this->tFile.ClusterListIndex + 1];
+					this->tFile.ClusterListIndex += 2;
+				} else
+					return 0;
+			}
+			this->tFile.SectorIndex = 0;
+		}		
+	} else
+		return 0;
+		
+	return 1;
 }
 
 RUN_RESULT SDCard::Setup(uint32_t timeStamp)

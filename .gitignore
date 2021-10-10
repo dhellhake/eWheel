@@ -13,4 +13,4 @@
 *.suo
 
 *.cache
-Diagnostic/obj/Debug/Diagnostic.pdb
+Diagnostic/*.*

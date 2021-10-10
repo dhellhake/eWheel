@@ -32,6 +32,7 @@
 	
 	uint32_t ReadSector(uint32_t rca, uint32_t lba, uint32_t* rxd);
 	uint32_t WriteSector(uint32_t rca, uint32_t lba, uint32_t* data);
+	uint32_t WriteMultipleSector(uint32_t rca, uint32_t lba, uint32_t* data, uint16_t blkcnt);
 
 #ifdef __cplusplus
 	}

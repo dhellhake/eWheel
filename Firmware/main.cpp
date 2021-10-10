@@ -21,9 +21,9 @@ uint16_t timeSlot[TASKPOOL_SIZE]
 
 typedef struct RuntimeRecord
 {
-	RecordType Type			= RecordType::Runtime;
 	uint32_t Runtime[TASKPOOL_SIZE] { 0 };
 	uint64_t ElapsedMicros	= 0;
+	RecordType Type			= RecordType::Runtime;
 	uint16_t Postamble		= 0xAA55;
 } RuntimeRecord;
 
@@ -34,7 +34,7 @@ int main(void)
 	uint8_t taskIndex = 0;
 	RuntimeRecord runtimeRecord;
 	RUN_RESULT runResult;
-	
+		
 	while (1)
 	{
 		t_now = System.GetElapsedMicros();
@@ -48,11 +48,11 @@ int main(void)
 		
 		taskIndex++;
 		if (taskIndex >= TASKPOOL_SIZE)
-		{
-#ifdef RecordRuntime
-			runtimeRecord.ElapsedMicros = t_now_2;
-			Disk.AddRecord((uint8_t*)&runtimeRecord);
-#endif
+		{			
+			#ifdef RecordRuntime
+				runtimeRecord.ElapsedMicros = t_now_2;
+				Disk.AddRecord((uint8_t*)&runtimeRecord);
+			#endif
 			taskIndex = 0;
 		}
 	}

@@ -146,6 +146,36 @@ uint32_t WriteSector(uint32_t rca, uint32_t lba, uint32_t* data)
 	return 1;
 }
 
+uint32_t WriteMultipleSector(uint32_t rca, uint32_t lba, uint32_t* data, uint16_t blkcnt)
+{
+	
+	HSMCI->HSMCI_BLKR = HSMCI_BLKR_BLKLEN(512) | HSMCI_BLKR_BCNT(blkcnt);
+	// CMD: SEND_STATUS
+	do
+	{
+		if (SetCMD(SD_CMD13, rca << 16) != 0)
+			return 0;
+	} while ((HSMCI->HSMCI_RSPR[0] & CARD_STATUS_READY_FOR_DATA) == 0);
+	
+	// CMD: WRITE_BLOCK
+	if (SetCMD(SD_CMD25, lba) != 0)
+		return 0;
+	if (HSMCI->HSMCI_RSPR[0] & CARD_STATUS_ERR_RD_WR)
+		return 0;
+	
+	for (uint32_t x = 0; x < (128 * blkcnt); x++)
+	{
+		while ((HSMCI->HSMCI_SR & HSMCI_SR_TXRDY) == 0);
+		HSMCI->HSMCI_TDR = data[x];
+	}
+	
+	while ((HSMCI->HSMCI_SR & HSMCI_SR_FIFOEMPTY) == 0);
+	while ((HSMCI->HSMCI_SR & HSMCI_SR_TXRDY) == 0);
+	SetCMD(SD_CMD12, 0);
+		
+	return 1;
+}
+
 void HSMCI_Handler(void)
 {
 	uint32_t status = HSMCI->HSMCI_SR;
